@@ -1,0 +1,10 @@
+# Never publish private or working material
+private/
+**/private/
+*.raw.yaml
+*UNVERIFIED*
+resume*.pdf
+.claude/
+Thumbs.db
+.DS_Store
+projects/_preview.html

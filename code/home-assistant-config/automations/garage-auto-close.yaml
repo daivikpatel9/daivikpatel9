@@ -1,0 +1,144 @@
+# Clock times are replaced with placeholders such as '<evening>'. The structure is unchanged.
+# SANITIZED EXCERPT of automations.yaml
+# The four "v2" garage auto-close automations.
+# Device and entity hash IDs are replaced with readable placeholders.
+# Logic, timings and ordering are unchanged from the original.
+
+- alias: Auto Garage Close v2 p1
+  description: ''
+  triggers:
+  - trigger: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: opened
+  conditions:
+  - condition: state
+    entity_id: input_boolean.garage_auto_close
+    state: 'on'
+  actions:
+  - action: timer.start
+    target:
+      entity_id: timer.garage_auto_close_timer
+    data:
+      duration: 00:15:00
+  mode: single
+
+- alias: 'Garage Auto Close v2 p2: Close when timer ends'
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - timer.garage_auto_close_timer
+    from: active
+    to: idle
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  conditions:
+  - condition: state
+    entity_id: input_boolean.garage_auto_close
+    state: 'on'
+  actions:
+  - device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: close
+  mode: single
+
+- alias: 'Garage Auto Close v2 p3: cancel when closed'
+  description: ''
+  triggers:
+  - trigger: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: closed
+  conditions:
+  - condition: state
+    entity_id: timer.garage_auto_close_timer
+    state: active
+  - condition: state
+    entity_id: input_boolean.garage_auto_close
+    state: 'on'
+  actions:
+  - action: timer.cancel
+    target:
+      entity_id: timer.garage_auto_close_timer
+    data: {}
+  mode: single
+
+- alias: 'Garage Timer v2 p4: restart timer when motion detected'
+  description: ''
+  triggers:
+  - trigger: device
+    type: motion
+    device_id: <garage_door_device>
+    entity_id: <garage_motion_sensor>
+    domain: binary_sensor
+  - trigger: device
+    type: occupied
+    device_id: <garage_presence_device>
+    entity_id: <garage_occupancy_sensor>
+    domain: binary_sensor
+  - trigger: state
+    entity_id:
+    - binary_sensor.ratgdo_obstruction
+    to:
+    - 'on'
+  conditions:
+  - condition: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: is_open
+  actions:
+  - action: timer.cancel
+    target:
+      entity_id: timer.garage_auto_close_timer
+    data: {}
+  - choose:
+    # Evening and overnight: 3 minutes
+    - conditions:
+      - condition: time
+        after: '<evening>'
+        before: '<late night>'
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.garage_auto_close_timer
+        data:
+          duration:
+            hours: 0
+            minutes: 3
+            seconds: 0
+    # Early morning: 2 minutes
+    - conditions:
+      - condition: time
+        after: '<late night>'
+        before: '<early morning>'
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.garage_auto_close_timer
+        data:
+          duration:
+            hours: 0
+            minutes: 2
+            seconds: 0
+    # Daytime: 10 minutes
+    - conditions:
+      - condition: time
+        after: '<early morning>'
+        before: '<night>'
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.garage_auto_close_timer
+        data:
+          duration:
+            hours: 0
+            minutes: 10
+            seconds: 0
+  mode: single

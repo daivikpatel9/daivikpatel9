@@ -1,0 +1,206 @@
+# SANITIZED EXCERPT of automations.yaml
+# The three automations that switch the tablet and TV between photos and cameras.
+# Device and entity hash IDs, host addresses and browser IDs are replaced with placeholders.
+# Media metadata blocks are shortened to content id and type.
+# Logic, timings and ordering are unchanged from the original.
+
+- alias: Start Camera Motion Timer
+  description: ''
+  triggers:
+  - trigger: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: opening
+  - trigger: device
+    type: turned_on
+    device_id: <front_door_camera_device>
+    entity_id: <front_door_visitor_sensor>
+    domain: binary_sensor
+  - trigger: device
+    type: occupied
+    device_id: <presence_sensor_1_device>
+    entity_id: <presence_sensor_1>
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 2
+  - trigger: device
+    type: motion
+    device_id: <front_door_camera_device>
+    entity_id: <front_door_person_sensor>
+    domain: binary_sensor
+  - trigger: device
+    type: occupied
+    device_id: <presence_sensor_2_device>
+    entity_id: <presence_sensor_2>
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 3
+  - trigger: device
+    type: occupied
+    device_id: <presence_sensor_3_device>
+    entity_id: <presence_sensor_3>
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 3
+  conditions:
+  - condition: state
+    entity_id: input_boolean.camera_motion_reset
+    state:
+    - 'off'
+  actions:
+  # Latch first, so repeated motion cannot restart the session
+  - action: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.camera_motion_reset
+    data: {}
+  - action: timer.start
+    target:
+      entity_id: timer.camera_motion
+    data:
+      duration: '90'
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.tab_a9
+    data:
+      media:
+        media_content_id: media-source://media_source/local/<harp_chime>.mp3
+        media_content_type: audio/mpeg
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.tv
+    data:
+      media:
+        media_content_id: media-source://media_source/local/<harp_chime>.mp3
+        media_content_type: audio/mpeg
+  - if:
+    - condition: not
+      conditions:
+      - condition: state
+        entity_id: sensor.tab_a9_current_page
+        attribute: full_url
+        state:
+        - http://<ha_host>/immich-kiosk/2
+    then:
+    - action: fully_kiosk.load_url
+      target:
+        device_id: <tablet_device>
+      data:
+        url: http://<ha_host>/tabet-dashboard-2-0/cameras
+    - action: browser_mod.navigate
+      data:
+        browser_id:
+        - <tv_browser_id>
+        path: http://<ha_host>/tabet-dashboard-2-0/tv-dash
+  mode: restart
+
+- alias: Camera popup on motion or ding
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id:
+    - timer.camera_motion
+    from: idle
+    to: active
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 5
+  - trigger: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: closed
+  conditions:
+  - condition: state
+    entity_id: input_boolean.camera_motion_reset
+    state: 'off'
+  - condition: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: is_closed
+  - condition: state
+    entity_id: timer.camera_motion
+    state:
+    - idle
+  actions:
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.tab_a9
+    data:
+      media:
+        media_content_id: media-source://media_source/local/<notification_tone>.mp3
+        media_content_type: audio/mpeg
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.tv
+    data:
+      media:
+        media_content_id: media-source://media_source/local/<notification_tone>.mp3
+        media_content_type: audio/mpeg
+  - action: browser_mod.navigate
+    data:
+      browser_id:
+      - <tv_browser_id>
+      path: http://<ha_host>/tabet-dashboard-2-0/tv-dash
+  - action: fully_kiosk.load_url
+    target:
+      device_id: <tablet_device>
+    data:
+      url: http://<ha_host>/tabet-dashboard-2-0/cameras
+  mode: single
+
+- alias: Return to Photo Display
+  description: ''
+  triggers:
+  - trigger: state
+    entity_id: timer.camera_motion
+    from: active
+    to: idle
+    for:
+      seconds: 5
+  - trigger: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: closed
+  - trigger: homeassistant
+    event: start
+  - trigger: device
+    device_id: <front_door_camera_device>
+    domain: select
+    entity_id: <front_door_camera_select>
+    type: current_option_changed
+  conditions:
+  - condition: device
+    device_id: <garage_door_device>
+    domain: cover
+    entity_id: <garage_door>
+    type: is_closed
+  - condition: device
+    type: is_no_motion
+    device_id: <front_door_camera_device>
+    entity_id: <front_door_person_sensor>
+    domain: binary_sensor
+  actions:
+  - action: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.camera_motion_reset
+  - action: fully_kiosk.load_url
+    target:
+      device_id: <tablet_device>
+    data:
+      url: http://<ha_host>/tabet-dashboard-2-0/photos
+  - action: browser_mod.navigate
+    data:
+      browser_id:
+      - <tv_browser_id>
+      path: http://<ha_host>/tabet-dashboard-2-0/photos
+  mode: single

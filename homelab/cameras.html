@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cameras and AI · Homelab · Daivik Patel</title>
+  <meta name="description" content="Frigate on a Google Coral and integrated graphics: object detection, face recognition, semantic search, three alert rules, and the doorbell stream path I chose.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="Cameras and AI · Homelab · Daivik Patel">
+  <meta property="og:description" content="Frigate on a Google Coral and integrated graphics: object detection, face recognition, semantic search, three alert rules, and the doorbell stream path I chose.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/homelab/cameras.html">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects" aria-current="page">Projects</a>
+        <a href="../index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Homelab sections">
+    <div class="wrap">
+      <span class="tabs-label">Homelab</span>
+      <a href="index.html">Overview</a>
+      <a href="automations.html">Automations</a>
+      <a href="cameras.html" aria-current="page">Cameras and AI</a>
+      <a href="displays.html">Displays</a>
+      <a href="services.html">Server and services</a>
+      <a href="remote-access.html">Remote access</a>
+    </div>
+  </nav>
+
+  <main>
+    <aside class="notice" aria-label="Security note">
+      <div class="wrap">
+        <p><strong>Security note.</strong> These pages describe projects I have worked on. They are not a complete or current picture of what runs in my home, and I have left out details on purpose for security reasons.</p>
+      </div>
+    </aside>
+
+    <section class="hero has-media">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="eyebrow">Homelab · Cameras and AI</p>
+          <h1>A camera recorder that does its AI at home</h1>
+          <p class="lede">Frigate records my cameras and runs object detection, face recognition and semantic search on my own server. Its job in the system is to get the doorbell onto the dashboard and to get AI events into Home Assistant.</p>
+          <dl class="facts">
+            <div><dt>Alert rules</dt><dd>3<small>on one camera</small></dd></div>
+            <div><dt>Stream paths</dt><dd>3<small>compared for the doorbell</small></dd></div>
+            <div><dt>Cameras</dt><dd>4<small>on the camera grid</small></dd></div>
+          </dl>
+      
+        </div>
+        <div class="hero-media">
+          <img src="../assets/img/art/cameras.svg" alt="Diagram: a camera feeds a bridge, then a recorder that detects people, cars and packages on local hardware and alerts phones, the TV and the dashboard" width="1200" height="675">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>What Frigate does</h2>
+        <div class="prose">
+          <p>Frigate is an open-source network video recorder with AI detection. It runs as a container on the <a href="services.html">Unraid server</a> and uses two pieces of hardware for its work: a Google Coral, a small AI accelerator, and the integrated graphics of the server's i7-12700K processor.</p>
+          <ul>
+            <li><strong>Object detection</strong> picks out people, packages, animals and cars in the video.</li>
+            <li><strong>Face recognition</strong> matches faces against a face library kept in Frigate.</li>
+            <li><strong>Semantic search</strong> finds past detections from a plain description.</li>
+          </ul>
+          <p>Frigate feeds two things. Its alert events go into <a href="automations.html">Home Assistant</a>, which decides who hears about them. It also supplies the front door tile on the camera grid shown by <a href="displays.html">the wall tablet and the TV</a>. The doorbell's own person and visitor sensors are what switch those screens to cameras, so both paths are needed for the full result.</p>
+        </div>
+        <div class="split">
+          <figure>
+          <img src="../assets/img/art/cameras.svg" alt="Diagram: a camera feeds a bridge, then a recorder that detects people, cars and packages on local hardware and alerts phones, the TV and the dashboard" width="1200" height="675" loading="lazy">
+          <figcaption>How a camera event becomes an alert.</figcaption>
+        </figure>
+          <figure>
+            <a href="../assets/img/homelab/frigate-accelerators.png"><img src="../assets/img/homelab/frigate-accelerators.png" alt="Unraid dashboard panels showing the Intel UHD Graphics 770 at 98 percent render load and 28 percent video load, and a PCI Coral accelerator reported alive at 34 degrees Celsius" width="476" height="416" loading="lazy"></a>
+            <figcaption>The server's two accelerators: the integrated graphics under load and the Coral reporting in.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>One camera, three alert rules</h2>
+        <div class="prose">
+          <p>One camera has three notification rules in Home Assistant, each with a different job.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Rule</th><th>What triggers it</th><th>Where it goes</th></tr></thead>
+            <tbody>
+              <tr><td>People, packages, animals</td><td>Frigate detects one of those labels</td><td>iPhones, with a thumbnail, a clip and a live view</td></tr>
+              <tr><td>Cars</td><td>A car crosses the driveway entrance and then the driveway, in that order</td><td>iPhones</td></tr>
+              <tr><td>TV overlay</td><td>A Frigate alert event</td><td>An on-screen overlay on the TV through the NVIDIA Shield</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><p><strong>Why zones in order.</strong> The car rule needs both zones crossed in order, so it fires for a car moving into the driveway, not for one that only touches a single zone.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Getting the doorbell into the recorder</h2>
+        <div class="prose">
+          <p>The Reolink doorbell stream was unstable when it went straight into Frigate. I compared three ways of feeding it in. One used Scrypted, a camera bridge, and one used MediaMTX, a stream relay server.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Path tried</th><th>Stability</th><th>Delay</th><th>Outcome</th></tr></thead>
+            <tbody>
+              <tr><td>Doorbell straight into Frigate</td><td>Unstable</td><td>Low</td><td>Rejected</td></tr>
+              <tr><td>Doorbell through a Scrypted bridge into Frigate</td><td>Stable</td><td>Higher</td><td>Kept</td></tr>
+              <tr><td>Doorbell through MediaMTX into Frigate</td><td>Unstable</td><td>Low</td><td>Rejected. No better than the direct connection.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout"><p><strong>Decision.</strong> I chose the bridge that added delay but stopped the stream dropping. Stability won over low delay.</p></div>
+        <div class="prose">
+          <p>What I have not done yet is measure how much delay the bridge adds. That is the next step, so the trade-off has a number on it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <aside class="connects">
+          <h2>Connects to</h2>
+          <ul>
+            <li><a href="automations.html">Automations</a>Frigate's alert events are one of the inputs Home Assistant acts on, including all three alert rules.</li>
+            <li><a href="displays.html">Displays</a>Frigate supplies the front door tile on the camera grid the tablet and TV switch to.</li>
+            <li><a href="services.html">Server and services</a>Frigate and the Scrypted bridge run as containers on the Unraid server. Frigate uses its integrated graphics.</li>
+            <li><a href="remote-access.html">Remote access</a>Frigate has its own Tailscale identity for private access from my devices.</li>
+          </ul>
+        </aside>
+        <div class="next-prev"><a class="btn ghost" href="automations.html">Previous: Automations</a><a class="btn" href="displays.html">Next: Displays</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="../index.html#about-this-site">How I use AI</a> · <a href="../credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../assets/js/site.js?v=32" defer></script>
+</body>
+</html>

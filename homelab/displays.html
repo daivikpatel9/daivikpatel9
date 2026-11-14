@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Displays · Homelab · Daivik Patel</title>
+  <meta name="description" content="A wall tablet and a TV that show family photos by default, switch themselves to live cameras when someone arrives or the garage opens, then switch back.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="Displays · Homelab · Daivik Patel">
+  <meta property="og:description" content="A wall tablet and a TV that show family photos by default, switch themselves to live cameras when someone arrives or the garage opens, then switch back.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/homelab/displays.html">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects" aria-current="page">Projects</a>
+        <a href="../index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Homelab sections">
+    <div class="wrap">
+      <span class="tabs-label">Homelab</span>
+      <a href="index.html">Overview</a>
+      <a href="automations.html">Automations</a>
+      <a href="cameras.html">Cameras and AI</a>
+      <a href="displays.html" aria-current="page">Displays</a>
+      <a href="services.html">Server and services</a>
+      <a href="remote-access.html">Remote access</a>
+    </div>
+  </nav>
+
+  <main>
+    <aside class="notice" aria-label="Security note">
+      <div class="wrap">
+        <p><strong>Security note.</strong> These pages describe projects I have worked on. They are not a complete or current picture of what runs in my home, and I have left out details on purpose for security reasons.</p>
+      </div>
+    </aside>
+
+    <section class="hero has-media">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="eyebrow">Homelab · Displays</p>
+          <h1>Screens that show photos until someone arrives</h1>
+          <p class="lede">A wall tablet and the TV show family photos by default and switch themselves to live cameras when someone arrives or the garage opens. When it is safe, they switch back on their own.</p>
+          <dl class="facts">
+            <div><dt>Screens</dt><dd>2<small>wall tablet and TV</small></dd></div>
+            <div><dt>Camera hold</dt><dd>90 s<small>per session</small></dd></div>
+            <div><dt>Cameras</dt><dd>4<small>on each grid</small></dd></div>
+          </dl>
+      
+        </div>
+        <div class="hero-media">
+          <img src="../assets/img/photos/tablet-camera-mode.jpg" alt="A wall-mounted tablet with its screen replaced by an illustration of a four-camera grid" width="1170" height="880">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Photo mode and camera mode</h2>
+        <div class="prose">
+          <p>Both screens run one Home Assistant dashboard with three views. A dedicated Home Assistant user named Tablet gets kiosk mode, so the tablet shows no sidebar or header. Fully Kiosk, a kiosk browser app, runs the tablet. Browser Mod, a Home Assistant extension that lets Home Assistant drive a browser, runs the TV.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>View</th><th>Screen</th><th>What it shows</th></tr></thead>
+            <tbody>
+              <tr><td>Photos</td><td>Tablet and TV</td><td>An Immich Kiosk slideshow, embedded as an iframe that fills the screen edge to edge. A camera icon, top right: tap starts a camera session, hold jumps straight to the cameras. A garage door icon opens the door's controls.</td></tr>
+              <tr><td>Cameras</td><td>Tablet</td><td>Four cameras in two columns: front yard, front door, back yard, garage. Menu and status bar hidden. A back icon returns to photos.</td></tr>
+              <tr><td>TV grid</td><td>TV</td><td>A separate four-camera grid in two columns: front yard, front door, garage, back yard. Each camera has its own aspect ratio, so the grid fills a 16:9 TV with no gaps.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="prose">
+          <p>The photos come from Immich, the photo library on the <a href="services.html">server</a>, through Immich Kiosk, a slideshow app. The full-screen fit uses a trick: the iframe sits inside a picture card whose image is an empty 16:9 canvas, so the card sizes itself to the screen. The camera grids use Advanced Camera Card, a dashboard card for live camera feeds. The front door tile comes from <a href="cameras.html">Frigate</a>, the camera recorder with AI detection.</p>
+        </div>
+        <div class="split">
+          <figure>
+          <img src="../assets/img/photos/tablet-photo-mode.jpg" alt="A tablet mounted on a wall in a black holder with its charging cable attached. The screen area is replaced by a drawn illustration of a landscape labelled photo slideshow" width="1170" height="880" loading="lazy">
+          <figcaption>The real tablet in photo mode. The screen is covered with an illustration, because the real one shows family photos.</figcaption>
+        </figure>
+          <figure>
+          <img src="../assets/img/photos/tablet-camera-mode.jpg" alt="The same wall-mounted tablet. The screen area is replaced by a drawn illustration of a two by two grid of camera tiles" width="1170" height="880" loading="lazy">
+          <figcaption>The same tablet in camera mode. The screen is covered with an illustration, because the real one shows my cameras.</figcaption>
+        </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The display session</h2>
+        <div class="prose">
+          <p>One automation joins six kinds of device: the garage controller, the doorbell's person and visitor sensors, three presence sensors, a chime stored on the server, the tablet and the TV.</p>
+        </div>
+        <ol class="flow">
+          <li><strong>Trigger</strong>Garage opening, a doorbell person or visitor event, or a presence sensor held for 2 to 3 seconds</li>
+          <li><strong>Latch</strong>A helper is set first so more motion cannot restart the session</li>
+          <li><strong>Timer</strong>A 90 second timer starts</li>
+          <li><strong>Chime</strong>A sound stored on the server plays on the tablet and the TV</li>
+          <li><strong>Switch</strong>The tablet loads its cameras view and the TV goes to its camera grid</li>
+          <li><strong>Return</strong>Back to photos once the timer ends, the garage is closed and the doorway is clear</li>
+        </ol>
+        <div class="prose">
+          <p>The latch matters because a person at the door keeps tripping sensors. Without it, each new motion event would start the session over. A second automation clears the latch when it sends the screens back to photos. That automation also runs when Home Assistant starts up, so a restart sends both screens back to photos.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The garage warning banner</h2>
+        <div class="prose">
+          <p>When the <a href="automations.html">garage auto-close</a> turns on its alert helper, a pulsing red "Garage Open!" banner appears bottom left on both the photos view and the cameras view. It is drawn with card-mod, a plugin that lets a dashboard card take custom CSS: a <code>::before</code> pseudo-element whose display is set by a template on <code>input_boolean.garage_alert</code>. No extra card is needed, and the banner sits over whatever the screen is showing.</p>
+        </div>
+
+        <aside class="connects">
+          <h2>Connects to</h2>
+          <ul>
+            <li><a href="automations.html">Automations</a>The display session and the garage banner are both driven by Home Assistant automations.</li>
+            <li><a href="cameras.html">Cameras and AI</a>Frigate supplies the front door tile on both camera grids.</li>
+            <li><a href="services.html">Server and services</a>The server hosts the Immich photo library, the Immich Kiosk slideshow and the chime files.</li>
+          </ul>
+        </aside>
+        <div class="next-prev"><a class="btn ghost" href="cameras.html">Previous: Cameras and AI</a><a class="btn" href="services.html">Next: Server and services</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="../index.html#about-this-site">How I use AI</a> · <a href="../credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../assets/js/site.js?v=32" defer></script>
+</body>
+</html>

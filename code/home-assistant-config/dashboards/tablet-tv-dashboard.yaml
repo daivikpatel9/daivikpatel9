@@ -1,0 +1,234 @@
+# SANITIZED COPY of the tablet and TV dashboard (path: tabet-dashboard-2-0)
+# Views included: photos, cameras, tv-dash.
+# The "temp" view is omitted. It was experimental and contained direct stream URLs.
+# Host addresses are replaced with <immich_kiosk_host> and <frigate_host>.
+
+kiosk_mode:
+  user_settings:
+    - users:
+        - Tablet
+      kiosk: true
+views:
+  - type: panel
+    path: photos
+    title: Photos
+    icon: phu:immich
+    cards:
+      - type: picture-elements
+        # Empty 16:9 SVG used as a sizing canvas
+        image: >-
+          data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 16 9'%3E%3C/svg%3E
+        elements:
+          - type: custom:hui-element
+            card_type: iframe
+            url: http://<immich_kiosk_host>/
+            style:
+              top: 55%
+              left: 50%
+              width: 100%
+              height: 110%
+              transform: translate(-50%, -50%)
+            card_mod:
+              style: |
+                ha-card {
+                  height: 100%;
+                  width: 100%;
+                }
+                /* Floating Garage Alert - Left Side */
+                ha-card::before {
+                  content: "🏠🚨 Garage Open!";
+                  display: {% if is_state('input_boolean.garage_alert','on') %}block{% else %}none{% endif %};
+                  position: fixed;
+                  bottom: 30px;
+                  left: 30px;
+                  background: red;
+                  color: white;
+                  font-size: 38px;
+                  font-weight: bold;
+                  padding: 25px 40px;
+                  border-radius: 20px;
+                  box-shadow: 0 0 30px rgba(255,0,0,0.95);
+                  z-index: 9999;
+                  text-align: center;
+                  line-height: 1.2;
+                  animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse {
+                  0%   { box-shadow: 0 0 10px rgba(255,0,0,0.6); }
+                  50%  { box-shadow: 0 0 40px rgba(255,0,0,1); }
+                  100% { box-shadow: 0 0 10px rgba(255,0,0,0.6); }
+                }
+          - type: icon
+            style:
+              left: 90%
+              top: 10%
+              --mdc-icon-size: 50px
+            icon: mdi:cctv
+            tap_action:
+              action: perform-action
+              perform_action: automation.trigger
+              target:
+                entity_id: automation.start_camera_motion_timer
+              data:
+                skip_condition: true
+            hold_action:
+              action: navigate
+              navigation_path: /tabet-dashboard-2-0/cameras
+          - type: state-icon
+            style:
+              left: 90%
+              top: 20%
+              --mdc-icon-size: 50px
+            entity: cover.ratgdo_door
+            tap_action:
+              action: more-info
+  - title: Cameras
+    path: cameras
+    panel: true
+    type: panel
+    icon: mdi:cctv
+    cards:
+      - type: picture-elements
+        image: >-
+          data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 16 9'%3E%3C/svg%3E
+        elements:
+          - type: custom:hui-element
+            card_type: custom:advanced-camera-card
+            style:
+              top: 50%
+              left: 50%
+              width: 100%
+              height: 100%
+              transform: translate(-50%, -50%)
+            card_mod:
+              style: |
+                ha-card {
+                  height: 100%;
+                  width: 100%;
+                }
+                /* Floating Garage Alert - Left Side */
+                ha-card::before {
+                  content: "🏠🚨 Garage Open!";
+                  display: {% if is_state('input_boolean.garage_alert','on') %}block{% else %}none{% endif %};
+                  position: fixed;
+                  bottom: 20px;
+                  left: 30px;
+                  background: red;
+                  color: white;
+                  font-size: 38px;
+                  font-weight: bold;
+                  padding: 25px 40px;
+                  border-radius: 20px;
+                  box-shadow: 0 0 30px rgba(255,0,0,0.95);
+                  z-index: 9999;
+                  text-align: center;
+                  line-height: 1.2;
+                  animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse {
+                  0%   { box-shadow: 0 0 10px rgba(255,0,0,0.6); }
+                  50%  { box-shadow: 0 0 40px rgba(255,0,0,1); }
+                  100% { box-shadow: 0 0 10px rgba(255,0,0,0.6); }
+                }
+            grid:
+              columns: 2
+            menu:
+              mode: none
+              style: none
+            cameras:
+              - camera_entity: camera.front_2
+                title: Front Yard
+                icon: mdi:tree
+                live_provider: ha
+              - title: Front Door
+                icon: mdi:door
+                frigate:
+                  url: http://<frigate_host>
+                  camera_name: front_door
+              - camera_entity: camera.back_yard_live_view
+                title: Back Yard
+                icon: mdi:flower
+                live_provider: ha
+              - live_provider: ha
+                camera_entity: camera.garage_fluent
+            live:
+              display:
+                mode: grid
+                grid_selected_width_factor: 1
+            dimensions:
+              aspect_ratio_mode: dynamic
+            status_bar:
+              style: none
+          - type: icon
+            style:
+              left: 50%
+              top: 20%
+              --mdc-icon-size: 50px
+            icon: mdi:keyboard-backspace
+            tap_action:
+              action: navigate
+              navigation_path: /tabet-dashboard-2-0/photos
+            hold_action:
+              action: none
+            title: Photos
+          - type: state-icon
+            style:
+              left: 50%
+              top: 50%
+              --mdc-icon-size: 50px
+            entity: cover.ratgdo_door
+            state_color: true
+            tap_action:
+              action: more-info
+  - type: panel
+    title: tv dash
+    path: tv-dash
+    cards:
+      - type: custom:advanced-camera-card
+        menu:
+          mode: none
+          style: none
+        cameras:
+          - camera_entity: camera.front_2
+            title: Front Yard
+            icon: mdi:tree
+            live_provider: ha
+            dimensions:
+              aspect_ratio: '16:9'
+              layout:
+                fit: fill
+          - title: Front Door
+            icon: mdi:door
+            frigate:
+              url: http://<frigate_host>
+              camera_name: front_door
+            dimensions:
+              aspect_ratio: '16:11'
+              layout:
+                fit: fill
+          - live_provider: ha
+            camera_entity: camera.garage_fluent
+            dimensions:
+              aspect_ratio: '16:9'
+              layout:
+                fit: fill
+          - camera_entity: camera.back_yard_live_view
+            title: Back Yard
+            icon: mdi:flower
+            live_provider: ha
+            dimensions:
+              aspect_ratio: '16:8'
+              layout:
+                fit: fill
+        live:
+          display:
+            mode: grid
+            grid_columns: 2
+            grid_selected_width_factor: 1
+        dimensions:
+          aspect_ratio: '16:9'
+          aspect_ratio_mode: static
+        status_bar:
+          style: none
