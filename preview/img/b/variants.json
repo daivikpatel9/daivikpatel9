@@ -1,0 +1,32 @@
+{
+  "automation-hub": {
+    "main": {
+      "light": "img/b/automation-hub--main-light.jpg",
+      "dark": "img/b/automation-hub--main-dark.jpg"
+    },
+    "automations": {
+      "light": "img/b/automation-hub--automations-light.jpg",
+      "dark": "img/b/automation-hub--automations-dark.jpg"
+    }
+  },
+  "tablet-camera-mode": {
+    "main": {
+      "light": "img/b/tablet-camera-mode--main-light.jpg",
+      "dark": "img/b/tablet-camera-mode--main-dark.jpg"
+    },
+    "displays": {
+      "light": "img/b/tablet-camera-mode--displays-light.jpg",
+      "dark": "img/b/tablet-camera-mode--displays-dark.jpg"
+    }
+  },
+  "tablet-photo-mode": {
+    "main": {
+      "light": "img/b/tablet-photo-mode--main-light.jpg",
+      "dark": "img/b/tablet-photo-mode--main-dark.jpg"
+    },
+    "displays": {
+      "light": "img/b/tablet-photo-mode--displays-light.jpg",
+      "dark": "img/b/tablet-photo-mode--displays-dark.jpg"
+    }
+  }
+}

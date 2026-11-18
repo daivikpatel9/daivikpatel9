@@ -3,7 +3,9 @@
 <head>
 <meta name="robots" content="noindex, nofollow">
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- the browser chrome follows the blended top colour (set by the colour engine) -->
+<meta name="theme-color" id="meta-tc" content="">
 <title>Daivik Patel · Computer Science, UMass Lowell</title>
 <meta name="description" content="Daivik Patel, a first-year Computer Science student at UMass Lowell. Projects: an object-detecting robot boat and a home server tied into a smart home.">
 <!-- link previews: the same drawn server-rack card as the live site (not the tablet photo, not the boat) -->
@@ -61,8 +63,11 @@
 :root,:root[data-theme="light"]{
   color-scheme:light;
   --base-bg:#efe7da; --base-ink:#1f1512; --base-muted:#1f1512; --base-line:rgba(31,21,18,.16); --base-hover:rgba(31,21,18,.05); --base-chrome:rgba(239,231,218,.82);
-  --tone-hero:#efe7da; --tone-map:#ede6dc; --tone-ch1:#f0e6d7; --tone-h0:#f1e6d6; --tone-h1:#efe2d2; --tone-h2:#f2e8dc; --tone-h3:#f0e4d4;
-  --tone-ch2:#f3e2d4; --tone-o0:#f3dfd1; --tone-o1:#f2ddcf; --tone-o2:#f4e2d6; --tone-o3:#f2e0d2; --tone-back:#ebe6df; --tone-ai:#e9e5de; --tone-end:#ece6dd;
+  --tone-hero:#efe7da; --tone-map:#ebe5dd; --tone-ch1:#f2e5d3; --tone-h0:#f3e4d1; --tone-h1:#f0dfcc; --tone-h2:#f4e7d8; --tone-h3:#f1e1ce;
+  --tone-ch2:#f5dfcf; --tone-o0:#f6dccb; --tone-o1:#f4d8c7; --tone-o2:#f6e0d2; --tone-o3:#f3dacb; --tone-back:#e8e4de; --tone-ai:#e6e3de; --tone-end:#eae4dc;
+  /* blended by the colour engine (these are the no-JS / first-paint values): screen gradient stops and the top bar */
+  --ce-1:#efe7da; --ce-2:#efe7da; --ce-3:#efe7da;
+  --bar-bg:rgba(239,231,218,.86); --bar-ink:#1f1512; --bar-line:rgba(31,21,18,.16); --bar-btn:#941819; --bar-btn-ink:#f6efe4; --bar-acc:#86251c;
   /* the two divider lines while a project is expanded (over the sunset) */
   --ln-open:rgba(246,239,228,.42);
   --card-bg:#f6efe4; --card-ink:#1f1512; --card-line:rgba(31,21,18,.16);
@@ -86,13 +91,14 @@
   /* detail pages: identical in both themes */
   --detail-bg:linear-gradient(160deg,#360b0b 0%,#6a1513 32%,#a3241d 62%,#ee4f2a 100%);
   --detail-solid:#4e110e; --detail-bar:rgba(54,11,11,.92);
-  --detail-ink:#f6efe4; --detail-line:rgba(246,239,228,.3); --detail-btn-bg:#f6efe4; --detail-btn-ink:#1f1512;
+  --detail-ink:#f6efe4; --detail-onbg:#e9c69b; --detail-line:rgba(246,239,228,.3); --detail-btn-bg:#f6efe4; --detail-btn-ink:#1f1512;
   --detail-card-bg:#f6efe4; --detail-card-solid:#f6efe4; --detail-card-ink:#1f1512; --detail-card-line:rgba(31,21,18,.16); --detail-card-hover:rgba(31,21,18,.05); --detail-link:#86251c; --detail-link-ink:#f6efe4;
   --detail-sheet-btn:#86251c; --detail-sheet-btn-ink:#f6efe4; --c-code-bg:#e6dccb;
   --detail-plate-bg:rgba(20,12,10,.35); --detail-plate-line:rgba(246,239,228,.3);
   --detail-route-1:#8f1f18; --detail-route-2:#c4341f;
   --detail-shadow:rgba(20,6,4,.45);
   /* the live sketch: ink on paper in both themes (it is a sketch); its accent is the detail-route red */
+  --s4-hit:rgba(0,0,0,.001);
   --sketch-paper:#efe7da; --sketch-ink:#1f1512; --sketch-label:#3a2a24; --sketch-note:#f8f2e7; --sketch-photo-bg:#d9cfc0;
   /* case-study content inside expanded pages */
   --c-mat:#e6dccb; --lbox-bg:rgba(20,8,6,.94);
@@ -104,8 +110,10 @@
 :root[data-theme="dark"]{
   color-scheme:dark;
   --base-bg:#140c0a; --base-ink:#f1e9dc; --base-muted:#f1e9dc; --base-line:rgba(241,233,220,.14); --base-hover:rgba(241,233,220,.06); --base-chrome:rgba(20,12,10,.8);
-  --tone-hero:#140c0a; --tone-map:#150d10; --tone-ch1:#170d0b; --tone-h0:#180d0b; --tone-h1:#1a0f0d; --tone-h2:#1b0e0c; --tone-h3:#190f0c;
-  --tone-ch2:#1e0e0b; --tone-o0:#200e0b; --tone-o1:#220d0a; --tone-o2:#1f0f0c; --tone-o3:#210e0c; --tone-back:#131011; --tone-ai:#121012; --tone-end:#141011;
+  --tone-hero:#140c0a; --tone-map:#160d12; --tone-ch1:#1a0e0b; --tone-h0:#1c0e0b; --tone-h1:#200f0d; --tone-h2:#1e0d0c; --tone-h3:#1b100c;
+  --tone-ch2:#250e0b; --tone-o0:#2a0f0b; --tone-o1:#2d0e0a; --tone-o2:#280f0d; --tone-o3:#2b0f0c; --tone-back:#121013; --tone-ai:#111014; --tone-end:#151013;
+  --ce-1:#140c0a; --ce-2:#140c0a; --ce-3:#140c0a;
+  --bar-bg:rgba(20,12,10,.86); --bar-ink:#f1e9dc; --bar-line:rgba(241,233,220,.14); --bar-btn:#973314; --bar-btn-ink:#f1e9dc; --bar-acc:#e0685c;
   --ln-open:rgba(241,233,220,.3);
   --card-bg:#1f1412; --card-ink:#f1e9dc; --card-line:rgba(241,233,220,.14);
   --card-glow:rgba(194,40,26,.24); --card-glow-2:rgba(238,79,42,.1); --card-line-warm:rgba(238,79,42,.3);
@@ -113,7 +121,7 @@
   /* the expanded page, dark version: a deeper sunset, warm dark glass cards, the light accent red */
   --detail-bg:linear-gradient(160deg,#1c0606 0%,#3e0d0b 32%,#6f1712 62%,#c23a20 100%);
   --detail-solid:#2a0909; --detail-bar:rgba(28,6,6,.92);
-  --detail-ink:#f1e9dc; --detail-line:rgba(241,233,220,.14); --detail-btn-bg:var(--accent-gradient); --detail-btn-ink:#f1e9dc;
+  --detail-ink:#f1e9dc; --detail-onbg:#e9c69b; --detail-line:rgba(241,233,220,.14); --detail-btn-bg:var(--accent-gradient); --detail-btn-ink:#f1e9dc;
   --detail-card-bg:rgba(20,12,10,.8); --detail-card-solid:#1d1210; --detail-card-ink:#f1e9dc; --detail-card-line:rgba(241,233,220,.14); --detail-card-hover:rgba(241,233,220,.06);
   --detail-link:#ff9d8f; --detail-link-ink:#140c0a; --detail-sheet-btn:var(--accent-gradient); --detail-sheet-btn-ink:#f1e9dc;
   --detail-plate-line:rgba(241,233,220,.14); --detail-route-1:#e0685c; --detail-route-2:#f0786a; --detail-shadow:rgba(0,0,0,.6);
@@ -138,8 +146,8 @@ body{--fg:var(--base-ink);--muted:var(--base-muted);--rule:var(--base-line);--ho
 .card,.mpanel,.elabel,.secnote,.nl,.pop,.tourbox,.ctr-box,.cue,.c-call,.c-card,.c-embed,.d-idx,.lbox p,.b-block,.ai-box,.foot,.theme-joke{--fg:var(--card-fg);--muted:var(--card-fg);--rule:var(--card-rule);--link:var(--card-link);--focus:var(--card-link);--solid:var(--card);background:var(--card);color:var(--fg)}
 
 *,*::before,*::after{box-sizing:border-box}
-html{background:var(--base-bg);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--base-bg);color:var(--fg);font-family:var(--sans);font-size:1.0625rem;font-weight:500;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{background:var(--ce-1);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ce-1);color:var(--fg);font-family:var(--sans);font-size:1.0625rem;font-weight:500;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .d-lock,.d-lock body{overflow:hidden}
 img{max-width:100%;display:block}
 a{color:inherit}
@@ -153,7 +161,7 @@ svg path{stroke-linecap:round;stroke-linejoin:round}
 .ico path,.ico circle{fill:none;stroke:currentColor;stroke-width:2}
 .lbl{font:600 .75rem/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .in-wrap{width:100%;max-width:var(--max);margin:0 auto}
-[data-section],.chapter{scroll-margin-top:var(--bar)}
+[data-section],.chapter{scroll-margin-top:calc(var(--bar) + var(--sat,0px))}
 .defs{position:absolute;width:0;height:0;overflow:hidden}
 
 /* contour lines: the printed paper of a map; static */
@@ -164,12 +172,7 @@ body.d-open .topo{color:var(--topo-detail);opacity:var(--topo-do)}
    Two stacked tone layers cross-fade by opacity when the section at the viewport centre changes;
    the sunset layer on top fades in while a project expands, in step with the divider lines. */
 .scr{position:fixed;inset:0;z-index:0;pointer-events:none}
-.scr i{position:absolute;inset:0;background-color:var(--tone-hero)}
-.scr .scr-b{opacity:0;transition:opacity .7s cubic-bezier(.4,0,.2,1)}
-.scr .scr-b.on{opacity:1}
-.scr .scr-sun{background:var(--detail-bg);opacity:0}
-.scr.sun-on .scr-sun{opacity:1}
-@media (prefers-reduced-motion:reduce){html:not(.mo-on) .scr .scr-b{transition-duration:.2s}}
+.scr i{position:absolute;inset:0;background:linear-gradient(160deg,var(--ce-1) 0%,var(--ce-2) 55%,var(--ce-3) 100%)}
 .topo path{fill:none;stroke:currentColor;vector-effect:non-scaling-stroke}
 main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
 
@@ -218,10 +221,15 @@ main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
 
 /* ---------- chrome (always neutral, so it never changes colour while you scroll) ---------- */
 .c{position:fixed;z-index:50}
-.topbar{position:fixed;left:0;right:0;top:0;height:var(--bar);z-index:49;background:var(--solid);border-bottom:1px solid var(--rule);pointer-events:none}
-@supports (backdrop-filter:blur(8px)) or (-webkit-backdrop-filter:blur(8px)){.topbar{background:var(--chrome);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}}
-.c-tl{top:calc((var(--bar) - 40px) / 2);left:var(--gut);height:40px;display:flex;align-items:center}
-.c-tr{top:calc((var(--bar) - 40px) / 2);right:var(--gut);height:40px;display:flex;align-items:center;gap:clamp(.6rem,1.6vw,1.2rem)}
+/* the top bar takes the screen's colour too: its backing, hairline, text, switch and Contact pill all read the
+   blended --bar-* values the colour engine writes, so no band at the top stays the old colour.
+   Safe areas: the bar grows under a phone's status area (viewport-fit=cover) and its items keep clear of it. */
+:root{--sat:env(safe-area-inset-top,0px);--sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px)}
+#chrome{--fg:var(--bar-ink);--muted:var(--bar-ink);--rule:var(--bar-line);--btn:var(--bar-btn);--btn-fg:var(--bar-btn-ink);--accent:var(--bar-acc);--focus:var(--bar-acc);color:var(--bar-ink)}
+.topbar{position:fixed;left:0;right:0;top:0;height:calc(var(--bar) + var(--sat));z-index:49;background:var(--bar-bg);border-bottom:1px solid var(--bar-line);pointer-events:none}
+@supports (backdrop-filter:blur(8px)) or (-webkit-backdrop-filter:blur(8px)){.topbar{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}}
+.c-tl{top:calc((var(--bar) - 40px) / 2 + var(--sat));left:calc(var(--gut) + var(--sal));height:40px;display:flex;align-items:center}
+.c-tr{top:calc((var(--bar) - 40px) / 2 + var(--sat));right:calc(var(--gut) + var(--sar));height:40px;display:flex;align-items:center;gap:clamp(.6rem,1.6vw,1.2rem)}
 /* counter fades in: reason: it only means something once you are inside the stops */
 .c-bl{bottom:var(--corner);left:var(--corner);opacity:0;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
 .in-stop .c-bl{opacity:1;visibility:visible;transition:opacity .3s}
@@ -235,7 +243,7 @@ main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
 /* the one addition to the bar while a project is expanded: a way back (reason: convenience, not a new page) */
 .bchip{display:inline-flex;align-items:center;gap:.35rem;height:36px;margin-left:clamp(.6rem,1.4vw,1rem);padding:0 .85rem 0 .6rem;border-radius:999px;border:1px solid var(--rule);background:transparent;cursor:pointer;font-weight:600;font-size:.9rem;transition:scale 90ms ease,border-color .2s}
 .bchip[hidden]{display:none}
-.bchip:hover{border-color:currentColor}
+.bchip:hover{border-color:var(--bar-acc)}
 .bchip .ico{transition:transform .25s var(--ease)}
 .bchip:hover .ico{transform:translateX(-3px)}
 /* the narrowest phones: the chip keeps its arrow and says "Back" to screen readers, so the bar never overflows */
@@ -266,7 +274,7 @@ main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
 /* during the joke the page lightens only slightly, in step with the knob, then settles back */
 .theme-peek{position:fixed;inset:0;z-index:94;pointer-events:none;background:var(--peek);opacity:0;animation:tt-peek 1.3s ease-in-out both}
 @keyframes tt-peek{0%{opacity:0}38%{opacity:.06}55%{opacity:.06}82%,100%{opacity:0}}
-html.theme-fade,html.theme-fade *{transition:background-color .4s ease,color .4s ease,border-color .4s ease!important}
+html.theme-fade,html.theme-fade *{transition:background-color .7s ease,color .7s ease,border-color .7s ease!important}
 /* the joke grows out of the switch itself (reason: it is the switch answering you, not a popup) */
 .theme-joke{position:fixed;top:calc(var(--bar) + 8px);right:var(--jr,var(--gut));transform-origin:var(--jo,100% 0);z-index:96;width:min(92vw,30rem);padding:1.25rem 1.4rem 1.3rem;background:var(--card-bg);color:var(--card-ink);border:1px solid var(--accent);border-radius:16px;box-shadow:0 30px 60px -20px var(--shadow);animation:joke-in .42s cubic-bezier(.2,1.3,.4,1) both;--fg:var(--card-ink);--focus:var(--accent)}
 .theme-joke.is-leaving{animation:joke-out .2s ease-in both}
@@ -323,7 +331,7 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .cta:active,.ghost:active,.pill:active,.btn-tour:active,.rbtn:active,.cue:active,.theme:active,.bchip:active,.tourbox button:active,.s4-card-go:active,.d-nav a:active,.br-a:active{scale:.97}
 
 /* ---------- title page ---------- */
-.hero{position:relative;padding:calc(var(--bar) + clamp(24px,5vh,56px)) var(--gut) clamp(56px,9vh,96px)}
+.hero{position:relative;padding:calc(var(--bar) + var(--sat,0px) + clamp(24px,5vh,56px)) var(--gut) clamp(56px,9vh,96px)}
 .h-body{max-width:var(--max);margin:0 auto}
 .tp{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(24px,4vw,72px);align-items:center}
 .tp-cap{margin:0 0 .9rem}
@@ -373,7 +381,8 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .card{transition:transform .25s var(--ease-out),border-color .2s}
 .card:hover,.card:focus-visible{transform:translateY(-4px)}
 .card-p img{transition:transform .4s var(--ease-out)}
-.card:hover .card-p img,.card:focus-visible .card-p img{transform:scale(1.03)}
+.card-p svg.dg{transition:transform .4s var(--ease-out)}
+.card:hover .card-p img,.card:focus-visible .card-p img,.card:hover .card-p svg.dg,.card:focus-visible .card-p svg.dg{transform:scale(1.03)}
 .card-p{display:block;aspect-ratio:16/10}
 .card-p.frame,.card-p.frame.cover,.card-p.frame.contain{border:0;border-radius:0;border-bottom:1px solid var(--rule)}
 .card-p.frame.cutout{border:0;padding:.8rem 1rem .2rem}
@@ -397,7 +406,11 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .map-sub{margin:0;max-width:52ch;font:400 1.3rem/1.4 var(--serif)}
 .map-how{margin:0;max-width:34ch;font-size:1rem}
 .map-count{margin:.6rem 0 0}
-.map-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:clamp(16px,2.5vw,36px);align-items:start}
+/* the connector from the selected marker to its panel (drawn by JS) */
+.mconn{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:4}
+.mconn path{fill:none;stroke:var(--link);stroke-width:1.5}
+.mconn circle{fill:var(--link)}
+.map-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:clamp(16px,2.5vw,36px);align-items:start}
 .stage{position:relative;height:clamp(480px,66vh,620px);border:1px solid var(--rule);border-radius:16px;overflow:hidden;background-image:radial-gradient(circle,var(--rule) 1px,transparent 1.3px);background-size:28px 28px}
 .edges{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 /* route highlight: hover state, shows which routes belong to the marker */
@@ -536,8 +549,35 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
    The area between the lines (just under the unchanged top bar, down to the bottom edge) scrolls on
    its own; it has no background: the whole-screen colour layer behind it turns to the sunset.
    ===================================================================== */
-.dlayer{position:fixed;left:0;right:0;top:calc(var(--bar) + var(--ln-gap));bottom:var(--ln-gap);z-index:45;overflow:hidden;--card:var(--detail-card-bg);--card-fg:var(--detail-card-ink);--card-rule:var(--detail-card-line);--card-link:var(--detail-link);--fg:var(--detail-ink);--muted:var(--detail-ink);--rule:var(--detail-line);--hover:var(--detail-line);--link:var(--detail-ink);--link-ink:var(--detail-btn-ink);--focus:var(--detail-ink);--btn:var(--detail-btn-bg);--btn-fg:var(--detail-btn-ink);--solid:var(--detail-solid);--plate-c:var(--detail-plate-bg);--plate-l:var(--detail-plate-line);color:var(--fg)}
+.dlayer{position:fixed;left:0;right:0;top:calc(var(--bar) + var(--sat) + var(--ln-gap));bottom:var(--ln-gap);z-index:45;overflow:hidden;--card:var(--detail-card-bg);--card-fg:var(--detail-card-ink);--card-rule:var(--detail-card-line);--card-link:var(--detail-link);--fg:var(--detail-ink);--muted:var(--detail-ink);--rule:var(--detail-line);--hover:var(--detail-line);--link:var(--detail-onbg);--link-ink:var(--detail-btn-ink);--focus:var(--detail-onbg);--btn:var(--detail-btn-bg);--btn-fg:var(--detail-btn-ink);--solid:var(--detail-solid);--plate-c:var(--detail-plate-bg);--plate-l:var(--detail-plate-line);color:var(--fg)}
 .dlayer[hidden]{display:none}
+/* per-project colours: the colour engine writes blended --p-* (open project) and --m-* (main page diagram plate) values
+   on :root from project-colors.js; these rules bind every colour-carrying token to them (only once html.pc-on is set,
+   so without the data file the token blocks apply). See the mapping table in the script. */
+html.pc-on .dlayer{--detail-ink:var(--p-ink);--detail-onbg:var(--p-onbg);--detail-link:var(--p-accent);--detail-route-1:var(--p-accent);--detail-route-2:var(--p-accent);
+  --detail-sheet-btn:var(--p-btn);--detail-sheet-btn-ink:var(--p-btn-ink);--detail-btn-bg:var(--p-btn);--detail-btn-ink:var(--p-btn-ink);
+  --card-glow:var(--p-glow);--card-glow-2:transparent;--card-line-warm:var(--p-glow);--card-shadow:0 18px 44px -26px var(--p-glow);
+  --c-mat:var(--p-plate);--lbox-bg:var(--p-plate);--svg-bg:var(--p-plate);--svg-ink:var(--p-plate-ink);--svg-ink-soft:var(--p-plate-ink);
+  --svg-surface:var(--p-plate-fill);--svg-line:var(--p-plate-fill);--svg-accent:var(--p-plate-hl);--svg-accent-soft:var(--p-plate-fill)}
+/* diagram plates follow too, once diagrams are drawn inline (a baked cream image needs its dark plate) */
+html.pc-on.dg-ok .dlayer,html.pc-on[data-theme="dark"] .dlayer{--plate:var(--p-plate);--plate-bg:var(--p-plate);--detail-plate-bg:var(--p-plate);--plate-ink:var(--p-plate-ink);--plate-fill:var(--p-plate-fill);--plate-highlight:var(--p-plate-hl)}
+html.pc-on.dg-ok body{--plate:var(--m-plate);--plate-bg:var(--m-plate);--plate-ink:var(--m-plate-ink);--plate-fill:var(--m-plate-fill);--plate-highlight:var(--m-plate-hl)}
+/* small solid fills on the main page (map markers, rail edge fades) follow the screen tone */
+body{--solid:var(--ce-1)}
+.dlayer ::selection{background:var(--detail-sheet-btn);color:var(--detail-sheet-btn-ink)}
+.dlayer .fl.main{stroke:var(--link)}
+/* the short summary on the gradient when the case study follows (tags row, then the case study's own title and lede) */
+.d-tags{margin:0 0 1rem}
+.d-sum{max-width:46ch}
+.d-ct{margin:0 0 .35rem;font-weight:700;font-size:1.15rem;line-height:1.3}
+.d-lede{margin:0;font:400 1.2rem/1.45 var(--serif)}
+/* inline diagrams: lines, labels and fills come from --plate-ink, --plate-fill, --plate-highlight, --plate */
+svg.dg{display:block;width:100%;height:100%;max-width:100%}
+.c-mat svg.dg{height:auto}
+.s4-card-img svg.dg{padding:8px}
+.lbox-svg{position:relative;width:min(100%,1100px);padding:12px;border-radius:6px;background:var(--plate-bg)}
+.lbox-svg[hidden]{display:none}
+.lbox-svg svg.dg{height:auto;max-height:calc(100vh - 240px)}
 /* while the lines stretch, shared elements fly in from the main page, so nothing is clipped */
 .dlayer.is-anim,.dlayer.is-anim .dscroll{overflow:visible}
 .dscroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;transform-origin:50% 50%}
@@ -613,6 +653,9 @@ body.d-open .ctr-mini{display:none}
 /* destination line fades in on hover, focus or first tap: reason: previews where the route goes */
 .br-ln{font-size:1rem;line-height:1.4;opacity:0;transition:opacity .2s}
 .br.on .br-ln{opacity:1}
+/* touch: the first tap previews the route and shows this button; the second tap (on it or the row) opens it */
+.br-open{display:none;align-self:flex-start;align-items:center;gap:.4rem;min-height:44px;margin-top:.4rem;padding:0 1rem;border-radius:999px;background:var(--btn);color:var(--btn-fg);font-weight:600;font-size:.95rem}
+.br.on[data-armed="1"] .br-open{display:inline-flex}
 .br-pl{flex:none;width:112px;aspect-ratio:4/3}
 .br.main .br-pl{width:140px}
 .br.on .br-pl{box-shadow:0 0 0 2px var(--link)}
@@ -660,7 +703,7 @@ body.d-open .ctr-mini{display:none}
 .c-yt-btn svg{width:28px;height:28px;margin-left:4px;fill:var(--btn-fg)}
 .c-yt-play:hover .c-yt-btn,.c-yt-play:focus-visible .c-yt-btn{transform:scale(1.07)}
 .c-yt-play:focus-visible{outline-offset:-4px}
-.c-yt-lbl{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);padding:.45rem .75rem;border-radius:999px;background:var(--lbox-bg);color:var(--detail-ink);font:600 .8rem/1.3 var(--mono);letter-spacing:.03em}
+.c-yt-lbl{position:absolute;left:12px;bottom:12px;max-width:calc(100% - 24px);padding:.45rem .75rem;border-radius:999px;background:var(--btn);color:var(--btn-fg);font:600 .8rem/1.3 var(--mono);letter-spacing:.03em}
 .c-yt .c-cap{margin-top:.5rem}
 .c-yt-out a{font-weight:600}
 .c-h2{margin:0 0 1rem;font-weight:700;font-size:clamp(1.5rem,2.4vw,2.1rem);line-height:1.15;letter-spacing:-.01em}
@@ -769,8 +812,10 @@ body.d-open .ctr-mini{display:none}
 /* a drawn group under the pointer or focus: accent red, slightly thicker (reason: shows what the card describes) */
 .s4-svg path.is-hot{stroke:var(--s4-accent);stroke-width:calc(var(--w,1.6) * 1px + .9px)}
 .s4-svg text.is-hot{fill:var(--s4-link)}
-.s4-svg .s4-hitr{fill:transparent;stroke:none;pointer-events:all;cursor:pointer}
-.s4-svg .s4-hitp{fill:none;stroke:transparent;stroke-width:20px;pointer-events:stroke;cursor:pointer}
+/* hit areas: a near-invisible paint rather than "transparent" (some mobile browsers skip fully transparent strokes) */
+.s4-svg .s4-hitr{fill:var(--s4-hit);stroke:none;pointer-events:all;cursor:pointer}
+.s4-svg .s4-hitp{fill:none;stroke:var(--s4-hit);stroke-width:20px;pointer-events:stroke;cursor:pointer}
+@media (hover:none){.s4-svg .s4-hitp{stroke-width:34px}}
 .s4-ov{position:absolute;left:0;top:0;pointer-events:none}
 .s4-cap{position:relative;grid-area:1/1;width:100%;text-align:center;font:italic 400 1em/1.35 var(--s4-serif);pointer-events:none;color:var(--s4-ink)}
 /* caption crossfade: reason: one line says what the step being drawn shows */
@@ -821,8 +866,11 @@ span.s4-card-go{border-style:dashed}
 .s4--phone .s4-ticks{position:static;transform:none;flex:none;flex-direction:row;justify-content:center;gap:8px;margin:.25rem 0 0}
 .s4--phone .s4-ticks li{width:12px;transform-origin:50% 50%}
 .s4--phone .s4-ticks li.is-cur{transform:scaleX(1.5)}
-.s4--phone .s4-card.is-pin{position:fixed;left:8px;right:8px;top:auto;bottom:8px;width:auto;transform:none!important}
-.s4--phone .s4-card.is-pin .s4-card-in{max-height:min(62vh,calc(var(--s4-vh,100vh) - var(--s4-top,0px) - 24px))!important;border-radius:12px 12px 8px 8px;transform-origin:50% 100%}
+/* touch: the card is docked inside the stage (in flow with the drawing), unfolding from the part you tapped */
+.s4-card.is-dock{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-width:440px;margin:0 auto;transform:none!important;z-index:7}
+.s4-card.is-dock .s4-card-in{border-radius:12px}
+.s4-card-more{display:inline-flex;align-items:center;min-height:44px;margin-top:.6rem;padding:0 1.1rem;border:1px solid var(--s4-link);border-radius:8px;background:transparent;color:var(--s4-link);font:600 .95rem/1.2 var(--s4-sans);cursor:pointer}
+@media (hover:none){.s4-card-go,.s4-card-x{display:inline-flex;align-items:center;min-height:44px}.s4-card-go{padding:0 1rem}.s4-card-x{padding:0 .4rem}}
 .s4--static .s4-track{height:auto}
 .s4--static .s4-stage{position:relative;top:0;height:auto}
 .s4--static .s4-art{flex:none;aspect-ratio:var(--s4-ar,5 / 3);width:min(100%,calc(78vh * var(--s4-arn,1.667)));margin:.4rem auto 0}
@@ -934,10 +982,11 @@ span.s4-card-go{border-style:dashed}
   /* phones: the destination line shows on first tap (the tap equivalent of hover), so rows stay compact */
   .br-ln{grid-column:1/-1;grid-row:3;display:none;margin-top:.2rem}
   .br.on .br-ln{display:block}
+  .br-open{grid-column:1/-1;grid-row:4;justify-self:start}
   .br-map{width:44px;height:44px;border:0;font-size:.85rem;align-self:flex-start}
   .tourbox{left:var(--corner);right:var(--corner);bottom:var(--corner);transform:none;justify-content:space-between;flex-wrap:wrap;border-radius:18px}
   .tourbox .hint{display:none}
-  .hero{padding-top:calc(var(--bar) + 20px);padding-bottom:56px}
+  .hero{padding-top:calc(var(--bar) + var(--sat,0px) + 20px);padding-bottom:56px}
   .tp-st{font-size:1.25rem;line-height:1.4}
   .rail li{width:78vw}
   .end{padding-bottom:96px}
@@ -970,7 +1019,7 @@ span.s4-card-go{border-style:dashed}
 </head>
 <body>
 <!-- whole-screen colour: one tone per section, cross-faded as you scroll; the sunset on top while a project is expanded -->
-<div class="scr" id="scr" aria-hidden="true"><i class="scr-a" id="scr-a"></i><i class="scr-b" id="scr-b"></i><i class="scr-sun" id="scr-sun"></i></div>
+<div class="scr" id="scr" aria-hidden="true"><i></i></div>
 <!-- ambient colour: soft glows at the screen edges, tinted per section as you scroll -->
 <div class="amb" id="amb" aria-hidden="true"></div>
 <svg class="topo" id="topo" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><path id="topo-a" stroke-width="1"/><path id="topo-b" stroke-width="1.8"/></svg>
@@ -1031,6 +1080,7 @@ span.s4-card-go{border-style:dashed}
   </div>
   <div class="lbox" id="lbox" role="dialog" aria-modal="true" aria-label="Enlarged image" hidden>
     <i class="lbox-dim" aria-hidden="true"></i>
+    <div class="lbox-svg" id="lbox-svg" hidden></div>
     <button type="button" class="lbox-x" id="lbox-x">Close</button>
     <img id="lbox-img" alt="">
     <p id="lbox-cap"></p>
@@ -1040,6 +1090,7 @@ span.s4-card-go{border-style:dashed}
 
 <script src="data.js"></script>
 <script src="content.js"></script>
+<script src="project-colors.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1063,7 +1114,7 @@ span.s4-card-go{border-style:dashed}
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("fg-theme", next); } catch (e) {}
       label();
-      setTimeout(function () { root.classList.remove("theme-fade"); }, 350);
+      setTimeout(function () { root.classList.remove("theme-fade"); }, 750);
     }
     function protest() {
       var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1343,7 +1394,7 @@ span.s4-card-go{border-style:dashed}
           '<span class="br-dest">' +
             '<span class="br-mk" aria-hidden="true">' + esc(t.no) + "</span>" +
             '<span class="br-txt">' + (isMain && k === nextAt ? '<span class="br-tag lbl">Next on the tour</span>' : "") +
-              '<span class="br-ti"><span class="sr">Project ' + esc(t.no) + ": </span>" + esc(t.title) + '</span><span class="br-ln">' + esc(t.line) + "</span></span>" +
+              '<span class="br-ti"><span class="sr">Project ' + esc(t.no) + ": </span>" + esc(t.title) + '</span><span class="br-ln">' + esc(t.line) + '</span><span class="br-open" aria-hidden="true">Open' + ARROW + "</span></span>" +
             '<span class="br-pl frame ' + fitOf(t) + '">' + img(t, true) + "</span>" +
           "</span>" +
         "</a>" +
@@ -1540,12 +1591,16 @@ span.s4-card-go{border-style:dashed}
   /* ---------- detail pages: everything about one project ---------- */
   function detailHTML(p, idx) {
     var fit = fitOf(p), prev = P[idx - 1], next = P[idx + 1];
-    var showSec = SEC && HOME.indexOf(p.id) >= 0, c = CT[p.id] || null, ctx = { secShown: !!showSec, ptitle: p.title, noun: /film/i.test((p.kicker || "") + " " + ((c && c.eyebrow) || "")) ? "film" : "video" };
+    /* with a case study (content.js) the summary box is dropped: its body and facts repeat the case study's first section.
+       Title, line and hero image stay; tags become a small row under the line; the security note still shows once. */
+    var showSec = SEC && HOME.indexOf(p.id) >= 0, c = CT[p.id] || null, hasC = !!(c && (c.blocks || []).length);
+    var ctx = { secShown: !!showSec && !hasC, ptitle: p.title, noun: /film/i.test((p.kicker || "") + " " + ((c && c.eyebrow) || "")) ? "film" : "video" };
     var tagsH = (p.tags || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("");
     var secs = c ? sectionsOf(c, p.id, ctx) : [];
     var ctitle = c && c.title && c.title !== p.title && c.title !== p.line ? c.title : "";
     var lede = c && c.lede && c.lede !== p.line && c.lede !== p.body ? c.lede : "";
-    var intro = '<div class="d-sheet d-intro">' +
+    if (hasC && showSec && !ctx.secShown && secs.length) secs[0].html = secNote() + secs[0].html;
+    var intro = hasC ? "" : '<div class="d-sheet d-intro">' +
       (ctitle ? '<h3 class="c-h2">' + esc(ctitle) + "</h3>" : "") + (lede ? '<p class="c-lede">' + esc(lede) + "</p>" : "") +
       '<div class="d-grid"><div>' +
         '<p class="d-body">' + esc(p.body) + "</p>" +
@@ -1556,7 +1611,7 @@ span.s4-card-go{border-style:dashed}
     var story = p.story ? '<div class="story-mount d-story" data-story="' + esc(p.id) + '"><div class="s4-sr"><p>Text version of the story: ' + esc(p.storyTitle || "") + "</p><ol>" +
       p.story.map(function (st) { var b = byId(st.by); return "<li>" + esc(st.caption || "") + " " + esc(st.detail || "") + " Handled by: " + esc(b ? b.title : st.by) + ".</li>"; }).join("") +
       "</ol></div></div>" : "";
-    var parts = [intro], placed = !story;
+    var parts = intro ? [intro] : [], placed = !story;
     secs.forEach(function (s) { parts.push(secHTML(s)); if (!placed && s.title) { parts.push(story); placed = true; } });
     if (!placed) parts.push(story);
     parts.push('<div class="d-sheet d-leads">' + forkHTML(p, idx) +
@@ -1571,6 +1626,8 @@ span.s4-card-go{border-style:dashed}
           '<p class="d-meta lbl"><span>Project ' + esc(p.no) + " / " + TOTAL + "</span><span>" + esc(p.kicker) + '</span><span class="st">' + esc(p.status) + "</span></p>" +
           '<h2 class="d-t" id="dt-' + esc(p.id) + '" tabindex="-1">' + esc(p.title) + "</h2>" +
           '<p class="d-line">' + esc(p.line) + "</p>" +
+          (hasC && tagsH ? '<ul class="tags d-tags" aria-label="Tools">' + tagsH + "</ul>" : "") +
+          (hasC && (ctitle || lede) ? '<div class="d-sum">' + (ctitle ? '<p class="d-ct">' + esc(ctitle) + "</p>" : "") + (lede ? '<p class="d-lede">' + esc(lede) + "</p>" : "") + "</div>" : "") +
         "</div>" +
         '<figure class="d-fig frame ' + fit + '">' + img(p, true) + "</figure>" +
       "</div>" +
@@ -1656,21 +1713,96 @@ span.s4-card-go{border-style:dashed}
   var heroEl = $("top");
   var firstStopPos = sections.indexOf($("stop-" + P[0].id));
 
-  /* ---------- whole-screen tone: two stacked layers; the top one fades in with the new tone, then becomes the base ----------
-     reason: the whole screen taking on a new colour is how you feel you have moved on. Only opacity animates. */
-  var TONE = "hero", TONE_OF = null, scrA = $("scr-a"), scrB = $("scr-b"), scrSun = $("scr-sun"), scrBox = $("scr");
-  function toneVar(k) { return "var(--tone-" + k + ")"; }
-  scrA.style.backgroundColor = toneVar(TONE);
+  /* ---------- colour engine (reason: the whole screen taking on a new colour is how you feel you have moved on) ----------
+     One rAF tween blends a small set of colour variables on :root, in sRGB with alpha, from wherever they are now to
+     the target of the current state, then stops. Everything colour-carrying reads these variables, so the screen
+     gradient, html/body (overscroll), the top bar (backing, hairline, text, switch, Contact pill, Back chip), cards'
+     glows, buttons, links, diagram plates and their lines all pass through the same intermediate colours together.
+       state: { mode: "main", tone } (a main-page section) or { mode: "p", id } (an expanded project)
+       timing: expand, collapse, travel 1800ms; section change while scrolling 1200ms; theme switch 700ms;
+               ease-in-out, started with the movement and still flowing after the content has arrived;
+               reduced motion: 200ms linear. A new target mid-way continues from the current blend (no snap).
+       text colours that flip (ink to cream) cross over in the middle ~70ms rather than fading through grey.
+     Screen gradient: three stops at 0 / 55 / 100% and 160deg for every state (a main tone is three equal stops;
+     project gradients use the file's own three "stops"). <meta name="theme-color"> follows the top stop at the
+     start, middle and end of each blend. */
+  var TONE = "hero", TONE_OF = null, scrBox = $("scr"), PC = window.PROJECT_COLORS || null;
+  if (PC && PC.main) document.documentElement.classList.add("pc-on");
+  var CE = (function () {
+    var root = document.documentElement, meta = $("meta-tc");
+    var INK = { "--bar-ink": 1, "--bar-btn-ink": 1, "--p-ink": 1, "--p-btn-ink": 1, "--p-plate-ink": 1, "--m-plate-ink": 1 };
+    var cur = {}, from = {}, to = {}, t0 = 0, dur = 1, raf = 0, lin = false, metaAt = -1, state = { mode: "main", tone: "hero" };
+    function parse(s) {
+      s = String(s == null ? "" : s).trim(); var m;
+      if ((m = /^#([0-9a-f]{3,8})$/i.exec(s))) {
+        var h = m[1]; if (h.length === 3 || h.length === 4) h = h.replace(/./g, "$&$&");
+        return [parseInt(h.substr(0, 2), 16), parseInt(h.substr(2, 2), 16), parseInt(h.substr(4, 2), 16), h.length === 8 ? parseInt(h.substr(6, 2), 16) / 255 : 1];
+      }
+      if ((m = /^rgba?\(([^)]+)\)$/i.exec(s))) { var p = m[1].split(/[\s,\/]+/).filter(Boolean).map(parseFloat); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
+      return null;
+    }
+    function tok(n) { return getComputedStyle(root).getPropertyValue(n); }
+    function al(c, a) { return c ? [c[0], c[1], c[2], a] : null; }
+    function target(st) {
+      var th = themeNow(), m = PC && PC.main ? PC.main[th] : null, o = {}, ps = st.mode === "p" ? pset(st.id) : null;
+      var c = (ps && ps[th]) || m;   /* credits, or a project without a set: the main red */
+      if (st.mode === "p" && c && c.stops) {
+        var sp = c.stops.map(parse);
+        o["--ce-1"] = sp[0]; o["--ce-2"] = sp[1]; o["--ce-3"] = sp[2];
+        o["--bar-bg"] = al(sp[0], .86); o["--bar-ink"] = parse(c.bgInk); o["--bar-line"] = al(parse(c.bgInk), .2); o["--bar-acc"] = parse(c.accentOnBg);
+      } else {
+        var tn = parse(tok("--tone-" + (st.tone || "hero"))) || parse(tok("--base-bg")), ink = parse(tok("--base-ink"));
+        o["--ce-1"] = tn; o["--ce-2"] = tn; o["--ce-3"] = tn;
+        o["--bar-bg"] = al(tn, .86); o["--bar-ink"] = ink; o["--bar-line"] = al(ink, .16); o["--bar-acc"] = parse(tok("--accent"));
+      }
+      if (c) {
+        if (c.button) { o["--bar-btn"] = parse(c.button.fill); o["--bar-btn-ink"] = parse(c.button.label); o["--p-btn"] = parse(c.button.fill); o["--p-btn-ink"] = parse(c.button.label); }
+        o["--p-ink"] = parse(c.bgInk); o["--p-onbg"] = parse(c.accentOnBg); o["--p-accent"] = parse(c.accent); o["--p-glow"] = parse(c.glow);
+        o["--p-plate"] = parse(c.plate); o["--p-plate-ink"] = parse(c.plateInk); o["--p-plate-fill"] = parse(c.plateFill); o["--p-plate-hl"] = parse(c.plateHighlight);
+      }
+      if (m) { o["--m-plate"] = parse(m.plate); o["--m-plate-ink"] = parse(m.plateInk); o["--m-plate-fill"] = parse(m.plateFill); o["--m-plate-hl"] = parse(m.plateHighlight); }
+      Object.keys(o).forEach(function (k) { if (!o[k]) delete o[k]; });
+      return o;
+    }
+    function css(v) { return "rgba(" + Math.round(v[0]) + "," + Math.round(v[1]) + "," + Math.round(v[2]) + "," + (Math.round(v[3] * 1000) / 1000) + ")"; }
+    function write(stage) {
+      Object.keys(cur).forEach(function (k) { root.style.setProperty(k, css(cur[k])); });
+      if (meta && cur["--ce-1"] && stage !== metaAt) { metaAt = stage; var v = cur["--ce-1"]; meta.setAttribute("content", "rgb(" + Math.round(v[0]) + "," + Math.round(v[1]) + "," + Math.round(v[2]) + ")"); }
+    }
+    function frame(now) {
+      raf = 0;
+      var t = clamp((now - t0) / dur, 0, 1), e = lin ? t : (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2), ei = clamp((e - .44) / .12, 0, 1);
+      Object.keys(to).forEach(function (k) {
+        var a = from[k] || to[k], b = to[k], w = INK[k] ? ei : e;
+        cur[k] = [a[0] + (b[0] - a[0]) * w, a[1] + (b[1] - a[1]) * w, a[2] + (b[2] - a[2]) * w, a[3] + (b[3] - a[3]) * w];
+      });
+      write(t >= 1 ? 2 : t >= .5 ? 1 : 0);
+      if (t < 1) raf = requestAnimationFrame(frame);
+    }
+    function go(st, ms) {
+      if (st) state = st;
+      to = target(state); from = {};
+      Object.keys(to).forEach(function (k) { from[k] = cur[k] ? cur[k].slice() : to[k].slice(); });
+      lin = still(); dur = lin ? 200 : (ms || 1200); t0 = performance.now(); metaAt = -1;
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+    function snap(st) {
+      if (st) state = st;
+      to = target(state); cur = {}; from = {};
+      Object.keys(to).forEach(function (k) { cur[k] = to[k].slice(); });
+      metaAt = -1; write(2);
+    }
+    return { go: go, snap: snap, state: function () { return state; } };
+  })();
+  /* scrolling: the section under the viewport centre retargets the blend */
   function setTone(k) {
     if (!k || k === TONE) return;
-    scrA.style.backgroundColor = toneVar(TONE);       /* the base takes the tone we were heading to */
-    scrB.style.transition = "none"; scrB.classList.remove("on");
-    void scrB.offsetWidth;
-    scrB.style.backgroundColor = toneVar(k);
-    scrB.style.transition = "";
-    scrB.classList.add("on");
     TONE = k;
+    if (!DT || !DT.open) CE.go({ mode: "main", tone: k }, 1200);
   }
+  /* the theme switch runs through the same engine, and swaps the photo variants with the same timing */
+  new MutationObserver(function () { CE.go(null, 700); refreshPhotos(700); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  CE.snap({ mode: "main", tone: "hero" });
   function toneOfId(id) { var a = id === "credits" ? $("hello") : $("stop-" + id); return (a && TONE_OF && TONE_OF(a)) || "hero"; }
 
   /* ---------- ambient colour (reason: each section tints the screen slightly, so you feel you have moved on) ----------
@@ -1941,7 +2073,31 @@ span.s4-card-go{border-style:dashed}
         e.c = c;
       });
       placeLabels();
+      drawConn();
       dirty = false;
+    }
+    /* connector: a line from the selected marker to the edge of its panel (reason: the panel belongs to that marker) */
+    var grid = stage.parentNode && stage.parentNode.parentNode, panel = pan.parentNode, cSvg = null, cPath = null, cDot = null;
+    if (grid) {
+      cSvg = document.createElementNS(NS, "svg"); cSvg.setAttribute("class", "mconn"); cSvg.setAttribute("aria-hidden", "true"); cSvg.setAttribute("focusable", "false");
+      cPath = document.createElementNS(NS, "path"); cPath.setAttribute("pathLength", "1");
+      cDot = document.createElementNS(NS, "circle"); cDot.setAttribute("r", "3.5");
+      cSvg.appendChild(cPath); cSvg.appendChild(cDot); grid.appendChild(cSvg);
+    }
+    function drawConn() {
+      if (!cSvg) return;
+      if (!selected || !nodes[selected] || !W) { cSvg.style.display = "none"; return; }
+      cSvg.style.display = "";
+      var g = grid.getBoundingClientRect(), s = stage.getBoundingClientRect(), pr = panel.getBoundingClientRect(), n = nodes[selected];
+      var x0 = s.left - g.left + n.x, y0 = s.top - g.top + n.y, x1, y1, d;
+      if (pr.left >= s.right - 4) {
+        x0 += n.mr + 4; x1 = pr.left - g.left; y1 = clamp(y0, pr.top - g.top + 28, pr.bottom - g.top - 28);
+        d = "M" + x0.toFixed(1) + " " + y0.toFixed(1) + " C" + ((x0 + x1) / 2).toFixed(1) + " " + y0.toFixed(1) + " " + ((x0 + x1) / 2).toFixed(1) + " " + y1.toFixed(1) + " " + x1.toFixed(1) + " " + y1.toFixed(1);
+      } else {
+        y0 += n.mr + 4; y1 = pr.top - g.top; x1 = clamp(x0, pr.left - g.left + 28, pr.right - g.left - 28);
+        d = "M" + x0.toFixed(1) + " " + y0.toFixed(1) + " C" + x0.toFixed(1) + " " + ((y0 + y1) / 2).toFixed(1) + " " + x1.toFixed(1) + " " + ((y0 + y1) / 2).toFixed(1) + " " + x1.toFixed(1) + " " + y1.toFixed(1);
+      }
+      cPath.setAttribute("d", d); cDot.setAttribute("cx", x1.toFixed(1)); cDot.setAttribute("cy", y1.toFixed(1));
     }
     /* reason boxes: try a few spots along each highlighted route and keep the first that covers no marker, node label or other box */
     function hit(a, b) { return a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1]; }
@@ -2024,8 +2180,12 @@ span.s4-card-go{border-style:dashed}
     var panReady = false;
     function select(id, other) {
       selected = id; pair = other ? [id, other] : null; pan.className = "mp-in" + (id ? " has-fig" : ""); pan.innerHTML = panelHTML(id); paint();
-      if (panReady && !still() && pan.animate) pan.animate([{ opacity: 0, transform: "translateX(-14px) scale(.985)", transformOrigin: "0 30%" }, { opacity: 1, transform: "none", transformOrigin: "0 30%" }], { duration: 260, easing: EOUT });
+      if (panReady && !still() && pan.animate) {
+        pan.animate([{ opacity: 0, transform: "translateX(-14px) scale(.985)", transformOrigin: "0 30%" }, { opacity: 1, transform: "none", transformOrigin: "0 30%" }], { duration: 260, easing: EOUT });
+        if (cPath && id) cPath.animate([{ strokeDasharray: "1 1", strokeDashoffset: 1 }, { strokeDasharray: "1 1", strokeDashoffset: 0 }], { duration: 340, easing: EOUT });
+      }
       panReady = true;
+      drawConn();
     }
     pan.addEventListener("click", function (e) {
       var b = e.target.closest("[data-goto]"); if (!b) return;
@@ -2867,11 +3027,18 @@ span.s4-card-go{border-style:dashed}
     /* ---------- the page preview card ---------- */
     var cardOn = false, cardKey = "", cx = 0, cy = 0, tx = 0, ty = 0, lerping = false;
     function rmNow() { return mqRM.matches; }
+    /* diagrams show as inline, theme-coloured copies (opt.diagram), one per source, reused */
+    var dgCache = {}, dgShown = null;
     function setImage(p) {
       var src = p ? srcOf(p) : "";
       cardImgBox.classList.toggle("is-contain", !!(p && p.fit === "contain"));
       cardImgBox.classList.toggle("is-cutout", !!(p && p.fit === "cutout"));
       cardImgBox.hidden = !src;
+      var dn = null;
+      if (src && opt.diagram) { if (!dgCache[src]) dgCache[src] = opt.diagram(src); dn = dgCache[src]; }
+      if (dgShown && dgShown !== dn) { dgShown.remove(); dgShown = null; }
+      if (dn) { if (dn.parentNode !== cardImgBox) cardImgBox.appendChild(dn); dgShown = dn; cardImg.style.display = "none"; return; }
+      cardImg.style.display = "";
       if (cardImg.getAttribute("src") !== src) cardImg.setAttribute("src", src);
     }
     function lbl(p) { var e = mk("p", { "class": "s4-card-lbl" }); e.textContent = p ? "Project " + (p.no || "") + " · " + (p.title || "") : ""; return e; }
@@ -2945,8 +3112,35 @@ span.s4-card-go{border-style:dashed}
     }
     function hideCard() {
       cardOn = false; cardKey = "";
-      card.classList.remove("is-on", "is-pin");
+      card.classList.remove("is-on", "is-pin", "is-dock");
       cardIn.style.maxHeight = "";
+      if (card.parentNode !== ov) ov.appendChild(card);
+    }
+    /* touch: the preview (image, label, caption, first sentence) with a "See more" button that expands it in place */
+    function fillTouch(list, lead) {
+      cardKey = "tpeek";
+      var st = steps[lead], p = proj(st.by);
+      setImage(p);
+      cardBody.innerHTML = "";
+      cardBody.appendChild(lbl(p));
+      mk("p", { "class": "s4-card-cap" }, cardBody).textContent = st.caption || "";
+      mk("p", { "class": "s4-card-txt" }, cardBody).textContent = firstSentence(st.detail);
+      var more = mk("button", { type: "button", "class": "s4-card-more" }, cardBody);
+      more.textContent = "See more";
+      more.addEventListener("click", function () {
+        if (!pin) return;
+        pin.peek = false;
+        fillPinned(pin.list, pin.btn);
+        var x = cardBody.querySelector(".s4-card-x"); if (x) x.focus({ preventScroll: true });
+      });
+    }
+    /* on touch the card is docked inside the stage, never fixed to the screen: it cannot end up under the bar or off the bottom */
+    function dockCard(cxp, cyp) {
+      stage.appendChild(card);
+      card.classList.add("is-dock");
+      cardIn.style.maxHeight = f(Math.max(160, stage.clientHeight * .72)) + "px";
+      var r = card.getBoundingClientRect();
+      cardIn.style.transformOrigin = f(cxp - r.left) + "px " + f(cyp - r.top) + "px";
     }
     function ovPt(clientX, clientY) { var o = ov.getBoundingClientRect(); return [clientX - o.left, clientY - o.top]; }
     function anchorPx(i) {
@@ -2954,18 +3148,27 @@ span.s4-card-go{border-style:dashed}
       if (!q) return [ow / 2, oh / 2];
       return [(q.x + q.w) / LAY.vb[0] * ow - 8, (q.y + Math.min(q.h / 2, 30)) / LAY.vb[1] * oh];
     }
-    function openPinned(list, lead, els, zoneRef, px, py) {
+    function openPinned(list, lead, els, zoneRef, px, py, touch) {
       if (pin) btns[pin.btn].setAttribute("aria-expanded", "false");
-      pin = { zone: zoneRef, list: list, btn: lead, els: els, px: px, py: py, y: SC() };
+      pin = { zone: zoneRef, list: list, btn: lead, els: els, px: px, py: py, y: SC(), peek: !!touch };
       var wasOn = cardOn;
-      fillPinned(list, lead);
+      if (touch) fillTouch(list, lead); else fillPinned(list, lead);
       card.classList.add("is-pin");
       card.setAttribute("role", "region");
       card.setAttribute("aria-label", "Specifics");
       card.removeAttribute("aria-hidden");
-      ov.insertBefore(card, btns[lead].nextSibling);
       btns[lead].setAttribute("aria-expanded", "true");
       applyHot();
+      if (touch) {
+        var o = ov.getBoundingClientRect();
+        if (cardOn) { card.classList.remove("is-on"); cardOn = false; }
+        dockCard(o.left + px, o.top + py);
+        void card.offsetWidth;
+        cardOn = true; card.classList.add("is-on");
+        return;
+      }
+      if (card.classList.contains("is-dock")) { card.classList.remove("is-dock"); wasOn = false; cardOn = false; card.classList.remove("is-on"); }
+      ov.insertBefore(card, btns[lead].nextSibling);
       var b = bounds();
       cardIn.style.maxHeight = f(Math.max(160, b.b - b.t)) + "px";
       if (wasOn) { var q = cardPos(cx, cy, 0); moveTo(q[0], q[1], false); }
@@ -2984,7 +3187,7 @@ span.s4-card-go{border-style:dashed}
       if (back && !b.hidden) b.focus();
     }
     function placePinned() {
-      if (!pin || layoutName === "phone") return;
+      if (!pin || card.classList.contains("is-dock")) return;
       if (!pin.zone) { var a = anchorPx(pin.btn); pin.px = a[0]; pin.py = a[1]; }
       var b = bounds();
       cardIn.style.maxHeight = f(Math.max(160, b.b - b.t)) + "px";
@@ -3018,23 +3221,60 @@ span.s4-card-go{border-style:dashed}
       if (!pin) { if (focusI >= 0) { var a = anchorPx(focusI); fillPeek(focusI, "key"); showCard(a[0], a[1], 12); } else hideCard(); }
       applyHot();
     });
+    /* the part under a point, found from the drawing's own geometry (smallest finished part whose box holds the point),
+       so a tap does not depend on the browser hit-testing thin transparent strokes */
+    function zAt(clientX, clientY) {
+      var o = ov.getBoundingClientRect(); if (!o.width) return null;
+      var vx = (clientX - o.left) / o.width * LAY.vb[0], vy = (clientY - o.top) / o.height * LAY.vb[1], best = null, ba = 1e12, pad = 14;
+      zoneList.forEach(function (Z) {
+        if (!Z.active) return;
+        var b = vbBox(Z.name); if (!b) return;
+        if (vx >= b.x - pad && vx <= b.x + b.w + pad && vy >= b.y - pad && vy <= b.y + b.h + pad && b.w * b.h < ba) { ba = b.w * b.h; best = Z; }
+      });
+      return best;
+    }
+    function tapAt(Z, clientX, clientY) {
+      hideHint();
+      var q = ovPt(clientX, clientY);
+      if (pin && pin.zone === Z && pin.peek) { closeCard(false); return; }
+      var list = Z.steps.filter(function (s) { return done[s]; });
+      if (!list.length) return;
+      openPinned(list, Z.shown, Z.els, Z, q[0], q[1], true);
+    }
+    /* touch and pen: a tap is a short press that did not turn into a scroll (the browser cancels the pointer when it
+       pans), so native vertical scrolling keeps working and nothing calls preventDefault */
+    var tap = null, tapDone = 0;
+    svg.addEventListener("pointerdown", function (e) { tap = e.pointerType === "mouse" ? null : { x: e.clientX, y: e.clientY, t: performance.now() }; });
+    svg.addEventListener("pointercancel", function () { tap = null; });
+    svg.addEventListener("pointerup", function (e) {
+      var tp = tap; tap = null;
+      if (!tp || e.pointerType === "mouse") return;
+      if (Math.abs(e.clientX - tp.x) > 10 || Math.abs(e.clientY - tp.y) > 10 || performance.now() - tp.t > 700) return;
+      var Z = zOf(e.target) || zAt(e.clientX, e.clientY);
+      tapDone = performance.now();
+      if (Z) tapAt(Z, e.clientX, e.clientY); else if (pin) closeCard(false);
+    });
     svg.addEventListener("click", function (e) {
-      var Z = zOf(e.target); if (!Z) return;
+      if (performance.now() - tapDone < 800) return;   /* already handled as a tap */
+      var Z = zOf(e.target) || zAt(e.clientX, e.clientY);
+      if (!Z) { if (pin) closeCard(false); return; }
+      if (e.pointerType && e.pointerType !== "mouse") { tapAt(Z, e.clientX, e.clientY); return; }
       hideHint();
       var q = ovPt(e.clientX, e.clientY);
       if (pin && pin.zone === Z) {
         closeCard(false);
-        if (hoverZ === Z && e.pointerType !== "touch") { fillPeek(Z.shown, "ptr"); showCard(q[0], q[1], 18); applyHot(); }
+        if (hoverZ === Z) { fillPeek(Z.shown, "ptr"); showCard(q[0], q[1], 18); applyHot(); }
         return;
       }
       var list = Z.steps.filter(function (s) { return done[s]; });
       if (!list.length) return;
       openPinned(list, Z.shown, Z.els, Z, q[0], q[1]);
     });
+    /* tapping or clicking anywhere else closes it (a tap on the drawing is decided on pointerup instead) */
     document.addEventListener("pointerdown", function (e) {
       if (!active || !pin) return;
       var t = e.target;
-      if (card.contains(t) || zOf(t)) return;
+      if (card.contains(t) || zOf(t) || svg.contains(t)) return;
       closeCard(false);
     });
 
@@ -3150,7 +3390,8 @@ span.s4-card-go{border-style:dashed}
   function storyOn(id) {
     var pg = $("d-" + id), m = pg && pg.querySelector(".story-mount");
     if (!m) return;
-    if (!STORIES[id]) STORIES[id] = initStory(m, byId(id), { scroller: $("dialog"), barH: dbarH, imgSrc: imgSrc });
+    if (!STORIES[id]) STORIES[id] = initStory(m, byId(id), { scroller: $("dialog"), barH: dbarH,
+      imgSrc: function (p) { return photoFor(imgSrc(p), id); }, diagram: function (src) { return diagramEl(src, ""); } });
     else STORIES[id].resume();
     CUR_STORY = STORIES[id];
   }
@@ -3277,9 +3518,8 @@ span.s4-card-go{border-style:dashed}
   }
   /* the sunset takes over the whole screen (behind the top bar too) in step with the lines */
   function runSun(opening, dur, ease) {
-    var a = scrSun.animate(opening ? [{ opacity: 0 }, { opacity: 1 }] : [{ opacity: 1 }, { opacity: 0 }], { duration: dur, easing: ease, fill: "forwards" });
-    scrBox.classList.toggle("sun-on", opening);
-    return a;
+    /* the colour itself is blended by the engine over a longer time; this only marks the end of the movement */
+    return scrBox.animate([{ opacity: 1 }, { opacity: 1 }], { duration: dur, easing: ease });
   }
   /* the three shared elements: stop original -> expanded counterpart */
   function shared(id) {
@@ -3298,7 +3538,7 @@ span.s4-card-go{border-style:dashed}
   }
   function restEls(id) {
     var pg = $("d-" + id); if (!pg) return [];
-    return [pg.querySelector(".d-meta"), pg.querySelector(".d-wrap")].filter(Boolean);
+    return [pg.querySelector(".d-meta"), pg.querySelector(".d-tags"), pg.querySelector(".d-sum"), pg.querySelector(".d-wrap")].filter(Boolean);
   }
   function hideOrig(id, on) { shared(id).forEach(function (x) { x[0].style.visibility = on ? "hidden" : ""; }); }
   function chipShow(on) {
@@ -3314,6 +3554,145 @@ span.s4-card-go{border-style:dashed}
     if (r.top > bar - r.height * .25 && r.top < vh * .6) { go(); return; }
     tweenTo(r.top + window.scrollY - Math.max(bar + 16, (vh - r.height) / 2), go);
   }
+  /* ---------- per-project colours (project-colors.js, system "owner"; the alt set where the file names it "tuned") ----------
+     The main page never takes these: it stays red. The colour engine (above) blends file fields into a few root
+     variables; CSS rules (html.pc-on ...) bind the page's tokens to them. Nothing is derived by hand.
+     MAPPING  file field        -> engine variable -> tokens bound to it
+              stops[0..2]       -> --ce-1..3        -> the whole-screen gradient (160deg, 0/55/100%), html/body, --solid
+              stops[0], bgInk   -> --bar-bg (86%), --bar-ink, --bar-line (20%) -> top bar backing, text, hairline, switch
+              accentOnBg        -> --p-onbg, --bar-acc -> --detail-onbg (links, status dot, focus on the gradient), Back chip hover
+              bgInk             -> --p-ink          -> --detail-ink (title, line, labels, tags on the gradient)
+              accent            -> --p-accent       -> --detail-link, --detail-route-1/2 (links and highlights on cards, fork
+                                                       line, "On this page" marker, sketch active stroke and ticks)
+              button.fill/label -> --p-btn(-ink), --bar-btn(-ink) -> --detail-sheet-btn(-ink), --detail-btn-bg/ink, Contact pill, selection
+              glow              -> --p-glow         -> --card-glow, --card-line-warm, --card-shadow colour (--card-glow-2: transparent)
+              plate             -> --p-plate        -> --plate, --plate-bg, --detail-plate-bg, --c-mat, --lbox-bg, --svg-bg
+              plateInk          -> --p-plate-ink    -> --plate-ink, --svg-ink, --svg-ink-soft
+              plateFill         -> --p-plate-fill   -> --plate-fill, --svg-surface, --svg-line, --svg-accent-soft
+              plateHighlight    -> --p-plate-hl     -> --plate-highlight, --svg-accent
+              main.{theme}.plate* -> --m-plate*     -> the main page's diagram plates (once diagrams are inline)
+              uiScreen/uiTile/uiInk, collageBg/collageInk: carried by the photo variants (img/b/{base}--{scope}-{theme}.jpg) */
+  function themeNow() { return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark"; }
+  function pset(id) {
+    var e = PC && PC.owner && PC.owner[id];
+    if (!e) return null;
+    return e.alt && /tuned/i.test(e.alt.name || "") ? e.alt : e;
+  }
+
+  /* ---------- diagrams drawn inline, coloured by the plate variables ----------
+     The three redrawn diagrams are fetched once; every <img> showing one (stops, rail, map panel, expanded heads,
+     case-study figures, fork thumbnails, the sketch's preview card, the lightbox) is replaced by an inline copy whose
+     baked colours become variables: cream lines and labels -> --plate-ink, gold highlight -> --plate-highlight,
+     the dark box fill (drawn at 28%) -> --plate-fill, dark text on the one solid box -> --plate. Embedded brand icons
+     (<image>) keep their own colours. Ids are made unique per copy so arrowheads resolve inside their own copy.
+     If the fetch fails (for example opened from disk), the images and the token plates stay as they were. */
+  var DG_FILES = ["img/b/homelab.svg", "img/b/cameras.svg", "img/b/remote-access.svg"], DG = {}, DG_OK = false, dgN = 0;
+  var DG_MAP = { "#f6efe4": "--plate-ink", "#ffd9a0": "--plate-highlight", "#140c0a": "--plate-fill", "#1f1512": "--plate" };
+  function dgKey(src) { var k = String(src || "").split("?")[0]; return DG[k] ? k : null; }
+  function diagramEl(src, alt) {
+    var key = dgKey(src); if (!key || !window.DOMParser) return null;
+    var doc = new DOMParser().parseFromString(DG[key], "image/svg+xml"), sv = doc.documentElement;
+    if (!sv || sv.nodeName.toLowerCase() !== "svg") return null;
+    sv = document.importNode(sv, true);
+    var uid = "-dg" + (++dgN);
+    [].forEach.call(sv.querySelectorAll("[id]"), function (n) { n.id = n.id + uid; });
+    [].forEach.call(sv.querySelectorAll("*"), function (n) {
+      ["marker-end", "marker-start", "marker-mid", "clip-path", "mask", "filter", "fill", "stroke"].forEach(function (a) {
+        var v = n.getAttribute(a);
+        if (v && v.indexOf("url(#") >= 0) n.setAttribute(a, v.replace(/url\(#([^)]+)\)/g, "url(#$1" + uid + ")"));
+      });
+      ["fill", "stroke"].forEach(function (a) {
+        var v = (n.getAttribute(a) || "").toLowerCase();
+        if (DG_MAP[v]) { n.style.setProperty(a, "var(" + DG_MAP[v] + ")"); n.removeAttribute(a); }
+      });
+    });
+    sv.setAttribute("class", "dg"); sv.setAttribute("data-dg", key);
+    sv.setAttribute("role", "img"); sv.setAttribute("focusable", "false");
+    if (alt != null) sv.setAttribute("aria-label", alt);
+    sv.removeAttribute("width"); sv.removeAttribute("height");
+    return sv;
+  }
+  function inlineImg(im) {
+    if (!DG_OK || !im.parentNode || im.closest(".s4-card-img")) return;
+    var src = im.getAttribute("src") || im.getAttribute("data-src"), el = dgKey(src) ? diagramEl(src, im.getAttribute("alt") || "") : null;
+    if (el) im.parentNode.replaceChild(el, im);
+  }
+  function scanImgs(root) {
+    var list = root.tagName === "IMG" ? [root] : [].slice.call(root.querySelectorAll ? root.querySelectorAll("img") : []);
+    list.forEach(function (im) { inlineImg(im); fixPhoto(im, false); });
+  }
+  /* images added later (the map panel, the sketch card, rebuilt markup) are handled as they arrive */
+  new MutationObserver(function (ms) {
+    ms.forEach(function (m) { [].forEach.call(m.addedNodes, function (n) { if (n.nodeType === 1 && (n.tagName === "IMG" || n.querySelector)) scanImgs(n); }); });
+  }).observe(document.body, { childList: true, subtree: true });
+  if (window.fetch) {
+    Promise.all(DG_FILES.map(function (f) { return fetch(f).then(function (r) { if (!r.ok) throw new Error(f); return r.text(); }).then(function (t) { DG[f] = t; }); }))
+      .then(function () { DG_OK = true; document.documentElement.classList.add("dg-ok"); scanImgs(document.body); })
+      .catch(function () { DG = {}; });
+  }
+
+  /* ---------- photos with baked colours: the variant for this scope and theme, if the manifest lists it ----------
+     img/b/{base}--{scope}-{theme}.jpg; scope is "main" on the main page (rail, stops, map panel) or the id of the
+     expanded page the image sits in. Falls back to the main variant for the theme, then to the plain file.
+     A theme change swaps them with a 200ms crossfade, preloading first. */
+  var VAR = null, VRX = /^img\/b\/(automation-hub|tablet-camera-mode|tablet-photo-mode)(?:--[a-z0-9-]+-(?:light|dark))?\.jpg$/;
+  function photoFor(src, scope) {
+    var m = VRX.exec(String(src || "").split("?")[0]);
+    if (!m || !VAR) return src;
+    var t = themeNow(), a = m[1] + "--" + scope + "-" + t + ".jpg", b = m[1] + "--main-" + t + ".jpg";
+    var out = "img/b/" + (VAR[a] ? a : VAR[b] ? b : m[1] + ".jpg");
+    if (out !== "img/b/" + m[1] + ".jpg") FALLBACK[out] = "img/b/" + m[1] + ".jpg";
+    return out;
+  }
+  function scopeOf(el) { var pg = el.closest && el.closest(".dpage"); return pg ? pg.getAttribute("data-id") : "main"; }
+  /* the new picture is stacked over the old one and fades in over the colour blend's duration, then replaces it */
+  function swapSrc(im, src, ms) {
+    var par = im.parentNode;
+    if (still() || !im.animate || !par || !im.getClientRects().length) { im.setAttribute("src", src); return; }
+    var top = im.cloneNode(false);
+    top.removeAttribute("id"); top.setAttribute("alt", ""); top.setAttribute("aria-hidden", "true");
+    top.style.cssText += ";position:absolute;left:" + im.offsetLeft + "px;top:" + im.offsetTop + "px;width:" + im.offsetWidth + "px;height:" + im.offsetHeight + "px;opacity:0;pointer-events:none";
+    if (getComputedStyle(par).position === "static") par.style.position = "relative";
+    var go = function () {
+      if (!top.isConnected) return;
+      var a = top.animate([{ opacity: 0 }, { opacity: 1 }], { duration: typeof ms === "number" ? ms : 700, easing: "ease-in-out", fill: "forwards" });
+      a.onfinish = function () { im.setAttribute("src", src); top.remove(); };
+    };
+    top.onload = go; top.onerror = function () { top.remove(); };
+    top.setAttribute("src", src);
+    par.insertBefore(top, im.nextSibling);
+  }
+  function fixPhoto(im, fade) {
+    if (!VAR || im.closest(".s4-card-img")) return;
+    var lazy = im.hasAttribute("data-src") && !im.hasAttribute("src"), cur = lazy ? im.getAttribute("data-src") : im.getAttribute("src");
+    if (!cur || !VRX.test(cur.split("?")[0])) return;
+    var want = photoFor(cur, scopeOf(im));
+    if (want === cur) return;
+    if (lazy) im.setAttribute("data-src", want); else if (fade) swapSrc(im, want, fade); else im.setAttribute("src", want);
+  }
+  function refreshPhotos(fade) { if (VAR) [].forEach.call(document.querySelectorAll("img"), function (im) { fixPhoto(im, fade); }); }
+  if (window.fetch) {
+    fetch("img/b/variants.json").then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j) return;
+      VAR = {};
+      (function walk(x) {
+        if (typeof x === "string") { var b = x.split("/").pop().split("?")[0]; if (/--[a-z0-9-]+-(light|dark)\.jpg$/.test(b)) VAR[b] = 1; }
+        else if (x && typeof x === "object") Object.keys(x).forEach(function (k) { walk(k); walk(x[k]); });
+      })(j);
+      refreshPhotos(false);
+    }).catch(function () {});
+  }
+
+  /* the "On this page" index unfolds from its top as the page arrives */
+  function unfoldIdx(id) {
+    var pg = $("d-" + id), nav = pg && pg.querySelector(".d-idx");
+    if (!nav || still() || !nav.animate || !nav.getClientRects().length) return;
+    nav.animate([{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0 0)" }], { duration: 420, easing: EOUT });
+    [].forEach.call(nav.querySelectorAll("li"), function (li, k) {
+      li.animate([{ opacity: 0, transform: "translateX(-8px)" }, { opacity: 1, transform: "none" }], { duration: 300, delay: 120 + 40 * k, easing: EOUT, fill: "backwards" });
+    });
+  }
+
   function openDetail(id, o) {
     if (!$("d-" + id)) return;
     o = o || {};
@@ -3330,6 +3709,7 @@ span.s4-card-go{border-style:dashed}
       var box = g ? g.box : contentBox();
       DT.open = true; DT.after = null;
       showPage(id);
+      if (animate) CE.go({ mode: "p", id: id }, 1800); else CE.snap({ mode: "p", id: id });
       if (o.push !== false) { try { history.pushState({ fgp: id }, "", phref(id)); DT.pushed = true; } catch (err) { DT.pushed = false; } }
       else DT.pushed = false;
       lock(); setInert(true);
@@ -3346,7 +3726,7 @@ span.s4-card-go{border-style:dashed}
         if (o.sketch) scrollToSketch(id); else dlg.scrollTop = 0;
         drawForks();
       }
-      if (!animate) { scrBox.classList.add("sun-on"); settle(); }
+      if (!animate) settle();
       else if (!pl) {
         /* reduced motion (or nothing to measure): a 150ms crossfade to the same end state */
         var f = fades([layer, lnT, lnB], 0, 1, 150).concat(fades([main], 1, 0, 150), [runSun(true, 150, "linear")]);
@@ -3365,6 +3745,7 @@ span.s4-card-go{border-style:dashed}
           anims.forEach(function (x) { x.cancel(); });
           rest.forEach(function (el) { el.style.opacity = ""; el.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: EOUT }); });
           settle();
+          unfoldIdx(id);
         };
       }
       h.focus({ preventScroll: true });
@@ -3389,7 +3770,7 @@ span.s4-card-go{border-style:dashed}
       if (DT.closeWait) { DT.closeWait = false; closeDetail(); }
     }
     DT.trav = true;
-    setTone(toneOfId(id));
+    if (still() || !canAnim) CE.go({ mode: "p", id: id });
     if (still() || !canAnim) {
       var out = canAnim ? dlg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 75, fill: "forwards" }) : null;
       var swap = function () { showPage(id); dlg.scrollTop = 0; arrive(); if (out) { out.cancel(); dlg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 75 }); } finish(); };
@@ -3426,13 +3807,14 @@ span.s4-card-go{border-style:dashed}
     }
     /* the edge lines draw in a little with the pull-back, then return */
     anims.push(lnT.animate(hold(e.t, e.t + ins), opt), lnB.animate(hold(e.b, e.b - ins), opt));
-    /* the colour flows: the sunset thins for a moment over the new section's tone, then fills again */
-    anims.push(scrSun.animate([{ opacity: 1 }, { opacity: .78, offset: .5 }, { opacity: 1 }], { duration: dur, easing: TRAVEL_EASE }));
+    /* the colour flows from the old project's set to the new one's, started with the move and outlasting it */
+    CE.go({ mode: "p", id: id }, 1800);
     setTimeout(arrive, dur / 2);
     anims[1].onfinish = function () {
       ghost.remove(); seams.forEach(function (x) { x.remove(); });
       anims.forEach(function (x) { x.cancel(); });
       finish();
+      unfoldIdx(id);
     };
   }
   function swapDetail(id) { travelTo(id); }
@@ -3450,7 +3832,9 @@ span.s4-card-go{border-style:dashed}
     var target = returnTo(id), anims = [];
     body.classList.remove("d-open");
     chip.hidden = true;
-    setTone(toneOfId(id));
+    /* the colour drains back to this section's main-page tone over 1.8s, outlasting the 600ms movement */
+    TONE = toneOfId(id);
+    CE.go({ mode: "main", tone: TONE }, 1800);
     function done() {
       if (DT.doneFn !== done) return;
       DT.doneFn = null;
@@ -3460,7 +3844,6 @@ span.s4-card-go{border-style:dashed}
       restEls(id).forEach(function (el) { el.style.opacity = ""; });
       dlg.style.opacity = "";
       showLines(false);
-      scrBox.classList.remove("sun-on");
       setInert(false);
       measure();
       if (sections[curPos]) setCurrent(sections[curPos]);
@@ -3520,10 +3903,13 @@ span.s4-card-go{border-style:dashed}
 
   /* ---------- lightbox: the image grows in place from its spot to fill the area while the page eases back ---------- */
   var lbox = $("lbox"), lbImg = $("lbox-img"), lbCap = $("lbox-cap"), lbFrom = null, lbBack = null, lbDim = lbox.querySelector(".lbox-dim");
+  var lbSvg = $("lbox-svg"), lbMedia = lbImg;
   function lbOpen(btn) {
-    var im = btn.querySelector("img"); if (!im) return;
-    lbImg.setAttribute("src", im.getAttribute("src") || im.getAttribute("data-src") || "");
-    lbImg.setAttribute("alt", im.getAttribute("alt") || "");
+    var im = btn.querySelector("img, svg.dg"); if (!im) return;
+    var dgc = im.tagName.toLowerCase() === "svg" ? diagramEl(im.getAttribute("data-dg"), im.getAttribute("aria-label") || "") : null;
+    lbSvg.innerHTML = ""; lbSvg.hidden = !dgc; lbImg.style.display = dgc ? "none" : "";
+    if (dgc) { lbSvg.appendChild(dgc); lbImg.removeAttribute("src"); lbMedia = lbSvg; }
+    else { lbImg.setAttribute("src", im.getAttribute("src") || im.getAttribute("data-src") || ""); lbImg.setAttribute("alt", im.getAttribute("alt") || ""); lbMedia = lbImg; }
     var cap = btn.parentNode.querySelector("figcaption");
     lbCap.textContent = cap ? cap.textContent : "";
     lbox.hidden = false; lbFrom = btn; lbImg.__from = null;
@@ -3532,24 +3918,24 @@ span.s4-card-go{border-style:dashed}
     var ra = im.getBoundingClientRect();
     function go() {
       if (lbox.hidden) return;
-      var rb = lbImg.getBoundingClientRect(); if (!rb.width || !ra.width) return;
+      var rb = lbMedia.getBoundingClientRect(); if (!rb.width || !ra.width) return;
       var s = Math.min(ra.width / rb.width, ra.height / rb.height);
       lbImg.__from = "translate(" + ((ra.left + ra.width / 2) - (rb.left + rb.width / 2)).toFixed(1) + "px," + ((ra.top + ra.height / 2) - (rb.top + rb.height / 2)).toFixed(1) + "px) scale(" + s.toFixed(4) + ")";
-      lbImg.animate([{ transform: lbImg.__from }, { transform: "none" }], { duration: 420, easing: EOUT });
+      lbMedia.animate([{ transform: lbImg.__from }, { transform: "none" }], { duration: 420, easing: EOUT });
       lbDim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: "ease-out" });
       [lbCap, $("lbox-x")].forEach(function (x) { x.animate([{ opacity: 0 }, { opacity: 0, offset: .5 }, { opacity: 1 }], { duration: 420 }); });
       lbBack = dlg.animate([{ transform: "none" }, { transform: "scale(.97)" }], { duration: 420, easing: EOUT, fill: "forwards" });
     }
-    if (lbImg.complete && lbImg.naturalWidth) go();
+    if (lbMedia === lbSvg || (lbImg.complete && lbImg.naturalWidth)) go();
     else { var once = function () { lbImg.removeEventListener("load", once); go(); }; lbImg.addEventListener("load", once); }
   }
   function lbClose(instant) {
     if (lbox.hidden) return false;
     var from = lbFrom; lbFrom = null;
-    function fin() { lbox.hidden = true; lbImg.removeAttribute("src"); lbImg.__from = null; if (lbBack) { lbBack.cancel(); lbBack = null; } }
+    function fin() { lbox.hidden = true; lbImg.removeAttribute("src"); lbImg.style.display = ""; lbSvg.innerHTML = ""; lbSvg.hidden = true; lbImg.__from = null; if (lbBack) { lbBack.cancel(); lbBack = null; } }
     if (instant || still() || !canAnim || !lbImg.__from) fin();
     else {
-      var a = lbImg.animate([{ transform: "none" }, { transform: lbImg.__from }], { duration: 320, easing: EOUT, fill: "forwards" });
+      var a = lbMedia.animate([{ transform: "none" }, { transform: lbImg.__from }], { duration: 320, easing: EOUT, fill: "forwards" });
       var d = lbDim.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, easing: "ease-out", fill: "forwards" });
       if (lbBack) lbBack.reverse();
       a.onfinish = function () { fin(); a.cancel(); d.cancel(); };
@@ -3701,7 +4087,7 @@ span.s4-card-go{border-style:dashed}
       if (f.classList.contains("cover")) f.style.clipPath = f.closest(".sgrid.rev") ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)";
       else f.style.opacity = "0";
     }, function (f) {
-      var im = f.querySelector("img");
+      var im = f.querySelector("img, svg.dg");
       if (f.classList.contains("cover")) {
         var from = f.style.clipPath; f.style.clipPath = "";
         f.animate([{ clipPath: from }, { clipPath: "inset(0 0 0 0)" }], { duration: 700, easing: EOUT });
