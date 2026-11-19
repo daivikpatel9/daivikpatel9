@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI trash-cleaning robot boat · Daivik Patel</title>
+  <meta name="description" content="A sub-$250 autonomous boat that runs object detection on its camera to find floating trash and steer to it. Built in 10 days for the 2026 science fair.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="AI trash-cleaning robot boat · Daivik Patel">
+  <meta property="og:description" content="A sub-$250 autonomous boat that runs object detection on its camera to find floating trash and steer to it. Built in 10 days for the 2026 science fair.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/projects/trash-cleaning-robot.html">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects" aria-current="page">Projects</a>
+        <a href="../index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Robotics and edge AI · 2026</p>
+        <h1>An AI boat that finds floating trash and steers to it</h1>
+        <p class="lede">I built a small autonomous boat for about $250 that spots bottles and cups with an on-camera AI model and drives itself toward them. It reached every upright object in testing, and the misses showed where a stock AI model falls short.</p>
+        <dl class="facts">
+          <div><dt>Cost</dt><dd>~$250<small>total parts</small></dd></div>
+          <div><dt>Upright objects</dt><dd>100%<small>reached in testing</small></dd></div>
+          <div><dt>Power</dt><dd>~15 W<small>typical, under 27 W peak</small></dd></div>
+          <div><dt>All orientations</dt><dd>~64%<small>across nearly 60 trials</small></dd></div>
+        </dl>
+        <figure>
+          <img class="cutout" src="../../assets/img/robot/boat-cutout.webp" alt="The finished boat seen from the front, cut out from its background: a red corrugated plastic deck with the AI camera mounted on the front of a black Raspberry Pi case, a battery holder and motor shield behind it, and a yellow gear motor with a popsicle-stick paddle wheel on each side." width="1356" height="908">
+          <figcaption>The finished boat. The camera faces forward from the Pi case, and the two paddle wheels are the improvised drive described below.</figcaption>
+        </figure>
+        <figure>
+          <video controls muted playsinline preload="metadata" poster="../../assets/video/boat-test-full-poster.jpg" width="1280" height="720" aria-label="Top-down video of the robot boat in a bathtub, steering toward a clear plastic cup and stopping when it gets close, with a hand occasionally moving the power cable">
+            <source src="../../assets/video/boat-test-full.mp4" type="video/mp4">
+            <a href="../../assets/video/boat-test-full.mp4">Download the test video</a>
+          </video>
+          <figcaption>A bathtub test, seen from above and uncut. The boat finds the cup, steers to it and stops when it is close, several times over. It keeps drifting after it stops because the power cable was pulling it toward me, which is why I move the cable now and then. No sound.</figcaption>
+        </figure>
+        <ul class="tags"><li>Arduino C++</li><li>Raspberry Pi 5</li><li>Edge AI</li><li>Serial</li></ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The problem and the goal</h2>
+        <div class="prose">
+          <p>Trash floats on lakes, rivers and ponds. I wanted to test whether low-cost, on-device object detection could find a piece of floating trash and steer a boat to it, with no internet connection and no one at the controls.</p>
+          <p>I kept the scope narrow on purpose: detect and reach. The boat has no collector. Picking trash up was outside this project.</p>
+          <p>I built it in 10 days in February 2026 for the science fair. It advanced to the state science fair.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <div class="prose">
+          <p>The boat has two brains. A Raspberry Pi 5 (a small single-board computer) decides where to go. An Arduino Uno (a simple microcontroller board) drives the motors. Keeping them separate keeps motor current away from the Pi.</p>
+          <p>Detection runs on the Raspberry Pi AI Camera, which uses a Sony IMX500 sensor that runs the model on the sensor chip itself. That is edge AI: no cloud, lower power and lower cost.</p>
+        </div>
+
+        <ol class="flow">
+          <li><strong>Camera</strong>IMX500 runs MobileNet-SSD and reports each object's label, confidence and box</li>
+          <li><strong>Raspberry Pi 5</strong>Python reads the detections and picks a command</li>
+          <li><strong>USB serial</strong>One character at 9600 baud: f, l, r or s</li>
+          <li><strong>Arduino Uno</strong>Maps the character to the L293D motor shield</li>
+          <li><strong>Motors</strong>Two gear motors turn the paddle wheels</li>
+        </ol>
+
+        <div class="prose">
+          <p>On the Pi, a Python script starts <code>rpicam-hello</code> (the Pi's camera app) with the MobileNet-SSD settings file, reads its log, and uses a regular expression to pull out the label, confidence, horizontal position and box width of each detection. It then applies these rules:</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Condition</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>Label is <code>person</code></td><td>Ignore. The boat never steers at people.</td></tr>
+              <tr><td>Confidence at or below 0.5</td><td>Ignore</td></tr>
+              <tr><td>Box wider than 850 px</td><td>Too close: stop. This rule has the highest priority.</td></tr>
+              <tr><td>Box x position below 400</td><td>Turn left</td></tr>
+              <tr><td>Box x position above 812</td><td>Turn right</td></tr>
+              <tr><td>Anywhere in between</td><td>Go forward</td></tr>
+              <tr><td>No target for 0.8 seconds</td><td>Stop</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="prose">
+          <p>The script only sends a command when the state changes, so the serial line stays quiet while the boat holds a course. On the Arduino, turning works by stopping one side: to turn left, the left motor stops and the right one keeps driving.</p>
+          <p>This is the core of the decision logic from <code>boat_ai.py</code>:</p>
+        </div>
+
+<pre><code>if conf &gt; 0.5:
+    last_seen_time = time.time()
+
+    # brake when too close, highest priority
+    if width &gt; MAX_WIDTH:
+        if boat_state != "s":
+            ser.write(b's')
+            boat_state = "s"
+        continue  # Skip steering entirely!
+
+    # steer left or right if object is not too close
+    if x_pos &lt; LEFT_LIMIT:
+        new_state = "l"
+    elif x_pos &gt; RIGHT_LIMIT:
+        new_state = "r"
+    else:
+        new_state = "f"
+
+    # only send command if state changed
+    if new_state != boat_state:
+        ser.write(new_state.encode())
+        boat_state = new_state</code></pre>
+
+        <div class="prose">
+          <p>The code was transcribed from my project notebook, which lost the original indentation, so the block structure was rebuilt from the logic.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The build</h2>
+        <div class="prose">
+          <p>The hull is a sheet of corrugated plastic board floating on three empty water bottles. The motors run on AA batteries. The Pi is powered over a USB cable, so the boat runs tethered.</p>
+          <p>The plan was to use propellers, but I could not attach them to the motors. So I made paddle wheels from two old tires and popsicle sticks, one on each motor.</p>
+        </div>
+
+        <div class="split">
+          <figure>
+            <img src="../../assets/img/robot/boat-top.jpg" alt="Top view of the boat deck: the Raspberry Pi in a black case with a fan at the front where the camera sits, a battery holder in the middle, the blue Arduino motor shield behind it, and a blue USB cable linking the Pi to the Arduino. A paddle wheel made of a blue tire and popsicle sticks sits on each side." width="1200" height="1600" loading="lazy">
+            <figcaption>Top view. The blue USB cable is the serial link from the Pi to the Arduino.</figcaption>
+          </figure>
+          <figure>
+            <img src="../../assets/img/robot/boat-hull.jpg" alt="The underside of the boat: three clear plastic water bottles taped to the bottom of a white corrugated plastic board, with a popsicle-stick paddle wheel at the edge." width="1120" height="840" loading="lazy">
+            <figcaption>Underneath. Three empty water bottles are the floats.</figcaption>
+          </figure>
+        </div>
+
+        <h3>Ten-day timeline</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Date (2026)</th><th>Work</th></tr></thead>
+            <tbody>
+              <tr><td>13 Feb</td><td>Arduino accepts serial commands f, l, r, s and drives two motors. Fixed a wrong motor-library declaration.</td></tr>
+              <tr><td>15 Feb</td><td>Flashed Raspberry Pi OS. AI camera running the demo model and detecting everyday objects.</td></tr>
+              <tr><td>16 Feb</td><td>Python script on the Pi controls the motors over USB serial.</td></tr>
+              <tr><td>18 Feb</td><td>Camera preview runs, but detection data not yet readable. Tried a YOLOv8 trash model; conversion failed.</td></tr>
+              <tr><td>19 Feb</td><td>Found the correct way to read detection data.</td></tr>
+              <tr><td>20 Feb</td><td>Motors follow the direction of detected objects. Full navigation script complete.</td></tr>
+              <tr><td>21 Feb</td><td>Hull built and floated. Paddle wheels made. Motor wiring flipped to fix reversed turning.</td></tr>
+              <tr><td>22 Feb</td><td>Detection trials in a bathtub, with a colored board so clear objects show against the white tub.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>What went wrong</h2>
+        <div class="prose">
+          <h3>The custom model would not convert</h3>
+          <p>I first tried a YOLOv8 model (a popular object detection model) trained on trash. The IMX500 camera needs models converted to its own format, and the conversion kept failing. To stay on schedule I switched to the stock MobileNet-SSD model (a small, fast detection model) that ships with the camera. It is not custom trained. That limit later became the main finding of the project.</p>
+          <h3>The boat turned the wrong way</h3>
+          <p>After the hull was built, the boat turned the opposite way from the command it was given. The motor wiring was reversed. I flipped it and the turns matched the commands.</p>
+          <h3>The power cable pulled the boat</h3>
+          <p>The USB tether that powers the Pi dragged the boat to the left. Because the script keeps checking where the target is and correcting, the steering compensated for the drift.</p>
+          <h3>Clear objects in a white tub</h3>
+          <p>Clear bottles were hard to see against the white bathtub, so I added a colored board behind the test area.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Results</h2>
+        <div class="prose">
+          <p>I tested bottles and cups in different positions across nearly 60 controlled trials. How the object was lying mattered much more than what the object was.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Object orientation</th><th>Reached</th></tr></thead>
+            <tbody>
+              <tr><td>Upright</td><td>100%</td></tr>
+              <tr><td>Cup rim facing the boat (cups only)</td><td>100%</td></tr>
+              <tr><td>Upside down</td><td>61.5%</td></tr>
+              <tr><td>Diagonal</td><td>38.5%</td></tr>
+              <tr><td>On its side</td><td>33.3%</td></tr>
+              <tr><td>Overall</td><td>about 64%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure>
+          <img src="../../assets/img/robot/figure3-success-by-orientation.png" alt="Bar chart of success rate by orientation: up 100 percent, side 33.33 percent, upside down 61.54 percent, diagonal 38.46 percent, inside angle for cups 100 percent." width="1200" height="742" loading="lazy">
+          <figcaption>Success by orientation. Upright objects, the position the stock model's training data mostly shows, were reached every time.</figcaption>
+        </figure>
+
+        <div class="split">
+          <figure>
+            <img src="../../assets/img/robot/figure1-all-detections.png" alt="Pie chart of all detections: 63.8 percent successful, 36.2 percent failed." width="1324" height="742" loading="lazy">
+            <figcaption>All trials combined.</figcaption>
+          </figure>
+          <figure>
+            <img src="../../assets/img/robot/figure2-success-by-object.png" alt="Stacked bar chart of success rate by object: bottles 68.75 percent, small cups 60 percent, large cups 65 percent." width="1200" height="742" loading="lazy">
+            <figcaption>By object type. The spread between objects is much smaller than the spread between orientations.</figcaption>
+          </figure>
+        </div>
+
+        <div class="prose">
+          <p>Power use was about 15 W in normal running and stayed under 27 W at peak.</p>
+        </div>
+
+        <div class="callout"><p><strong>Conclusion.</strong> A low-cost AI boat can find and reach floating trash. The limit is the model's training data, which is mostly upright objects, not the hardware or the control loop.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>What I learned</h2>
+        <div class="prose">
+          <ul>
+            <li>A working fallback beats a stuck plan. Dropping YOLOv8 for the stock model kept the project on schedule, and its weakness turned into a clear, measurable result.</li>
+            <li>Splitting the system into a decision side and a drive side made each half easy to test alone. The Arduino took serial commands before the camera worked at all.</li>
+            <li>Simple closed-loop control can absorb messy physics. The tether drift was handled by steering, not by a fix to the hull.</li>
+            <li>A test setup is part of the experiment. The colored board in the tub changed what the camera could see.</li>
+          </ul>
+        </div>
+
+        <h2>What I would do next</h2>
+        <div class="prose">
+          <ul>
+            <li>Get a custom model converted to the IMX500 format, trained on trash in many orientations, not mostly upright.</li>
+            <li>Remove the USB power tether that pulled the boat off course.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="research">
+      <div class="wrap">
+        <h2>Original research documents</h2>
+        <div class="prose">
+          <p>These are the documents I wrote for the fair, exactly as submitted. I wrote them myself in February and March 2026.</p>
+        </div>
+        <div class="grid docs">
+          <a class="doc" href="../../assets/docs/robot/project-report.pdf">
+            <span class="doc-kind">Research paper · PDF · 10 MB</span>
+            <strong>Project report</strong>
+            <span>Introduction, hypothesis, method, results, analysis, a comparison with industrial trash collectors, and works cited.</span>
+          </a>
+          <a class="doc" href="../../assets/docs/robot/project-notebook.pdf">
+            <span class="doc-kind">Lab notebook · PDF</span>
+            <strong>Project notebook</strong>
+            <span>The day-by-day build log, with every problem and fix, both full programs and the raw trial table.</span>
+          </a>
+          <a class="doc" href="../../assets/docs/robot/poster.pdf">
+            <span class="doc-kind">Poster · PDF</span>
+            <strong>Presentation poster</strong>
+            <span>The board I presented at the state fair.</span>
+          </a>
+        </div>
+        <div class="callout"><p><strong>Why a few details differ from this page.</strong> The documents are unedited. Their materials list shows the propellers I planned to use before switching to paddle wheels, and the report counts 56 trials while the charts include a few extra runs, which is why this page says nearly 60.</p></div>
+
+        <h3 id="references">References</h3>
+        <p class="refs-note">Sources cited in the report and notebook, as accessed in February 2026. A few have since moved or been taken down, and are marked.</p>
+        <ol class="refs">
+          <li>ClearBot. (n.d.). <cite>ClearBot Neo: Autonomous Marine Waste Collection</cite>. Link no longer available.</li>
+          <li>Fulton, M., Hong, J., Islam, M., &amp; Sattar, J. (2019). Robotic Detection of Marine Litter Using Deep Visual Detection Models. <cite>2019 International Conference on Robotics and Automation (ICRA)</cite>, 5752-5758. IEEE. <a href="https://doi.org/10.1109/ICRA.2019.8793975">doi.org/10.1109/ICRA.2019.8793975</a></li>
+          <li>Lebreton, L., &amp; Andrady, A. (2019). Future scenarios of global plastic waste generation and disposal. <cite>Palgrave Communications</cite>, 5(1), 6. <a href="https://doi.org/10.1057/s41599-018-0212-7">doi.org/10.1057/s41599-018-0212-7</a></li>
+          <li>Marine Biodiversity Science Center. (2025, April 30). <cite>These Ocean-Cleaning Robots Are Transforming Marine Debris Recovery</cite>. <a href="https://www.marinebiodiversity.ca/these-ocean-cleaning-robots-are-transforming-marine-debris-recovery/">marinebiodiversity.ca</a></li>
+          <li>Microsoft. (2023, June 14). <cite>How AI and cloud technology are cleaning the world's oceans</cite>. Microsoft News. Link no longer available.</li>
+          <li>Raspberry Pi. (2025). <cite>AI Camera: getting started</cite>. Raspberry Pi documentation. Now published at <a href="https://www.raspberrypi.com/documentation/">raspberrypi.com/documentation</a>.</li>
+          <li>Raspberry Pi. (2025). <cite>rpicam-apps post-processing</cite>. Raspberry Pi documentation. Now published at <a href="https://www.raspberrypi.com/documentation/">raspberrypi.com/documentation</a>.</li>
+          <li>Raspberry Pi. (2025). <cite>rpicam common options</cite>. Raspberry Pi documentation. Now published at <a href="https://www.raspberrypi.com/documentation/">raspberrypi.com/documentation</a>.</li>
+          <li>Raspberry Pi. (n.d.). <cite>Raspberry Pi Documentation: Camera</cite>. <a href="https://www.raspberrypi.com/documentation/accessories/camera.html">raspberrypi.com</a></li>
+          <li>Sony Semiconductor Solutions Group. (2025). <cite>Raspberry Pi AI Camera tutorial</cite>. <a href="https://developer.aitrios.sony-semicon.com/en/docs/raspberry-pi-ai-camera/raspberry-pi-ai-camera-tutorial">developer.aitrios.sony-semicon.com</a></li>
+          <li>dkrkamesh. (2021, November 14). <cite>Raspberry Pi meets Arduino: Connect Arduino and Raspberry Pi with serial USB cable</cite>. GitHub Gist. <a href="https://gist.github.com/dkrkamesh/5e3ff89d3b804d7bce3ea40a99eb2ee9">gist.github.com</a></li>
+          <li>bjoernboeckle. (2024, February 22). <cite>L293D: Simple library to access a L293D motor driver</cite>. GitHub. <a href="https://github.com/bjoernboeckle/L293D">github.com/bjoernboeckle/L293D</a></li>
+          <li>W3Schools. (n.d.). <cite>Python Reference</cite>. <a href="https://www.w3schools.com/python/python_reference.asp">w3schools.com</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Code</h2>
+        <div class="actions">
+          <a class="btn" href="https://github.com/daivikpatel9/daivikpatel9/tree/main/code/trash-cleaning-robot">Code on GitHub</a>
+          <a class="btn ghost" href="../index.html">Back to all projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="../index.html#about-this-site">How I use AI</a> · <a href="../credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../../assets/js/site.js?v=32" defer></script>
+</body>
+</html>

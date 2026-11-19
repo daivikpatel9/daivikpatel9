@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Server and services · Homelab · Daivik Patel</title>
+  <meta name="description" content="One Unraid server running 20+ containers: photos, files, media playback, cameras and Home Assistant, plus the tools I tried and retired.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="Server and services · Homelab · Daivik Patel">
+  <meta property="og:description" content="One Unraid server running 20+ containers: photos, files, media playback, cameras and Home Assistant, plus the tools I tried and retired.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/homelab/services.html">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects" aria-current="page">Projects</a>
+        <a href="../index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Homelab sections">
+    <div class="wrap">
+      <span class="tabs-label">Homelab</span>
+      <a href="index.html">Overview</a>
+      <a href="automations.html">Automations</a>
+      <a href="cameras.html">Cameras and AI</a>
+      <a href="displays.html">Displays</a>
+      <a href="services.html" aria-current="page">Server and services</a>
+      <a href="remote-access.html">Remote access</a>
+    </div>
+  </nav>
+
+  <main>
+    <aside class="notice" aria-label="Security note">
+      <div class="wrap">
+        <p><strong>Security note.</strong> These pages describe projects I have worked on. They are not a complete or current picture of what runs in my home, and I have left out details on purpose for security reasons.</p>
+      </div>
+    </aside>
+
+    <section class="hero has-media">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="eyebrow">Homelab · Server and services</p>
+          <h1>One server that hosts everything else</h1>
+          <p class="lede">Every other part of the homelab runs on one Unraid server with more than twenty containers running. It holds my photos, files and media, and it hosts Home Assistant and the camera recorder that the rest of the system depends on.</p>
+          <dl class="facts">
+            <div><dt>Running</dt><dd>20+<small>containers now</small></dd></div>
+            <div><dt>Deployed</dt><dd>50+<small>containers over time</small></dd></div>
+            <div><dt>Processor</dt><dd>i7-12700K<small>integrated graphics in use</small></dd></div>
+          </dl>
+      
+        </div>
+        <div class="hero-media">
+          <img src="../../assets/img/photos/server-motherboard.jpg" alt="Close-up inside the server: the motherboard with its expansion slots and heatsink, cabling running across it" width="1920" height="1079">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The server and its jobs</h2>
+        <div class="prose">
+          <p>Unraid is an operating system for home servers that runs each service in its own container. More than 20 containers run on it, out of more than 50 I have deployed over time. Grouped by the job each one does:</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Job</th><th>What does it</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Smart home</td><td>Home Assistant</td><td>The hub. 33 active <a href="automations.html">automations</a> join about twenty systems.</td></tr>
+              <tr><td>Cameras and AI</td><td>Frigate, Scrypted</td><td>Frigate records and detects on a Google Coral and the integrated graphics. Scrypted bridges the doorbell into it. See <a href="cameras.html">Cameras and AI</a>.</td></tr>
+              <tr><td>Photos</td><td>Immich, Immich Kiosk</td><td>Self-hosted photo library on PostgreSQL 16 with vector search, and a slideshow app.</td></tr>
+              <tr><td>Files</td><td>Nextcloud</td><td>Self-hosted file sync that replaced Google Drive for me.</td></tr>
+              <tr><td>Media playback</td><td>Remux, Jellyfin</td><td>Two media servers behind one interface, with hardware transcoding.</td></tr>
+              <tr><td>Remote access</td><td>Tunnel client, Tailscale</td><td>A tunnel client (frpc) to a cloud relay, and Tailscale for private access. See <a href="remote-access.html">Remote access</a>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="prose">
+          <p>The server also holds the chime sound files that play on <a href="displays.html">the tablet and the TV</a> when the screens switch to cameras.</p>
+        </div>
+        <div class="split">
+          <figure>
+          <img src="../../assets/img/photos/server-inside.jpg" alt="Inside a computer case: a large twin-tower processor cooler, memory, a motherboard and a stack of hard drives in trays on the right" width="767" height="728" loading="lazy">
+          <figcaption>Inside the server during the build: the processor cooler, the motherboard and the drive stack.</figcaption>
+        </figure>
+          <figure>
+          <img src="../../assets/img/photos/server-usb-boot-module.jpg" alt="Close-up of a motherboard with a small green flash module plugged into an internal header" width="1400" height="1190" loading="lazy">
+          <figcaption>The green module is the USB disk-on-module that replaced the failed boot drive.</figcaption>
+        </figure>
+        </div>
+        <div class="prose">
+          <p>I built the server myself and have kept working on it since. I added the Coral accelerator later for the <a href="cameras.html">camera system</a>. When the original boot drive failed, I replaced it with a USB disk-on-module, a small flash module that plugs straight into a header on the motherboard, so the boot device now sits inside the case.</p>
+        </div>
+        <figure>
+          <img src="../../assets/img/photos/network-gateway.jpg" alt="A white UniFi Cloud Gateway Max network gateway on a dark shelf with network cables behind it" width="1380" height="920" loading="lazy">
+          <figcaption>The network gateway everything at home sits behind: a UniFi Cloud Gateway Max.</figcaption>
+        </figure>
+        <div class="split">
+          <figure>
+            <a href="../../assets/img/homelab/unraid-processor-memory.png"><img src="../../assets/img/homelab/unraid-processor-memory.png" alt="Unraid dashboard panels showing a 12th generation Intel Core i7-12700K processor at 8 percent overall load and 32 GiB of DDR4 memory at 68 percent use, split between the system, the virtual machine and Docker" width="482" height="598" loading="lazy"></a>
+            <figcaption>Processor and memory on a normal evening. The virtual machine in the memory chart is Home Assistant.</figcaption>
+          </figure>
+          <figure>
+            <a href="../../assets/img/homelab/unraid-storage.png"><img src="../../assets/img/homelab/unraid-storage.png" alt="Unraid dashboard panels showing a valid parity check with zero errors, an 8 terabyte array of one parity disk and two data disks all healthy, and a 256 gigabyte cache drive" width="482" height="412" loading="lazy"></a>
+            <figcaption>Storage: two data disks protected by a parity disk, plus a cache drive. The last parity check found no errors.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Photos and files</h2>
+        <div class="prose">
+          <p>Immich is a self-hosted photo library. It runs on PostgreSQL 16 with vector search, and I kept it running through several database upgrades. Its photos feed Immich Kiosk, a slideshow app embedded as an iframe in the tablet dashboard. That slideshow is what the <a href="displays.html">wall tablet and the TV</a> show whenever nothing else needs the screen.</p>
+          <p>Nextcloud is self-hosted file sync. It replaced Google Drive for me. I first ran the Nextcloud all-in-one package and later moved to a standalone install.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Media playback</h2>
+        <div class="prose">
+          <p>Two media servers sit behind one interface. Remux is the main server, and a separate Jellyfin server is integrated into it. I made Remux the main one because it has fewer moving parts to maintain. Jellyfin uses the Intel integrated graphics for hardware transcoding, and playback away from home goes through the <a href="remote-access.html">relay and Tailscale</a>.</p>
+        </div>
+        <h3>A memory leak traced to one plugin</h3>
+        <div class="prose">
+          <p>The plugin I first used to join the two servers leaked memory. I traced the runaway memory to that one plugin, dropped it, and integrated the second server another way.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Tools evaluated and retired</h2>
+        <div class="prose">
+          <p>About 30 containers are stopped but kept as a record of what I tried. Three swaps were deliberate:</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Retired</th><th>Replaced by</th></tr></thead>
+            <tbody>
+              <tr><td>Plex</td><td>Jellyfin</td></tr>
+              <tr><td>Twingate</td><td>Tailscale</td></tr>
+              <tr><td>Nextcloud all-in-one package</td><td>Standalone Nextcloud install</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="tags"><li>Unraid</li><li>Docker</li><li>Immich</li><li>PostgreSQL</li><li>Nextcloud</li><li>Jellyfin</li></ul>
+
+        <aside class="connects">
+          <h2>Connects to</h2>
+          <ul>
+            <li><a href="automations.html">Automations</a>Home Assistant runs here, and the chime files it plays live on a server share.</li>
+            <li><a href="cameras.html">Cameras and AI</a>Frigate and the Scrypted bridge run here. Frigate uses the processor's integrated graphics.</li>
+            <li><a href="displays.html">Displays</a>Immich Kiosk serves the photo slideshow the screens return to.</li>
+            <li><a href="remote-access.html">Remote access</a>The tunnel client runs here and links the server to the cloud relay.</li>
+          </ul>
+        </aside>
+        <div class="next-prev"><a class="btn ghost" href="displays.html">Previous: Displays</a><a class="btn" href="remote-access.html">Next: Remote access</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="../index.html#about-this-site">How I use AI</a> · <a href="../credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../../assets/js/site.js?v=32" defer></script>
+</body>
+</html>

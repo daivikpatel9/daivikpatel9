@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Remote access · Homelab · Daivik Patel</title>
+  <meta name="description" content="How outside traffic reaches my home services through a cloud relay and a tunnel, with no ports open on the home network, plus Tailscale for private access.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="Remote access · Homelab · Daivik Patel">
+  <meta property="og:description" content="How outside traffic reaches my home services through a cloud relay and a tunnel, with no ports open on the home network, plus Tailscale for private access.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/homelab/remote-access.html">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects" aria-current="page">Projects</a>
+        <a href="../index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Homelab sections">
+    <div class="wrap">
+      <span class="tabs-label">Homelab</span>
+      <a href="index.html">Overview</a>
+      <a href="automations.html">Automations</a>
+      <a href="cameras.html">Cameras and AI</a>
+      <a href="displays.html">Displays</a>
+      <a href="services.html">Server and services</a>
+      <a href="remote-access.html" aria-current="page">Remote access</a>
+    </div>
+  </nav>
+
+  <main>
+    <aside class="notice" aria-label="Security note">
+      <div class="wrap">
+        <p><strong>Security note.</strong> These pages describe projects I have worked on. They are not a complete or current picture of what runs in my home, and I have left out details on purpose for security reasons.</p>
+      </div>
+    </aside>
+
+    <section class="hero has-media">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="eyebrow">Homelab · Remote access</p>
+          <h1>Reaching home services with no ports open at home</h1>
+          <p class="lede">Outside traffic reaches my home server through a relay on a cloud server and a tunnel, so the home network has no open ports. Tailscale covers private access from my own devices.</p>
+          <dl class="facts">
+            <div><dt>Open ports at home</dt><dd>0<small>all on the cloud server</small></dd></div>
+            <div><dt>Ways in</dt><dd>2<small>relay and Tailscale</small></dd></div>
+          </dl>
+      
+        </div>
+        <div class="hero-media">
+          <img src="../../assets/img/art/remote-access.svg" alt="Diagram: a visitor reaches a reverse proxy on a cloud server, which passes traffic through a tunnel that the home server opens outbound, so no ports are open at home" width="1200" height="675">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The relay path</h2>
+        <div class="prose">
+          <p>A small Oracle cloud server acts as the front door. Nginx Proxy Manager, a reverse proxy with a web interface, receives the visitor's request there and hands it to a tunnel server on the same machine. On my <a href="services.html">Unraid server</a>, a tunnel client (frpc) is linked to that tunnel server, and it passes the request on to the service.</p>
+        </div>
+        <ol class="flow">
+          <li><strong>Visitor</strong>A request arrives from outside the house</li>
+          <li><strong>Proxy</strong>Nginx Proxy Manager on the Oracle cloud server</li>
+          <li><strong>Tunnel server</strong>Also on the cloud server</li>
+          <li><strong>Tunnel client</strong>frpc on the home Unraid server</li>
+          <li><strong>Service</strong>The app the visitor asked for</li>
+        </ol>
+        <div class="callout"><p><strong>No ports are open at home.</strong> The only open ports are on the Oracle cloud server. The proxy runs there, not on the home server.</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Tailscale for my own devices</h2>
+        <div class="prose">
+          <p>Tailscale is a private mesh VPN. It covers private access from my own devices. Frigate and Jellyfin each have their own Tailscale identity, so <a href="cameras.html">the camera recorder</a> and the media server can be reached on their own. A small speed test container runs with Tailscale so I can test the remote path.</p>
+          <p>I also evaluated Twingate and retired it in favor of Tailscale.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Kasm Workspaces: a remote browser, since retired</h2>
+        <div class="prose">
+          <p>Kasm Workspaces streams a full desktop browser to any device through an ordinary browser tab. I ran it on its own Ubuntu virtual machine in the cloud, reached through my own domain. From a locked-down Chromebook I could open one tab and be working in a full browser running somewhere else.</p>
+          <p>What made it good was the isolation. The virtual machine sat apart from my home network by default, so I could let a friend use a workspace without giving them any path into my house. For my own sessions I could allow only my virtual browser to reach the services on my home network, and nothing else on that machine.</p>
+          <p>It was stable enough to watch video through, although playback was choppy because of the Chromebook's hardware and the limits of the virtual machine. I shut it down after high school because I no longer needed it and it used more memory than the server could spare.</p>
+        </div>
+        <ul class="tags"><li>Oracle Cloud</li><li>Nginx Proxy Manager</li><li>frp</li><li>Tailscale</li></ul>
+
+        <aside class="connects">
+          <h2>Connects to</h2>
+          <ul>
+            <li><a href="services.html">Server and services</a>The tunnel client runs as a container on the Unraid server, and remote media playback goes through this path.</li>
+            <li><a href="cameras.html">Cameras and AI</a>Frigate has its own Tailscale identity for private access.</li>
+            <li><a href="index.html">Overview</a>The system map shows where remote access sits beside the rest of the homelab.</li>
+          </ul>
+        </aside>
+        <div class="next-prev"><a class="btn ghost" href="services.html">Previous: Server and services</a><a class="btn" href="index.html">Next: Overview</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="../index.html#about-this-site">How I use AI</a> · <a href="../credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../../assets/js/site.js?v=32" defer></script>
+</body>
+</html>

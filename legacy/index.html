@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daivik Patel · Computer Science, UMass Lowell</title>
+  <meta name="description" content="Daivik Patel, a first-year Computer Science student at UMass Lowell. Projects: an object-detecting robot boat and a home server tied into a smart home.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="Daivik Patel · Computer Science, UMass Lowell">
+  <meta property="og:description" content="Daivik Patel, a first-year Computer Science student at UMass Lowell. Projects: an object-detecting robot boat and a home server tied into a smart home.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Computer Science · UMass Lowell</p>
+        <h1>Daivik Patel</h1>
+        <p class="lede">I am a first-year Computer Science student at UMass Lowell. I build working systems out of hardware, code and whatever is on hand, and I care most about how the pieces connect.</p>
+        <div class="actions">
+          <a class="btn" href="#projects">See the projects</a>
+          <a class="btn ghost" href="#web">How they connect</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="wrap">
+        <h2>Projects</h2>
+        <article class="feature" data-reveal>
+          <div class="feature-media"><img src="../assets/img/art/homelab.svg?v=3" alt="Diagram: one home server running Unraid and Docker hosts Home Assistant, Frigate, Immich, Nextcloud, Jellyfin, Scrypted, remote access tools and databases. Devices around the house feed it, and it reaches the tablet, TV, phones, lights and fans, and me when I am away" width="1200" height="675" loading="lazy"></div>
+          <div class="feature-body">
+            <p class="eyebrow">Homelab · Start here</p>
+            <h3><a href="homelab/index.html">A home server where about twenty systems act as one</a></h3>
+            <p>I run a home server with 20+ containers and use Home Assistant to join about twenty smart home systems through 33 automations. No single app is the project. The project is how the pieces connect.</p>
+            <ul class="chips">
+              <li><a href="homelab/automations.html">Automations</a></li>
+              <li><a href="homelab/cameras.html">Cameras and AI</a></li>
+              <li><a href="homelab/displays.html">Displays</a></li>
+              <li><a href="homelab/services.html">Server and services</a></li>
+              <li><a href="homelab/remote-access.html">Remote access</a></li>
+            </ul>
+          </div>
+        </article>
+        <div class="grid big">
+          <article class="card" data-reveal>
+            <img src="../assets/img/photos/server-motherboard.jpg" alt="Close-up inside the server: the motherboard with its expansion slots and heatsink, cabling running across it" width="1920" height="1079" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Homelab · Server and services</p>
+              <h3><a href="homelab/services.html">One server, 20+ containers</a></h3>
+              <p>An Unraid server hosts my photo library, file sync, media playback and every service the rest of the homelab depends on.</p>
+              <ul class="tags"><li>Unraid</li><li>Docker</li><li>Linux</li></ul>
+            </div>
+          </article>
+          <article class="card" data-reveal>
+            <img src="../assets/img/art/automation-hub.jpg" alt="Home Assistant in the center, connected to six of my own photos: the garage door opener, a wireless remote, a thermostat, the wall tablet, the vent fan and a dashboard. Caption: 33 automations, about 20 systems joined into one" width="1600" height="1000" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Homelab · Automations</p>
+              <h3><a href="homelab/automations.html">Home Assistant as the hub</a></h3>
+              <p>33 active automations join devices from different brands, including a four-part garage loop that closes the door on a timer and restarts when it sees activity.</p>
+              <ul class="tags"><li>Home Assistant</li><li>Zigbee</li><li>YAML</li></ul>
+            </div>
+          </article>
+          <article class="card" data-reveal>
+            <img src="../assets/img/art/cameras.svg" alt="Diagram: a camera feeds a bridge, then a recorder that detects people, cars and packages on local hardware and alerts phones, the TV and the dashboard" width="1200" height="675" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Homelab · Cameras and AI</p>
+              <h3><a href="homelab/cameras.html">A camera recorder that does its AI at home</a></h3>
+              <p>Frigate records my cameras and runs object detection, face recognition and semantic search on my own hardware, then sends alerts to phones and the TV.</p>
+              <ul class="tags"><li>Frigate</li><li>Google Coral</li><li>Object detection</li></ul>
+            </div>
+          </article>
+          <article class="card" data-reveal>
+            <img src="../assets/img/art/remote-access.svg" alt="Diagram: a visitor reaches a reverse proxy on a cloud server, which passes traffic to a tunnel server. The home server opens the tunnel outbound, so no ports are open at home" width="1200" height="675" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Homelab · Remote access</p>
+              <h3><a href="homelab/remote-access.html">Reaching home with no open ports</a></h3>
+              <p>A cloud relay with a tunnel, plus Tailscale, reach my services from anywhere without opening a single port on the home network.</p>
+              <ul class="tags"><li>Reverse proxy</li><li>Tunnel</li><li>Tailscale</li></ul>
+            </div>
+          </article>
+          <article class="card" data-reveal>
+            <img src="../assets/img/photos/tablet-camera-mode.jpg" alt="A wall-mounted tablet with its screen replaced by an illustration of a four-camera grid" width="1170" height="880" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Homelab · Displays</p>
+              <h3><a href="homelab/displays.html">Screens that switch from photos to cameras</a></h3>
+              <p>A wall tablet and the TV show family photos, then switch to live cameras when someone arrives or the garage opens, and switch back on their own.</p>
+              <ul class="tags"><li>Home Assistant</li><li>Kiosk dashboard</li><li>Immich</li></ul>
+            </div>
+          </article>
+          <article class="card" data-reveal>
+            <img class="cutout" src="../assets/img/robot/boat-cutout.webp" alt="The robot boat: a red plastic deck with a Raspberry Pi and camera at the front, a battery pack and motor board behind, and paddle wheels made of popsicle sticks on each side" width="1356" height="908" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Robotics · Science fair</p>
+              <h3><a href="projects/trash-cleaning-robot.html">A boat that finds floating trash</a></h3>
+              <p>A $250 boat that spots bottles and cups with object detection running on its camera and steers to them. It advanced to the state science fair.</p>
+              <ul class="tags"><li>Raspberry Pi 5</li><li>Arduino</li><li>Edge AI</li></ul>
+            </div>
+          </article>
+          <article class="card" data-reveal>
+            <img src="../assets/img/film/still-hallway.jpg?v=2" alt="A still from the film: a figure in silhouette in a dark room, looking down a hallway toward a brightly lit doorway where a blurred figure stands" width="1660" height="934" loading="lazy">
+            <div class="card-body">
+              <p class="eyebrow">Film · Festival winner</p>
+              <h3><a href="projects/forever-in-the-walls.html">Forever in the Walls</a></h3>
+              <p>A short film I edited and did the sound design for. It won Best Overall and Best Production Values at the A-Town Teen Film Festival in May 2026.</p>
+              <ul class="tags"><li>Editing</li><li>Sound design</li><li>Best Overall</li><li>Best Production Values</li></ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section web" id="web">
+      <div class="wrap">
+        <h2>How it all connects</h2>
+        <p class="web-intro">None of these projects stands alone. Pick one to see what it depends on and what depends on it, then open its page.</p>
+        <ul class="web-stage" aria-label="Projects and how they connect">
+          <li><a class="web-node is-hub" data-node="homelab" href="homelab/index.html" data-summary="One home server where about twenty separate systems act as one. Every other piece here runs on it or through it." data-cta="Open the homelab overview"><span class="web-node-title">Homelab</span><small>the hub</small></a></li>
+          <li><a class="web-node" data-node="cameras" href="homelab/cameras.html" data-summary="Frigate records my cameras and runs object detection, face recognition and semantic search on my own hardware." data-cta="Open Cameras and AI"><span class="web-node-title">Cameras and AI</span><small>homelab</small></a></li>
+          <li><a class="web-node" data-node="automations" href="homelab/automations.html" data-summary="Home Assistant joins devices from different brands through 33 active automations, including a four-part garage auto-close." data-cta="Open Automations"><span class="web-node-title">Automations</span><small>homelab</small></a></li>
+          <li><a class="web-node" data-node="displays" href="homelab/displays.html" data-summary="A wall tablet and the TV show family photos, then switch to live cameras when someone arrives." data-cta="Open Displays"><span class="web-node-title">Displays</span><small>homelab</small></a></li>
+          <li><a class="web-node" data-node="services" href="homelab/services.html" data-summary="Unraid with 20+ containers running: photos, files, media playback and the services everything else depends on." data-cta="Open Server and services"><span class="web-node-title">Server and services</span><small>homelab</small></a></li>
+          <li><a class="web-node" data-node="remote" href="homelab/remote-access.html" data-summary="A cloud relay and Tailscale reach my services from anywhere with no ports open at home." data-cta="Open Remote access"><span class="web-node-title">Remote access</span><small>homelab</small></a></li>
+          <li><a class="web-node" data-node="robot" href="projects/trash-cleaning-robot.html" data-summary="A $250 boat that finds floating trash with object detection running on its camera and steers to it." data-cta="Open the robot boat"><span class="web-node-title">Robot boat</span><small>robotics</small></a></li>
+          <li><a class="web-node" data-node="film" href="projects/forever-in-the-walls.html" data-summary="Forever in the Walls, a short film I edited and did the sound design for. It won Best Overall and Best Production Values at the A-Town Teen Film Festival in May 2026." data-cta="Open the film"><span class="web-node-title">Film</span><small>festival winner</small></a></li>
+        </ul>
+        <p class="web-hint">Click a project to select it. Click again to open it. Drag one to move it.</p>
+        <div class="web-panel" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="wrap">
+        <h2>Experience</h2>
+        <div class="split">
+          <article class="prose">
+            <h3>Instructor</h3>
+            <p><strong>Kids in Tech</strong> · Current</p>
+            <p>I work as an instructor at Kids in Tech.</p>
+          </article>
+          <article class="prose">
+            <h3>IT Systems and Hardware Intern</h3>
+            <p><strong>Lowell High School</strong> · Summer 2025</p>
+            <p>Did component-level repairs and motherboard diagnostics with iFixit precision tools. Kept written logs of recurring bugs and hardware failures, and worked through technical problems with teammates.</p>
+          </article>
+          <article class="prose">
+            <h3>Equipment Manager, TV Production Club / Raider Media</h3>
+            <p><strong>Lowell High School</strong> · Aug 2024 to June 2026</p>
+            <p>Director and Technical Director on live sports and concert broadcasts of 3 to 8 hours. Head Video Editor in Final Cut Pro (Apple's video editing software) on film projects with multiple competition wins.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="wrap">
+        <h2>Skills</h2>
+        <div class="prose">
+          <ul>
+            <li><strong>Programming:</strong> Java (core, object-oriented programming, data structures, algorithm design)</li>
+            <li><strong>Systems:</strong> Windows, macOS, Linux (Ubuntu, Debian, Unraid)</li>
+            <li><strong>Tools:</strong> Docker, UniFi networking, Home Assistant</li>
+            <li><strong>Spoken:</strong> English, Gujarati (first language), Hindi (conversational)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="education">
+      <div class="wrap">
+        <h2>Education</h2>
+        <div class="split">
+          <article class="prose">
+            <h3>University of Massachusetts Lowell</h3>
+            <p>Bachelor of Science in Computer Science, expected 2030. Dean's Scholarship recipient.</p>
+          </article>
+          <article class="prose">
+            <h3>Lowell High School</h3>
+            <p>Graduated June 2026. GPA 4.14 weighted. Lowell Latin Lyceum, Early College and AP courses. State science fair finalist for the robot boat.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="more">
+      <div class="wrap">
+        <h2>More in progress</h2>
+        <p>Game development in Roblox Studio will be added here later.</p>
+      </div>
+    </section>
+
+    <section class="section" id="about-this-site">
+      <div class="wrap">
+        <h2>About this site, and how I use AI</h2>
+        <div class="prose">
+          <p>Every project on this site is my own work. I planned them, built the hardware, wrote and configured the software, and did the troubleshooting.</p>
+          <p>I do use AI tools and large language models when they are the right tool. Sometimes that means using one as a troubleshooting step, the same way I would use documentation or a forum. Sometimes AI is part of the project itself, such as the object detection on the robot boat and in my camera system.</p>
+          <p>This website was written and laid out with help from Claude, an AI assistant made by Anthropic, working from my own notes, files and configurations. I reviewed what it says, and the projects it describes are mine.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="wrap">
+        <h2>Contact</h2>
+        <div class="actions"><a class="btn" href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a><a class="btn ghost" href="https://github.com/daivikpatel9" rel="me">GitHub</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="#about-this-site">How I use AI</a> · <a href="credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../assets/js/site.js?v=32" defer></script>
+</body>
+</html>

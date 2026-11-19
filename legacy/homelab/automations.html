@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Automations · Homelab · Daivik Patel</title>
+  <meta name="description" content="How Home Assistant joins about twenty systems from different brands with 33 automations, including a garage that closes itself around one shared timer.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daivik Patel">
+  <meta property="og:title" content="Automations · Homelab · Daivik Patel">
+  <meta property="og:description" content="How Home Assistant joins about twenty systems from different brands with 33 automations, including a garage that closes itself around one shared timer.">
+  <meta property="og:url" content="https://daivikpatel9.github.io/daivikpatel9/homelab/automations.html">
+  <meta property="og:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Daivik Patel, Computer Science at UMass Lowell. A drawn server rack connected to the apps it runs.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://daivikpatel9.github.io/daivikpatel9/assets/img/social-card.jpg">
+  <script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <link rel="stylesheet" href="../../assets/css/site.css?v=32">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../index.html">Daivik Patel</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#projects" aria-current="page">Projects</a>
+        <a href="../index.html#web">How it connects</a>
+        <a href="https://github.com/daivikpatel9">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Homelab sections">
+    <div class="wrap">
+      <span class="tabs-label">Homelab</span>
+      <a href="index.html">Overview</a>
+      <a href="automations.html" aria-current="page">Automations</a>
+      <a href="cameras.html">Cameras and AI</a>
+      <a href="displays.html">Displays</a>
+      <a href="services.html">Server and services</a>
+      <a href="remote-access.html">Remote access</a>
+    </div>
+  </nav>
+
+  <main>
+    <aside class="notice" aria-label="Security note">
+      <div class="wrap">
+        <p><strong>Security note.</strong> These pages describe projects I have worked on. They are not a complete or current picture of what runs in my home, and I have left out details on purpose for security reasons.</p>
+      </div>
+    </aside>
+
+    <section class="hero has-media">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="eyebrow">Homelab · Automations</p>
+          <h1>Home Assistant as the hub</h1>
+          <p class="lede">Home Assistant, open-source home automation software, is where devices that were never designed to work together get joined. Most of my 33 active automations take an input from one brand and act on another.</p>
+          <dl class="facts">
+            <div><dt>Automations</dt><dd>33<small>active</small></dd></div>
+            <div><dt>Systems</dt><dd>~20<small>joined into one</small></dd></div>
+            <div><dt>Garage loop</dt><dd>4<small>automations, one timer</small></dd></div>
+          </dl>
+      
+        </div>
+        <div class="hero-media">
+          <img src="../../assets/img/art/automation-hub.jpg" alt="Home Assistant in the center, connected to six of my own photos: the garage door opener, a wireless remote, a thermostat, the wall tablet, the vent fan and a dashboard. Caption: 33 automations, about 20 systems joined into one" width="1600" height="1000">
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>Garage auto-close</h2>
+        <div class="prose">
+          <p>My family kept forgetting to close the garage, and one night it was left open. So now, if the garage is left open, it closes itself. A ratgdo board, which puts the garage door opener on the local network, tells Home Assistant when the door opens. That starts one shared timer. Motion and occupancy sensors in the garage restart it, and the length of the restart depends on the time of day.</p>
+          <p>I did not reinvent the opener's safety. The opener's own obstruction beam already stops the door from closing on anything in its path, and that stays the opener's job. I work with it instead: ratgdo reports when the beam is broken, and I treat that as one more sign that someone is still in the garage, so it restarts the timer too.</p>
+        </div>
+        <ol class="flow">
+          <li><strong>Open</strong>The door opens and a 15 minute timer starts</li>
+          <li><strong>Activity</strong>Motion, occupancy or a broken beam restarts the timer: 3, 2 or 10 minutes by time of day</li>
+          <li><strong>Close</strong>When the timer ends, Home Assistant closes the door</li>
+          <li><strong>Tell</strong>Phones get a notification and the kitchen tablet chimes</li>
+          <li><strong>Show</strong>A shared helper puts a red "Garage Open!" banner on the <a href="displays.html">wall tablet dashboard</a></li>
+        </ol>
+        <figure>
+          <img src="../../assets/img/photos/garage-ratgdo-and-sensor.jpg" alt="A garage door opener seen from below. A motion sensor mounted beside it is circled on the left, and a small circuit board visible through the vents of the opener's light cover is circled on the right" width="1600" height="1201" loading="lazy">
+          <figcaption>My garage opener. Circled on the right is the ratgdo board, tucked inside the opener's light cover. Circled on the left is the motion sensor that restarts the timer.</figcaption>
+        </figure>
+
+        <h3>Inside one automation</h3>
+        <div class="prose">
+          <p>The loop is four automations around one timer: start it when the door opens, close the door when it ends, cancel it when the door is closed by hand, and restart it when there is activity. This is the restart part. Device IDs are replaced with placeholders.</p>
+        </div>
+<pre><code>- alias: 'Garage Timer v2 p4: restart timer when motion detected'
+  description: ''
+  triggers:
+  - trigger: device
+    type: motion
+    device_id: &lt;garage_door_device&gt;
+    entity_id: &lt;garage_motion_sensor&gt;
+    domain: binary_sensor
+  - trigger: device
+    type: occupied
+    device_id: &lt;garage_presence_device&gt;
+    entity_id: &lt;garage_occupancy_sensor&gt;
+    domain: binary_sensor
+  - trigger: state
+    entity_id:
+    - binary_sensor.ratgdo_obstruction
+    to:
+    - 'on'
+  conditions:
+  - condition: device
+    device_id: &lt;garage_door_device&gt;
+    domain: cover
+    entity_id: &lt;garage_door&gt;
+    type: is_open
+  actions:
+  - action: timer.cancel
+    target:
+      entity_id: timer.garage_auto_close_timer
+    data: {}
+  - choose:
+    # Evening and overnight: 3 minutes
+    - conditions:
+      - condition: time
+        after: '&lt;evening&gt;'
+        before: '&lt;late night&gt;'
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.garage_auto_close_timer
+        data:
+          duration:
+            hours: 0
+            minutes: 3
+            seconds: 0
+    # Early morning: 2 minutes
+    - conditions:
+      - condition: time
+        after: '&lt;late night&gt;'
+        before: '&lt;early morning&gt;'
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.garage_auto_close_timer
+        data:
+          duration:
+            hours: 0
+            minutes: 2
+            seconds: 0
+    # Daytime: 10 minutes
+    - conditions:
+      - condition: time
+        after: '&lt;early morning&gt;'
+        before: '&lt;night&gt;'
+      sequence:
+      - action: timer.start
+        target:
+          entity_id: timer.garage_auto_close_timer
+        data:
+          duration:
+            hours: 0
+            minutes: 10
+            seconds: 0
+  mode: single</code></pre>
+        <div class="prose">
+          <p>I used one shared timer instead of delays inside each automation, so all four automations can start, restart or cancel the same countdown. Activity in the garage cancels and restarts the timer with a length that fits the hour, and closing the door by hand cancels it.</p>
+        </div>
+        <div class="actions">
+          <a class="btn ghost" href="https://github.com/daivikpatel9/daivikpatel9/tree/main/code/home-assistant-config">Read all four garage automations on GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>The other automations</h2>
+        <div class="prose">
+          <p>Each of these is small. Together they are why the house behaves like one system.</p>
+        </div>
+
+        <h3>Person, light, camera</h3>
+        <div class="prose">
+          <p>Three small automations form a chain across two vendors. The outside light exists partly to give the <a href="cameras.html">doorbell camera</a> color video at night.</p>
+        </div>
+        <ol class="flow">
+          <li><strong>Detect</strong>The doorbell sees a person</li>
+          <li><strong>Light</strong>The outside light turns on</li>
+          <li><strong>Camera</strong>The light turning on switches the doorbell to color night mode</li>
+          <li><strong>Reset</strong>When the person leaves, the light goes off and the camera returns to auto</li>
+        </ol>
+
+        <h3>Wireless buttons across brands</h3>
+        <div class="split">
+          <div class="prose">
+            <p>Philips Hue remotes and an Aqara button talk to Home Assistant over Zigbee, a low-power wireless network for home devices. It runs locally, so the buttons keep working without the internet.</p>
+            <p>One Hue remote toggles a room light, toggles a smart plug, dims a Govee LED strip and recalls scenes on a long press. The dimmer has a floor at 1%, so a dim press never steps the strip to off. Three brands share four buttons. Two more remotes do the same job for the master bedroom lamp and the living room ceiling lights.</p>
+            <p>Not everything goes through an automation. The top button of the downstairs remote is linked directly to a Zigbee wall switch, device to device, so it works even if Home Assistant is down. Mains-powered Zigbee devices such as smart plugs also relay signals for the battery-powered ones, so adding a plug in the right place extends the network.</p>
+          </div>
+          <div class="gallery photos">
+            <figure>
+          <img src="../../assets/img/photos/hue-remote.jpg" alt="A Philips Hue wireless dimmer remote in its wall plate, on a cream wall with the shadow of a houseplant" width="1200" height="1200" loading="lazy">
+          <figcaption>One of the Hue remotes.</figcaption>
+        </figure>
+            <figure>
+          <img src="../../assets/img/photos/zigbee-wall-switch.jpg" alt="A two-gang wall plate with two smart switches. The right-hand switch is circled" width="750" height="800" loading="lazy">
+          <figcaption>The circled wall switch is a Zigbee switch. The remote's top button is linked straight to it.</figcaption>
+        </figure>
+            <figure>
+          <img src="../../assets/img/photos/zigbee-plug-night-light.jpg" alt="A smart plug in a wall outlet with a small night light plugged into it, lit" width="1000" height="1000" loading="lazy">
+          <figcaption>A Zigbee smart plug. It powers a night light and also extends the range of the Zigbee network.</figcaption>
+        </figure>
+          </div>
+        </div>
+
+        <h3>Evening out a cold basement</h3>
+        <div class="split">
+          <div class="prose">
+            <p>The basement, where family members sleep, was always cold. The living room warmed up as the sun came in, but the basement did not, and the heating often had no reason to run because the thermostat upstairs was satisfied.</p>
+            <p>I had temperature history for both floors in Home Assistant, so I used an AI model to help me analyze it. The data showed the pattern clearly: the gap between the two floors grew large at times when the heating system was not running at all.</p>
+            <p>The fix was to move air instead of making more heat. I worked with the AI model to draft an automation template that turns on the heating system's fan when the difference between the living room and the basement passes a set amount. Then I tuned it myself over time: lower thresholds, different behaviour at specific times of day, a millimeter-wave occupancy sensor in the basement as an input, and a lockout timer so the fan does not run constantly.</p>
+            <p>The template has two settings: a tighter threshold for comfort and a looser one for saving energy, each with its own lockout time.</p>
+            <p>I also built a dashboard for it, shown here, so I can watch the gap and switch the whole thing on or off. It is a deep-winter tool. I leave it off when the weather is mild, and the difference between the floors is still easy to see in the data.</p>
+          </div>
+          <div class="stack">
+            <figure>
+          <img src="../../assets/img/photos/temperature-history.png" alt="Home Assistant history graph over about thirteen hours. The living room line stays between about 70 and 73 degrees Fahrenheit while the basement line stays between about 66.5 and 71 degrees, usually two to four degrees lower" width="1600" height="436" loading="lazy">
+          <figcaption>Real data from my Home Assistant: living room in blue, basement in yellow, over one afternoon and evening. The basement stays several degrees colder for most of it.</figcaption>
+        </figure>
+            <figure>
+          <img src="../../assets/img/photos/thermal-delta-dashboard.png" alt="A Home Assistant dashboard titled Thermal Delta Tracker, with a chart of upstairs and basement temperatures, live readings, a basement occupancy sensor, a master switch for the automation, a lockout timer, an override button and two thermostat controls" width="1600" height="904" loading="lazy">
+          <figcaption>The dashboard I built to track the gap and control the automation: both temperatures, basement occupancy, a master switch, the lockout timer and an override.</figcaption>
+        </figure>
+            <figure>
+          <img src="../../assets/img/photos/ecobee-thermostat.jpg" alt="An Ecobee smart thermostat on a wall showing 69 degrees" width="1100" height="1100" loading="lazy">
+          <figcaption>One of the two Ecobee thermostats that supply the readings.</figcaption>
+        </figure>
+            <figure>
+              <img src="../../assets/img/photos/presence-sensor.jpg" alt="The basement occupancy sensor: a small round white Aqara millimeter-wave sensor mounted in the corner where a wall meets the ceiling" width="900" height="900" loading="lazy">
+              <figcaption>The basement occupancy sensor. It is a millimeter-wave sensor, which uses radar to notice someone even when they are sitting still or asleep, so the automation knows when the basement is really in use.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <h3>Keeping a room with a server in it cool</h3>
+        <div class="split">
+          <div class="prose">
+            <p>This one is a separate project. My <a href="services.html">server</a> used to live in my bedroom, and the computers made the room hot. I fitted an AirBoost booster fan in the room's ceiling vent and tied it to what the heating system is doing.</p>
+            <p>The unit has motorized louvers, so it does more than stop blowing. When the furnace is heating, the fan stops and the louvers physically close, which blocks heated air from coming into a room that is already warm. When the system is only circulating air, the louvers open and the fan runs to pull in more of the cooler air. A hold timer keeps it running for a while after the system fan stops. It is also just a good fan.</p>
+          </div>
+          <div class="stack">
+            <figure>
+              <img src="../../assets/img/photos/vent-fan-open.jpg" alt="A booster fan unit fitted in a ceiling vent with its three louvers open" width="1400" height="882" loading="lazy">
+              <figcaption>Louvers open: the fan is pulling air into the room.</figcaption>
+            </figure>
+            <figure>
+              <img src="../../assets/img/photos/vent-fan-closed.jpg" alt="The same ceiling vent unit with its three louvers shut flat" width="1400" height="882" loading="lazy">
+              <figcaption>Louvers shut: the vent is physically closed, so heated air cannot come in.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+
+        <h3>An infrared blaster for a heater with no network</h3>
+        <div class="split">
+          <div class="prose">
+            <p>A Shark tower fan heater in one bedroom has no network connection at all, only a small wireless remote. That remote only works from about two feet away. Past that it is basically useless, so in practice you had to walk over to the heater anyway.</p>
+            <p>I wired an infrared emitter to an ESP board, a small microcontroller, attached it to the heater and taught it the remote's signals. Home Assistant now has a button for every key on that remote: power, fan up and down, heat on and off, heat up and down, auto, rotate, timer and screen brightness. It works from anywhere, and it responds faster than the original remote does even when that remote is held right at the heater's sensor.</p>
+            <p>It also does something the remote never could: proper timers. An automation switches the heat at set times of day, chosen around the schedules and preferences of the people who use that room. It is a simple schedule built for people, not a data-driven one.</p>
+          </div>
+          <div class="gallery photos two">
+            <figure>
+              <img src="../../assets/img/photos/ir-blaster-on-heater.jpg" alt="A Shark tower fan heater with a small ESP board attached to it, a red light lit on the board" width="1300" height="1607" loading="lazy">
+              <figcaption>The blaster in place. The ESP board, attached to the side of the heater, with the wires for its infrared emitter.</figcaption>
+            </figure>
+            <figure>
+              <img src="../../assets/img/photos/ir-remote-dashboard.png" alt="A Home Assistant phone screen titled Shark with twelve buttons under Master IR ESP: power, info, fan up, fan down, fan button, heat on or off, heat up, heat down, auto, rotate, timer and screen brightness" width="920" height="1140" loading="lazy">
+              <figcaption>The remote, rebuilt in Home Assistant. Every button on the heater's remote is now a button I can press or automate.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <h3>Outdoor lights and schedules that survive a restart</h3>
+        <div class="prose">
+          <p>The outdoor string lights turn on at sunset and off late in the evening, and a fountain runs during the day. The string light rules also run whenever Home Assistant starts, so a restart or a power cut in the evening does not leave the lights in the wrong state. A floodlight that someone turns on switches itself off after ten minutes.</p>
+        </div>
+
+        <h3>Lamps that repair themselves</h3>
+        <div class="prose">
+          <p>When either WiZ bulb drops off the network, Home Assistant reloads their integration entries automatically. An hourly reload and a local webhook act as backups.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <aside class="connects">
+          <h2>Connects to</h2>
+          <ul>
+            <li><a href="displays.html">Displays</a>Automations switch the tablet and TV to cameras and raise the garage banner.</li>
+            <li><a href="cameras.html">Cameras and AI</a>The doorbell's sensors are inputs, and the outside light gives its camera color video.</li>
+            <li><a href="services.html">Server and services</a>Home Assistant runs as a virtual machine on the Unraid server, which also stores the chime sounds.</li>
+          </ul>
+        </aside>
+        <div class="next-prev"><a class="btn ghost" href="index.html">Previous: Overview</a><a class="btn" href="cameras.html">Next: Cameras and AI</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Daivik Patel · Computer Science, UMass Lowell</span>
+      <span><a href="https://github.com/daivikpatel9">GitHub</a> · <a href="https://www.linkedin.com/in/daivik-patel-30583844b/" rel="me">LinkedIn</a></span>
+      <p class="ai-note">Projects built by me. This site was written with help from Claude. <a href="../index.html#about-this-site">How I use AI</a> · <a href="../credits.html">Open source credits</a></p>
+    </div>
+  </footer>
+  <script src="../../assets/js/site.js?v=32" defer></script>
+</body>
+</html>
