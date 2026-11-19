@@ -965,7 +965,7 @@ span.s4-card-go{border-style:dashed}
    at most 120px tall, so it never grows behind long text. Chips, buttons and table cells do not get it. */
 .card,.mpanel,.elabel,.secnote,.c-call,.d-sheet,.d-story,.s4-card-in,.pop,.tourbox,.ctr-box,.theme-joke,.c-card,.c-embed,.c-tbl,.d-idx,.lbox p,.b-block,.ai-box,.foot{
   --gx:var(--glow-x,50%);--gy:100%;
-  background-image:radial-gradient(var(--card-glow-size) at var(--gx) var(--gy),var(--card-glow),var(--card-glow-2) 55%,transparent 100%);background-repeat:no-repeat;
+  background-image:radial-gradient(var(--gsz,var(--card-glow-size)) at var(--gx) var(--gy),color-mix(in srgb,var(--card-glow) calc(var(--gi,1) * 100%),transparent),color-mix(in srgb,var(--card-glow-2) calc(var(--gi,1) * 100%),transparent) 55%,transparent 100%);background-repeat:no-repeat;
   border:1px solid var(--rule);border-bottom-color:var(--card-line-warm);box-shadow:var(--card-shadow)}
 .secnote,.c-call{border-left:3px solid var(--link)}
 .card:hover,.card:focus-visible{border-color:currentColor}
@@ -988,13 +988,13 @@ span.s4-card-go{border-style:dashed}
    ===================================================================== */
 @property --mx{syntax:"<number>";inherits:true;initial-value:.5}
 @property --my{syntax:"<number>";inherits:true;initial-value:.5}
-@property --gx{syntax:"<percentage>";inherits:false;initial-value:50%}
-@property --gy{syntax:"<percentage>";inherits:false;initial-value:100%}
-[class*="hv-"]{transition-property:scale,translate,transform,box-shadow,border-color,background-color,color,filter,--gx,--gy,text-decoration-color,text-decoration-thickness;
+@property --gx{syntax:"<length-percentage>";inherits:false;initial-value:50%}
+@property --gy{syntax:"<length-percentage>";inherits:false;initial-value:100%}
+[class*="hv-"]{transition-property:scale,translate,transform,box-shadow,border-color,background-color,color,filter,text-decoration-color,text-decoration-thickness;
   transition-duration:.35s;transition-timing-function:cubic-bezier(.2,.7,.1,1)}
 .hv{transition-duration:.18s}
-/* light follows the pointer: the card's ember glow moves toward it and rises a little */
-.hv-cards.hv,.hv-cardw.hv{--gx:calc(var(--mx) * 100%);--gy:calc(72% + var(--my) * 28%)}
+/* the card's glow is a free light: the blob loop in the script moves it (--gx, --gy), reshapes it (--gsz) and sets its
+   strength (--gi); at rest it is the usual edge glow from the shared text-box rule */
 /* the hairline brightens toward the accent on the edge nearest the pointer */
 .hv-cards,.hv-cardw{position:relative}
 .d-idx.hv-cards{position:sticky}
@@ -4552,7 +4552,73 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       el.classList.remove("hv");
       setTimeout(function () { if (!el.classList.contains("hv")) el.style.willChange = ""; }, 400);
     }
+    /* ---- the glow as a free light ----
+       Each card's glow is a blob with a rest place on its bottom edge. While the pointer is over the card the blob lifts
+       off and glides to the pointer (exponential smoothing, time constant 140ms), rounding from the wide edge glow into
+       a spot and dimming a little under text (peak 80% of the edge glow, so text contrast holds); when the pointer leaves
+       it falls back like a dropped light (accelerating, a 3.5% overshoot past the edge, then settles, 620ms) and widens
+       into the edge glow. Re-entering mid-fall turns it around from where it is. One rAF loop runs only while a blob is
+       away from rest; card rects are read on enter and after scroll or resize, never inside the loop otherwise.
+       Reduced mode: it moves only a quarter of the way toward the pointer. Off: no blob. */
+    var blobs = [], bRaf = 0, bLast = 0, rectsDirty = false, BLOBSEL = R[11][1] + "," + R[12][1];
+    function bState(el) { for (var i = 0; i < blobs.length; i++) if (blobs[i].el === el) return blobs[i]; return null; }
+    function measureB(b) {
+      var r = b.el.getBoundingClientRect(); b.l = r.left; b.t = r.top; b.w = r.width || 1; b.h = r.height || 1;
+      b.rx = b.w * b.sx; b.ry = b.h;
+    }
+    function blobOn(el) {
+      if (!el || still() || !el.matches(BLOBSEL)) return;
+      var b = bState(el);
+      if (!b) {
+        var cs = getComputedStyle(el), gxs = parseFloat(cs.getPropertyValue("--glow-x")), sz = String(cs.getPropertyValue("--card-glow-size") || "").trim().split(/\s+/);
+        b = { el: el, sx: isNaN(gxs) ? .5 : gxs / 100, rw: (parseFloat(sz[0]) || 60) / 100, rh: parseFloat(sz[1]) || 120 };
+        measureB(b); b.x = b.rx; b.y = b.ry; blobs.push(b);
+      } else measureB(b);
+      b.mode = "follow";
+      if (!bRaf) { bLast = performance.now(); bRaf = requestAnimationFrame(bFrame); }
+    }
+    function blobOff(el) {
+      var b = el && bState(el); if (!b || b.mode === "fall") return;
+      b.mode = "fall"; b.f0 = performance.now(); b.fx = b.x; b.fy = b.y;
+      if (!bRaf) { bLast = performance.now(); bRaf = requestAnimationFrame(bFrame); }
+    }
+    function bWrite(b) {
+      var d = clamp((b.h - b.y) / Math.min(b.h, 240), 0, 1), spot = Math.min(170, Math.max(90, b.w * .3));
+      var sw = b.w * b.rw + (spot - b.w * b.rw) * d, sh = b.rh + (spot - b.rh) * d, gi = 1 - .2 * d;
+      var st = b.el.style;
+      st.setProperty("--gx", b.x.toFixed(1) + "px"); st.setProperty("--gy", b.y.toFixed(1) + "px");
+      st.setProperty("--gsz", sw.toFixed(1) + "px " + sh.toFixed(1) + "px"); st.setProperty("--gi", gi.toFixed(3));
+    }
+    function bClear(b) { ["--gx", "--gy", "--gsz", "--gi"].forEach(function (k) { b.el.style.removeProperty(k); }); }
+    function bFrame(now) {
+      bRaf = 0;
+      var dt = Math.min(.05, (now - bLast) / 1000); bLast = now;
+      if (rectsDirty) { rectsDirty = false; blobs.forEach(measureB); }
+      var k = 1 - Math.exp(-dt / .14), keep = [];
+      blobs.forEach(function (b) {
+        if (b.mode === "follow") {
+          var tx = clamp(px - b.l, 0, b.w), ty = clamp(py - b.t, 0, b.h);
+          if (lite()) { tx = b.rx + (tx - b.rx) * .25; ty = b.ry + (ty - b.ry) * .25; }
+          b.x += (tx - b.x) * k; b.y += (ty - b.y) * k;
+          bWrite(b); keep.push(b);
+        } else {
+          var t = clamp((now - b.f0) / 620, 0, 1);
+          var py0 = t < .78 ? 1.035 * Math.pow(t / .78, 2) : 1.035 - .035 * (1 - Math.pow(1 - (t - .78) / .22, 2));
+          var px0 = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          b.x = b.fx + (b.rx - b.fx) * px0; b.y = b.fy + (b.ry - b.fy) * py0;
+          if (t < 1) { bWrite(b); keep.push(b); } else bClear(b);
+        }
+      });
+      blobs = keep;
+      if (blobs.length) bRaf = requestAnimationFrame(bFrame);
+    }
+    document.addEventListener("scroll", function () { if (blobs.length) rectsDirty = true; }, { passive: true, capture: true });   /* the page or the expanded view scrolling */
+    window.addEventListener("resize", function () { if (blobs.length) rectsDirty = true; });
+    function cardOf(t) { return t ? (t.matches(BLOBSEL) ? t : t.parentElement && t.parentElement.closest(BLOBSEL)) : null; }
+    var lit = null;
     function set(t) {
+      var nc = cardOf(t);
+      if (nc !== lit) { if (lit) blobOff(lit); lit = nc; if (lit) blobOn(lit); }
       if (t === cur) return;
       var nb = t && t.parentElement ? t.parentElement.closest(CARD) : null;
       if (cur && cur !== nb) off(cur);
@@ -4570,8 +4636,9 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     }
     document.addEventListener("pointermove", function (e) {
       if (e.pointerType !== "mouse" || !FH.matches) return;
-      set(e.target.closest ? e.target.closest(ALL) : null);
       px = e.clientX; py = e.clientY;
+      set(e.target.closest ? e.target.closest(ALL) : null);
+      if (lit && !bRaf) { bLast = performance.now(); bRaf = requestAnimationFrame(bFrame); }
       if (cur && !raf) raf = requestAnimationFrame(frame);
     }, { passive: true });
     document.addEventListener("pointerout", function (e) { if (!e.relatedTarget) set(null); });
