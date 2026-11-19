@@ -170,7 +170,7 @@ body{--fg:var(--base-ink);--muted:var(--base-muted);--rule:var(--base-line);--ho
 
 *,*::before,*::after{box-sizing:border-box}
 html{background:var(--ce-1);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--ce-1);color:var(--fg);font-family:var(--sans);font-size:1.0625rem;font-weight:500;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{margin:0;background:transparent;color:var(--fg);font-family:var(--sans);font-size:1.0625rem;font-weight:500;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .d-lock,.d-lock body{overflow:hidden}
 img{max-width:100%;display:block}
 a{color:inherit}
@@ -581,6 +581,7 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .foot p{margin:0 0 .3rem;font-size:1rem}
 .foot ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;align-items:center}
 .foot ul a{font-weight:600;font-size:.95rem;text-underline-offset:.22em}
+.mo-ctl{padding:0;border:0;background:none;color:inherit;cursor:pointer;font-weight:600;font-size:.95rem;text-decoration:underline;text-underline-offset:.22em}
 
 /* =====================================================================
    EXPANDED PROJECTS: the same page, with the gap between two divider lines widened to the screen.
@@ -1242,10 +1243,40 @@ span.s4-card-go{border-style:dashed}
   var body = document.body, main = $("main");
   var RM = matchMedia("(prefers-reduced-motion: reduce)");
   /* ?motion=on (or localStorage s4-motion=on) forces motion for testing, even with reduced motion set */
-  var FORCE = /[?&]motion=on(&|$)/.test(location.search);
-  try { if (localStorage.getItem("s4-motion") === "on") FORCE = true; } catch (e) {}
-  if (FORCE) document.documentElement.classList.add("mo-on");
-  function still() { return RM.matches && !FORCE; }
+  /* motion modes (reason: "reduce" in the OS should calm the page, not freeze it):
+       full    everything
+       reduced (default when the OS asks for reduced motion) keeps the essential, gentle motion: the line-stretch
+               expand and collapse, the gradual colour change, heading and text arrivals, the image reveal, the sketch
+               drawn with the arrows; drops parallax, pointer tilt, the magnetic button, rail physics and the long
+               project-to-project sweep (a short crossfade instead), and shortens the colour blend
+       off     nothing moves (?motion=off only)
+     ?motion=on / ?motion=off force a mode and are remembered; the footer switch toggles Full / Reduced. */
+  var MODE = RM.matches ? "reduced" : "full";
+  try { var ms0 = localStorage.getItem("fg-motion"); if (ms0 === "full" || ms0 === "reduced" || ms0 === "off") MODE = ms0; if (localStorage.getItem("s4-motion") === "on") MODE = "full"; } catch (e) {}
+  var mq0 = /[?&]motion=(on|off|full|reduced)(&|$)/.exec(location.search);
+  if (mq0) { MODE = mq0[1] === "on" ? "full" : mq0[1]; try { localStorage.setItem("fg-motion", MODE); } catch (e) {} }
+  var FORCE = MODE !== "off";
+  /* .mo-on lets the CSS animations run even when the OS asks for reduced motion (the JS decides what runs) */
+  if (MODE !== "off") document.documentElement.classList.add("mo-on");
+  function still() { return MODE === "off"; }
+  function lite() { return MODE === "reduced"; }
+  function setMode(m) {
+    MODE = m; try { localStorage.setItem("fg-motion", m); } catch (e) {}
+    document.documentElement.classList.toggle("mo-on", m !== "off");
+    if (window.__motion) window.__motion.mode = m;
+  }
+  /* ?motiondebug=1: one console line per kind of motion event, and window.__motion with live counts */
+  var MDEBUG = /[?&]motiondebug=1(&|$)/.test(location.search), mlogged = {};
+  var MSTAT = window.__motion = { enabled: true, reduced: RM.matches, mode: MODE, touch: matchMedia("(hover: none)").matches,
+    pointer: matchMedia("(pointer: fine)").matches ? "fine" : "coarse", viewport: innerWidth + "x" + innerHeight,
+    counts: { reveal: 0, parallax: 0, expand: 0, travel: 0, colour: 0 } };
+  if (MDEBUG) try { console.log("motion: mode " + MODE + ", OS reduced " + RM.matches + ", pointer " + MSTAT.pointer + ", viewport " + MSTAT.viewport); } catch (e) {}
+  function mlog(kind, msg) {
+    MSTAT.enabled = !still(); MSTAT.reduced = RM.matches; MSTAT.mode = MODE; MSTAT.viewport = innerWidth + "x" + innerHeight;
+    if (MSTAT.counts[kind] != null) MSTAT.counts[kind]++;
+    var key = msg.replace(/#\S+/, "#");
+    if (MDEBUG && !mlogged[key]) { mlogged[key] = 1; try { console.log("motion: " + msg); } catch (e) {} }
+  }
   var NARROW = matchMedia("(max-width: 767px)");
   var FINE = matchMedia("(hover: hover) and (pointer: fine)");
   var EOUT = "cubic-bezier(.22,1,.36,1)";
@@ -1754,6 +1785,7 @@ span.s4-card-go{border-style:dashed}
   });
   (ME.links || []).forEach(function (l) { if (l[0] !== "GitHub" && l[0] !== "LinkedIn") footLinks.push('<a href="' + esc(l[1]) + '" target="_blank" rel="noopener">' + esc(l[0]) + "</a>"); });
   footLinks.push('<a href="' + esc(plain) + '">Plain view</a>');
+  footLinks.push('<button type="button" class="mo-ctl" id="mo-ctl" aria-pressed="false">Motion: Full</button>');
   var ending =
     '<section class="end" id="hello" data-amb="b,2.4,.7,end" data-section data-label="End" aria-labelledby="end-t">' +
       '<div class="in-wrap">' +
@@ -1854,8 +1886,24 @@ span.s4-card-go{border-style:dashed}
       return o;
     }
     function css(v) { return "rgba(" + Math.round(v[0]) + "," + Math.round(v[1]) + "," + Math.round(v[2]) + "," + (Math.round(v[3] * 1000) / 1000) + ")"; }
+    /* each variable is written only on the element whose subtree reads it (never on :root, where a change would
+       restyle the whole page every frame), and only when its value actually changed */
+    var scrEl = $("scr"), chromeEl = $("chrome"), layEl = $("dlayer"), lnEls = [$("ln-t"), $("ln-b")], last = {};
+    function where(k) {
+      if (k.indexOf("--ce-") === 0) return [scrEl];
+      if (k.indexOf("--bar-") === 0) return [chromeEl];
+      if (k === "--p-line") return [layEl].concat(lnEls);
+      if (k.indexOf("--p-") === 0) return [layEl];
+      if (k.indexOf("--m-") === 0) return [document.body];
+      return [root];
+    }
     function write(stage) {
-      Object.keys(cur).forEach(function (k) { root.style.setProperty(k, css(cur[k])); });
+      Object.keys(cur).forEach(function (k) {
+        var v = css(cur[k]); if (last[k] === v) return; last[k] = v;
+        where(k).forEach(function (el) { if (el) el.style.setProperty(k, v); });
+      });
+      if (cur["--ce-1"] && last.__html !== last["--ce-1"]) { last.__html = last["--ce-1"]; root.style.backgroundColor = last["--ce-1"]; }
+      if (stage === 2 && metaAt !== 2) mlog("colour", "colour tween end");
       if (meta && cur["--ce-1"] && stage !== metaAt) { metaAt = stage; var v = cur["--ce-1"]; meta.setAttribute("content", "rgb(" + Math.round(v[0]) + "," + Math.round(v[1]) + "," + Math.round(v[2]) + ")"); }
     }
     function frame(now) {
@@ -1872,7 +1920,8 @@ span.s4-card-go{border-style:dashed}
       if (st) state = st;
       to = target(state); from = {};
       Object.keys(to).forEach(function (k) { from[k] = cur[k] ? cur[k].slice() : to[k].slice(); });
-      lin = still(); dur = lin ? 200 : (ms || 1200); t0 = performance.now(); metaAt = -1;
+      lin = still(); dur = lin ? 200 : Math.round((ms || 1200) * (lite() ? .6 : 1)); t0 = performance.now(); metaAt = -1;
+      mlog("colour", "colour tween start (" + dur + "ms)");
       if (!raf) raf = requestAnimationFrame(frame);
     }
     function snap(st) {
@@ -2071,7 +2120,7 @@ span.s4-card-go{border-style:dashed}
       function f(now) {
         var dt = Math.min(32, now - last); last = now;
         vp.scrollLeft += v * dt; v *= Math.pow(.94, dt / 16);
-        if (Math.abs(v) > .05 && !still()) fling = requestAnimationFrame(f); else { fling = 0; vp.classList.remove("drag"); }
+        if (Math.abs(v) > .05 && !still() && !lite()) fling = requestAnimationFrame(f); else { fling = 0; vp.classList.remove("drag"); }
       }
       fling = requestAnimationFrame(f);
     }
@@ -2081,7 +2130,7 @@ span.s4-card-go{border-style:dashed}
       try { vp.releasePointerCapture(drag.id); } catch (err) {}
       var v = drag.moved && performance.now() - drag.lt < 80 ? clamp(drag.v, -4, 4) : 0;
       drag = null;
-      if (Math.abs(v) > .3 && !still()) coast(v); else vp.classList.remove("drag");
+      if (Math.abs(v) > .3 && !still() && !lite()) coast(v); else vp.classList.remove("drag");
     }
     vp.addEventListener("pointerup", end);
     vp.addEventListener("pointercancel", end);
@@ -2173,7 +2222,8 @@ span.s4-card-go{border-style:dashed}
       cDot = document.createElementNS(NS, "circle"); cDot.setAttribute("r", "3.5");
       cSvg.appendChild(cPath); cSvg.appendChild(cDot); grid.appendChild(cSvg);
     }
-    function drawConn() {
+    function drawConn() { try { drawConn0(); } catch (e) { if (cSvg) cSvg.style.display = "none"; } }
+    function drawConn0() {
       if (!cSvg) return;
       if (!selected || !nodes[selected] || !W) { cSvg.style.display = "none"; return; }
       cSvg.style.display = "";
@@ -2402,6 +2452,7 @@ span.s4-card-go{border-style:dashed}
   /* the heading rises line by line; its serif line follows as one or two masked lines of its own */
   function revealHead(h) {
     var sub = subOf(h);
+    mlog("reveal", "reveal heading #" + ((h.closest("[id]") || h).id || h.id || "heading"));
     if (still()) { h.classList.remove("lr-arm"); if (sub) sub.classList.remove("lf-arm"); return; }
     if (h.classList.contains("lr-go")) return;
     var n = splitLines(h, 0);
@@ -2447,7 +2498,15 @@ span.s4-card-go{border-style:dashed}
         if (st === "armed" && e.isIntersecting) { h.setAttribute("data-lr", "done"); hio.unobserve(h); revealHead(h); arriveStop(h); }
       });
     }, { rootMargin: "0px 0px -6% 0px" });
-    [].forEach.call(main.querySelectorAll(".map-t,.ch-t,.s-title,.b-t,.ai-t,.end-t"), function (h) { hio.observe(h); });
+    /* armed now, before the first paint, if below the screen (not on the observer's first report, which can arrive
+       late on a busy load and then count a heading as "already seen") */
+    [].forEach.call(main.querySelectorAll(".map-t,.ch-t,.s-title,.b-t,.ai-t,.end-t"), function (h) {
+      var r = h.getBoundingClientRect();
+      if (r.top < window.innerHeight) { h.setAttribute("data-lr", "done"); return; }
+      armHead(h); h.setAttribute("data-lr", "armed");
+      stopExtras(h).forEach(function (x) { x.classList.add("ta-arm"); });
+      hio.observe(h);
+    });
   }
 
   /* ---------- trail fork lines draw in once (reason: direction of travel); armed the same safe way ---------- */
@@ -3444,8 +3503,7 @@ span.s4-card-go{border-style:dashed}
       return SCR.scrollHeight > SCR.clientHeight + 50;
     }
     /* testing override and visitor choice: ?motion=on, localStorage s4-motion=on, or "Play the drawing" */
-    var motionOn = /[?&]motion=on(&|$)/.test(window.location.search);
-    try { if (window.localStorage.getItem("s4-motion") === "on") motionOn = true; } catch (e) {}
+    var motionOn = !still();
     /* modes: scroll-drawn (desktop with a fine pointer, as before) or ARROW mode: a normal-height card stepped with the
        bar, time-driven (each step draws in about 900ms). Arrow mode is the only mode on touch and narrow screens, with
        reduced motion, and wherever the page cannot scroll; on desktop the first arrow press switches to it. */
@@ -3454,7 +3512,7 @@ span.s4-card-go{border-style:dashed}
       var rm = mqRM.matches && !motionOn;
       isStatic = false; root.classList.remove("s4--static");
       root.classList.toggle("s4--rm", rm);
-      if (!arrow && (rm || TOUCHY.matches || mqPhone.matches || !scrollable())) {
+      if (!arrow && (rm || lite() || TOUCHY.matches || mqPhone.matches || !scrollable())) {
         arrow = true; root.classList.add("s4--arrow");
         if (rm) { aStep = N - 1; dA = (N - 1 + 0.9995) / N; }
       }
@@ -3567,7 +3625,15 @@ span.s4-card-go{border-style:dashed}
         if (st === 1 && e.isIntersecting) { el.__en = 2; io.unobserve(el); go(el); }
       });
     }, { root: opt.root || null, rootMargin: opt.margin || "0px 0px -8% 0px" });
-    els.forEach(function (el) { io.observe(el); });
+    els.forEach(function (el) {
+      /* with the window as root, arm right away (before first paint) when below the screen; else let the first report decide */
+      if (!opt.root) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight) { el.__en = 2; return; }
+        arm(el); el.__en = 1;
+      }
+      io.observe(el);
+    });
   }
 
   /* one live sketch per project with a story, built the first time its detail page is visible */
@@ -3871,7 +3937,8 @@ span.s4-card-go{border-style:dashed}
   }
 
   /* the "On this page" index unfolds from its top as the page arrives */
-  function unfoldIdx(id) {
+  function unfoldIdx(id) { try { unfoldIdx0(id); } catch (e) {} }
+  function unfoldIdx0(id) {
     var pg = $("d-" + id), nav = pg && pg.querySelector(".d-idx");
     if (!nav || still() || !nav.animate || !nav.getClientRects().length) return;
     nav.animate([{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0 0)" }], { duration: 420, easing: EOUT });
@@ -3920,12 +3987,14 @@ span.s4-card-go{border-style:dashed}
         f[0].onfinish = function () { settle(); f.forEach(function (x) { x.cancel(); }); };
       } else {
         layer.classList.add("is-anim");
+        mlog("expand", "expand start");
         var pairs = shared(id), rest = restEls(id), anims = [];
         hideOrig(id, true);
         pairs.forEach(function (x) { x[1].style.transformOrigin = "0 0"; anims.push(x[1].animate([{ transform: flipFrom(x[0], x[1]) }, { transform: "none" }], { duration: EXPAND_MS, easing: EOUT })); });
         rest.forEach(function (el) { el.style.opacity = "0"; });
         anims = anims.concat(runPush(g, pl, true, EXPAND_MS, EOUT), runLines(pl, e, true, EXPAND_MS, EOUT), [runSun(true, EXPAND_MS, EOUT)]);
         anims[anims.length - 1].onfinish = function () {
+          mlog("expand", "expand end");
           layer.classList.remove("is-anim");
           main.style.visibility = "hidden";
           hideOrig(id, false);
@@ -3957,8 +4026,9 @@ span.s4-card-go{border-style:dashed}
       if (DT.closeWait) { DT.closeWait = false; closeDetail(); }
     }
     DT.trav = true;
-    if (still() || !canAnim) CE.go({ mode: "p", id: id });
-    if (still() || !canAnim) {
+    mlog("travel", "travel start");
+    if (still() || lite() || !canAnim) CE.go({ mode: "p", id: id });
+    if (still() || lite() || !canAnim) {
       var out = canAnim ? dlg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 75, fill: "forwards" }) : null;
       var swap = function () { showPage(id); dlg.scrollTop = 0; arrive(); if (out) { out.cancel(); dlg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 75 }); } finish(); };
       if (out) out.onfinish = swap; else swap();
@@ -3998,6 +4068,7 @@ span.s4-card-go{border-style:dashed}
     CE.go({ mode: "p", id: id }, 1800);
     setTimeout(arrive, dur / 2);
     anims[1].onfinish = function () {
+      mlog("travel", "travel end");
       ghost.remove(); seams.forEach(function (x) { x.remove(); });
       anims.forEach(function (x) { x.cancel(); });
       finish();
@@ -4052,7 +4123,8 @@ span.s4-card-go{border-style:dashed}
     rest.forEach(function (el) { anims.push(el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: "ease-out", fill: "forwards" })); });
     pairs.forEach(function (x) { x[1].style.transformOrigin = "0 0"; anims.push(x[1].animate([{ transform: "none" }, { transform: flipFrom(x[0], x[1]) }], { duration: EXPAND_MS, easing: EOUT, fill: "forwards" })); });
     anims = anims.concat(runPush(g, pl, false, EXPAND_MS, EOUT), runLines(pl, e, false, EXPAND_MS, EOUT), [runSun(false, EXPAND_MS, EOUT)]);
-    anims[anims.length - 1].onfinish = done;
+    mlog("expand", "collapse start");
+    anims[anims.length - 1].onfinish = function () { mlog("expand", "collapse end"); done(); };
   }
   /* Back, Esc, the wordmark: let the browser history close it when we pushed an entry, so Back and the button agree */
   function requestClose(after) {
@@ -4201,21 +4273,24 @@ span.s4-card-go{border-style:dashed}
     var hp = heroEl.querySelector(".tp-plate");
     if (hp) items.push({ sec: heroEl, els: [{ el: hp, k: -.6, c: 0 }], top: 0, h: 0, vis: false, btn: null });
     function measureM() { var sy = window.scrollY; items.forEach(function (it) { var r = it.sec.getBoundingClientRect(); it.top = r.top + sy; it.h = r.height; }); }
+    try {
     /* 6. the plate reacts to you: a small tilt toward the pointer on fine pointers */
     [].forEach.call(document.querySelectorAll(".s-media .fig,.tp-plate .fig"), function (f) {
       var t = { el: f, x: 0, y: 0, tx: 0, ty: 0 };
       f.addEventListener("pointermove", function (e) {
-        if (e.pointerType !== "mouse" || !FINE.matches || still()) return;
+        if (e.pointerType !== "mouse" || !FINE.matches || still() || lite()) return;
         var r = f.getBoundingClientRect(); if (!r.width) return;
         t.tx = (.5 - (e.clientY - r.top) / r.height) * 5; t.ty = ((e.clientX - r.left) / r.width - .5) * 5; kick();
       });
       f.addEventListener("pointerleave", function () { t.tx = t.ty = 0; kick(); });
       tilts.push(t);
     });
+    } catch (e) {}
     function paintT(t) { t.el.style.transform = Math.abs(t.x) + Math.abs(t.y) > .001 ? "perspective(900px) rotateX(" + t.x.toFixed(2) + "deg) rotateY(" + t.y.toFixed(2) + "deg) rotate(var(--rot,0deg))" : ""; }
+    try {
     /* 6. the Open button pulls a few pixels toward the pointer when it comes within about 60px */
     document.addEventListener("pointermove", function (e) {
-      if (e.pointerType !== "mouse" || !FINE.matches || still() || DT.open) return;
+      if (e.pointerType !== "mouse" || !FINE.matches || still() || lite() || DT.open) return;
       items.forEach(function (it) {
         var b = it.btn; if (!b || !it.vis) return;
         var m = b.__m || (b.__m = { x: 0, y: 0, tx: 0, ty: 0 }), r = b.getBoundingClientRect();
@@ -4227,6 +4302,7 @@ span.s4-card-go{border-style:dashed}
       });
       kick();
     }, { passive: true });
+    } catch (e) {}
     /* 5. card rail physics: cards lean a little with the strip's speed and ease back */
     if (rv) rv.addEventListener("scroll", function () {
       var now = performance.now(), sl = rv.scrollLeft, dt = Math.max(8, now - rl.t);
@@ -4236,7 +4312,8 @@ span.s4-card-go{border-style:dashed}
     function lerp(o, key, tg, f) { var d = tg - o[key]; if (Math.abs(d) < .02) { if (o[key] === tg) return false; o[key] = tg; return true; } o[key] += d * f; return true; }
     function step() {
       if (still()) return false;
-      var moving = false, sy = window.scrollY, vh = window.innerHeight, A = NARROW.matches ? 12 : 26;
+      /* reduced mode: no parallax (anything already drifted eases back to rest) */
+      var moving = false, sy = window.scrollY, vh = window.innerHeight, A = lite() ? 0 : NARROW.matches ? 12 : 26;
       if (!DT.open) items.forEach(function (it) {
         var c = it.top - sy + it.h / 2, span = vh / 2 + it.h / 2, vis = Math.abs(c - vh / 2) < span;
         if (vis !== it.vis) { it.vis = vis; it.els.forEach(function (x) { x.el.style.willChange = vis ? "transform" : ""; }); }
@@ -4245,7 +4322,7 @@ span.s4-card-go{border-style:dashed}
         it.els.forEach(function (x) {
           var tg = p * A * x.k, before = x.c;
           if (!lerp(x, "c", tg, .14)) return;
-          if (x.c !== tg) moving = true;
+          if (x.c !== tg) { moving = true; mlog("parallax", "parallax tick"); }
           if (x.c !== before) x.el.style.transform = "translate3d(0," + x.c.toFixed(2) + "px,0)";
         });
       });
@@ -4300,6 +4377,14 @@ span.s4-card-go{border-style:dashed}
     var h = s.querySelector(".s-title"); if (h) h.focus({ preventScroll: true });
     try { history.replaceState(null, "", "#stop-" + id); } catch (err) {}
   }
+
+  /* ---------- motion switch in the footer: Full / Reduced, regardless of the OS setting (remembered) ---------- */
+  (function () {
+    var b = $("mo-ctl"); if (!b) return;
+    function label() { var f = MODE === "full"; b.textContent = "Motion: " + (f ? "Full" : MODE === "off" ? "Off" : "Reduced"); b.setAttribute("aria-pressed", f ? "true" : "false"); }
+    b.addEventListener("click", function () { setMode(MODE === "full" ? "reduced" : "full"); label(); kick(); });
+    label();
+  })();
 
   /* ---------- contact popover ---------- */
   var cbtn = $("contact-btn"), pop = $("contact-pop");
