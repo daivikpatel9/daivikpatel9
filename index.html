@@ -73,8 +73,8 @@
   --ln-open:rgba(246,239,228,.42);
   --card-bg:#ffffff; --card-ink:#1f1512; --card-line:rgba(31,21,18,.16);
   /* text boxes: one ember-glow set for every card that holds text (glow rises from the bottom edge) */
-  --card-glow:rgba(240,128,96,.13); --card-glow-2:rgba(255,180,140,.06); --card-glow-size:60% 120px; --card-line-warm:rgba(196,52,31,.22);
-  --card-shadow:0 18px 40px -28px rgba(240,128,96,.4); --card-blur:none;
+  --card-glow:rgba(184,40,24,.17); --card-glow-2:rgba(184,40,24,.06); --card-glow-size:60% 120px; --card-line-warm:rgba(196,52,31,.22);
+  --card-shadow:0 18px 40px -24px rgba(184,40,24,.3); --card-blur:none;
   --accent:#86251c; --accent-ink:#f6efe4;
   --sun-1:#8f1f18; --sun-2:#b8321f;
   --accent-gradient:linear-gradient(120deg,var(--sun-1),var(--sun-2));
@@ -112,13 +112,13 @@
   --ce-g1:rgba(239,129,97,0);
   --ce-g2:rgba(239,129,97,0);
   --ce-g3:rgba(239,129,97,0);
-  --exp-glow-1:.3;
-  --exp-glow-2:.2;
-  --exp-fill:.08;
-  --main-glow-1:.14;
-  --main-glow-2:.09;
-  --main-fill:.035;
-  --exp-intensity:1;
+  --exp-glow-1:.36;
+  --exp-glow-2:.24;
+  --exp-fill:.1;
+  --main-glow-1:.24;
+  --main-glow-2:.15;
+  --main-fill:.07;
+  --exp-intensity:1; --exp-card-glow:.18;
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
@@ -196,9 +196,9 @@ svg path{stroke-linecap:round;stroke-linejoin:round}
 /* light falling on a plain surface: a large soft core at the bottom-right corner, a fainter bounce on the left,
    a faint wash from the top; each has a bright centre and a long falloff. Only these colours change. */
 .scr i{position:absolute;inset:0;background:
-  radial-gradient(95vmax 80vmax at 100% 100%,var(--ce-g1),color-mix(in srgb,var(--ce-g1) 42%,transparent) 32%,transparent 72%),
-  radial-gradient(70vmax 85vmax at 0% 42%,var(--ce-g2),color-mix(in srgb,var(--ce-g2) 38%,transparent) 30%,transparent 70%),
-  radial-gradient(130vmax 55vmax at 50% -8%,var(--ce-g3),transparent 70%),
+  radial-gradient(circle max(88vmin,340px) at 100% 100%,var(--ce-g1),color-mix(in srgb,var(--ce-g1) 58%,transparent) 30%,color-mix(in srgb,var(--ce-g1) 20%,transparent) 64%,transparent 100%),
+  radial-gradient(circle max(66vmin,260px) at 0% 46%,var(--ce-g2),color-mix(in srgb,var(--ce-g2) 42%,transparent) 36%,transparent 100%),
+  radial-gradient(120vw max(34vh,220px) at 50% 0%,var(--ce-g3),transparent 100%),
   var(--ce-1)}
 .topo path{fill:none;stroke:currentColor;vector-effect:non-scaling-stroke}
 main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
@@ -1808,6 +1808,18 @@ span.s4-card-go{border-style:dashed}
     function tok(n) { return getComputedStyle(root).getPropertyValue(n); }
     function al(c, a) { return c ? [c[0], c[1], c[2], a] : null; }
     function num(n, d) { var v = parseFloat(tok(n)); return isNaN(v) ? d : v; }
+    /* debug aid: ?glow=2 (any number) multiplies every light's strength, main page and expanded */
+    var GM = (function () { var m = /[?&]glow=([0-9.]+)/.exec(location.search); var v = m ? parseFloat(m[1]) : 1; return isNaN(v) ? 1 : v; })();
+    /* main-page sections vary the light rather than the base (so the change shows on white too):
+       [strength factor, which colour leads: 0 = deep middle stop, 1 = bright corner stop, 2 = accent] */
+    function sectionLight(tone) {
+      if (/^o/.test(tone) || tone === "ch2") return [1.2, 1];
+      if (/^h[13]$/.test(tone)) return [1.05, 1];
+      if (/^h/.test(tone) || tone === "ch1") return [.95, 0];
+      if (tone === "map") return [.8, 2];
+      if (tone === "back" || tone === "ai" || tone === "end") return [.7, 2];
+      return [1, 0];
+    }
     /* the target of a state: a plain base (white or near-black) with the colour as light on it.
        Main page: the section's tone with the main red at main-page strength. Expanded: the theme's base with the
        project's light at the --exp-* strengths times --exp-intensity ("slightly more filled"). Light colours come
@@ -1817,8 +1829,15 @@ span.s4-card-go{border-style:dashed}
       var c = (ps && ps[th]) || m, exp = st.mode === "p" && !!c, ink = parse(tok("--base-ink")), base, I, src = c || m;
       if (exp) { base = parse(tok("--base-bg")); I = num("--exp-intensity", 1); }
       else base = parse(tok("--tone-" + (st.tone || "hero"))) || parse(tok("--base-bg"));
-      var s1 = exp ? num("--exp-glow-1", .34) * I : num("--main-glow-1", .15), s2 = exp ? num("--exp-glow-2", .22) * I : num("--main-glow-2", .1), s3 = exp ? num("--exp-fill", .08) * I : num("--main-fill", .04);
-      var g1 = src ? parse(src.glow) : parse(tok("--accent")), g2 = src && src.stops ? parse(src.stops[1]) : g1, g3 = src ? parse(src.accent) : g1;
+      var sl = exp ? [1, 0] : sectionLight(st.tone || "hero"), F = (exp ? I : sl[0]) * GM;
+      var s1 = (exp ? num("--exp-glow-1", .34) : num("--main-glow-1", .15)) * F, s2 = (exp ? num("--exp-glow-2", .22) : num("--main-glow-2", .1)) * F, s3 = (exp ? num("--exp-fill", .08) : num("--main-fill", .04)) * F;
+      /* the light's colours. Dark: the file's glow (already saturated) and the middle stop. Light: the light-theme glow
+         is a pale tint that vanishes on white, so the light uses the saturated gradient stops instead. */
+      var st3 = src && src.stops ? src.stops.map(parse) : null, acc = src ? parse(src.accent) : parse(tok("--accent")), g1, g2;
+      if (th === "light" && st3) { g1 = sl[1] === 2 ? acc : st3[sl[1] === 1 ? 2 : 1]; g2 = sl[1] === 1 ? st3[1] : st3[2]; }
+      else { g1 = sl[1] === 2 ? acc : src ? parse(src.glow) : acc; g2 = st3 ? st3[sl[1] === 1 ? 2 : 1] : g1; }
+      var g3 = acc;
+      s1 = Math.min(.9, s1); s2 = Math.min(.9, s2); s3 = Math.min(.9, s3);
       o["--ce-1"] = base; o["--ce-g1"] = al(g1, s1); o["--ce-g2"] = al(g2, s2); o["--ce-g3"] = al(g3, s3);
       /* the top bar: the same plain base, lightly see-through, with ink text; its hairline takes the accent when expanded */
       o["--bar-bg"] = al(base, .86); o["--bar-ink"] = ink;
@@ -1827,7 +1846,7 @@ span.s4-card-go{border-style:dashed}
       if (c) {
         if (c.button) { o["--bar-btn"] = parse(c.button.fill); o["--bar-btn-ink"] = parse(c.button.label); o["--p-btn"] = parse(c.button.fill); o["--p-btn-ink"] = parse(c.button.label); }
         /* text on the expanded screen is the theme's ink (it sits on the plain base now); accents stay at full strength */
-        o["--p-ink"] = ink; o["--p-onbg"] = parse(c.accent); o["--p-accent"] = parse(c.accent); o["--p-line"] = al(parse(c.accent), .3); o["--p-glow"] = parse(c.glow);
+        o["--p-ink"] = ink; o["--p-onbg"] = parse(c.accent); o["--p-accent"] = parse(c.accent); o["--p-line"] = al(parse(c.accent), .3); o["--p-glow"] = th === "light" && c.stops ? al(parse(c.stops[1]), num("--exp-card-glow", .18)) : parse(c.glow);
         o["--p-plate"] = parse(c.plate); o["--p-plate-ink"] = parse(c.plateInk); o["--p-plate-fill"] = parse(c.plateFill); o["--p-plate-hl"] = parse(c.plateHighlight);
       }
       if (m) { o["--m-plate"] = parse(m.plate); o["--m-plate-ink"] = parse(m.plateInk); o["--m-plate-fill"] = parse(m.plateFill); o["--m-plate-hl"] = parse(m.plateHighlight); }
