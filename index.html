@@ -231,6 +231,25 @@ main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
    uncropped, floating on the surface. No plate, frame, border, box shadow or grade; only a soft
    drop shadow that follows the object itself. */
 .frame.cutout{background:none;border:0;border-radius:0;overflow:visible}
+/* bare photo compositions: they fade into the page at their edges, so no plate, frame, mat or shadow; fitted whole
+   (they carry labels); a soft mask on the outer 6% so no rectangle edge can show against the screen's light */
+.frame.bare{background:none;border:0;border-radius:0;overflow:visible;box-shadow:none}
+.frame.bare img{width:100%;height:100%;object-fit:contain;filter:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent);mask-composite:intersect}
+.fig.bare,.d-fig.bare,.mp-fig.bare{aspect-ratio:16/10;box-shadow:none;max-height:none}
+.card-p.frame.bare{border-bottom:1px solid var(--rule)}
+/* a stop with a photo composition gives the picture about 58% of the row */
+@media (min-width:768px){
+  .sgrid.wide .s-text{grid-column:1/span 5}.sgrid.wide .s-media{grid-column:6/span 7}
+  .sgrid.rev.wide .s-text{grid-column:8/span 5}.sgrid.rev.wide .s-media{grid-column:1/span 7}
+}
+/* and in the expanded view it runs wide beside the title */
+@media (min-width:1024px){.d-top.wide{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
+/* hover: no tilt box on hero images; a gentle grow, and the drawings' highlights brighten */
+:is(.hv-fig,.hv-plate).hv.timg :is(img,svg.dg){scale:1.015}
+.hv-fig.hv.timg{transform:none}
+:is(.hv-fig,.hv-plate).hv svg.hiso{filter:brightness(1.12) saturate(1.15)}
 .frame.cutout img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 14px var(--shadow-soft))}
 .dlayer .frame.cutout img{filter:drop-shadow(0 18px 18px var(--detail-shadow))}
 ::selection{background:var(--accent);color:var(--accent-ink)}
@@ -1323,7 +1342,22 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
   var byId = window.byId || function (id) { for (var i = 0; i < P.length; i++) if (P[i].id === id) return P[i]; };
   /* images redrawn for this concept's palette; anything not listed falls back to the site image */
   var FALLBACK = {};
-  var THEMED = { homelab: "img/b/homelab.svg", cameras: "img/b/cameras.svg", remote: "img/b/remote-access.svg", automations: "img/b/automation-hub.jpg", displays: "img/b/tablet-camera-mode.jpg" };
+  /* title images: homelab keeps its diagram; cameras and remote are inline isometric drawings (theme-coloured through the
+     plate variables); five projects have photo compositions as theme and scope variants (img/b/hero-{id}--{scope}-{theme}.jpg),
+     shown bare, fitted whole, at a generous size. The old diagrams are still used inside the case studies. */
+  var HERO_PHOTO = { robot: 1, displays: 1, film: 1, automations: 1, services: 1 };
+  var HERO_SVG = { cameras: "img/b/hero-cameras.svg", remote: "img/b/hero-remote.svg" };
+  var THEME0 = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  var THEMED = { homelab: "img/b/homelab.svg", cameras: HERO_SVG.cameras, remote: HERO_SVG.remote };
+  Object.keys(HERO_PHOTO).forEach(function (id) { THEMED[id] = "img/b/hero-" + id + "--main-" + THEME0 + ".jpg"; });
+  /* the labels in the photo compositions, for screen readers */
+  var HERO_ALT = {
+    robot: "Labels: detection on the camera; steers to it; a cup and a bottle, each in a detection box; about $250, reached 100% of upright objects, about 60 trials.",
+    displays: "Labels: Photos, Cameras, someone arrives; screens shown as illustrations.",
+    film: "Labels: Forever in the Walls; editor and sound designer; Best Overall, Best Production Values.",
+    automations: "Motion sensor: motion in the garage restarts the timer. Ratgdo board: tells Home Assistant the door opened; left open, a timer closes it. Hue remote: toggles a light and a smart plug and dims a strip from another brand. IR blaster: every key of the heater's remote becomes a button, and the heat switches at set times. Booster fan: louvers shut when the furnace heats, and open to pull in cooler air.",
+    services: "Processor i7-12700K, memory 32 GB, storage 8 TB with parity, AI accelerator added later; containers: remote access, photo library, file cloud, media playback, camera recorder, home automation."
+  };;
   /* the same redrawn images, keyed by their original path, so figures inside the case-study content use them too */
   var THEMED_PATH = { "assets/img/art/homelab.svg": "img/b/homelab.svg", "assets/img/art/cameras.svg": "img/b/cameras.svg", "assets/img/art/remote-access.svg": "img/b/remote-access.svg",
     "assets/img/art/automation-hub.jpg": "img/b/automation-hub.jpg", "assets/img/photos/tablet-camera-mode.jpg": "img/b/tablet-camera-mode.jpg", "assets/img/photos/tablet-photo-mode.jpg": "img/b/tablet-photo-mode.jpg" };
@@ -1371,6 +1405,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     document.documentElement.classList.toggle("mo-on", m !== "off");
     document.documentElement.classList.toggle("mo-lite", m === "reduced");
     if (window.__motion) window.__motion.mode = m;
+    [].forEach.call(document.querySelectorAll("svg.hiso"), function (x) { x.classList.toggle("live", m === "full"); });
   }
   /* ?motiondebug=1: one console line per kind of motion event, and window.__motion with live counts */
   var MDEBUG = /[?&]motiondebug=1(&|$)/.test(location.search), mlogged = {};
@@ -1393,8 +1428,12 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function behavior() { return still() ? "auto" : "smooth"; }
-  function alt(p) { return p.alt || (p.title + ": " + p.line); }
-  function fitOf(p) { return p.fit === "contain" || p.fit === "cutout" ? p.fit : "cover"; }
+  function alt(p) { var a = p.alt || (p.title + ": " + p.line); return HERO_ALT[p.id] ? a + " " + HERO_ALT[p.id] : a; }
+  function fitOf(p) {
+    if (HERO_PHOTO[p.id]) return "bare timg";
+    if (HERO_SVG[p.id]) return "contain timg";
+    return p.fit === "contain" || p.fit === "cutout" ? p.fit : "cover";
+  }
   function img(p, lazy) { return '<img src="' + esc(imgSrc(p)) + '" alt="' + esc(alt(p)) + '"' + (lazy ? ' loading="lazy"' : "") + ' decoding="async" draggable="false">'; }
   function phref(id) { return "#project/" + encodeURIComponent(id); }
   var ARROW = '<svg class="ico go-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h17M13.5 5.5 20 12l-6.5 6.5"/></svg>';
@@ -1546,7 +1585,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     var rev = idx % 2 === 1 ? " rev" : "", fit = fitOf(p), ch = chOf[idx], links = ownLinks(p), last = ch.items[ch.items.length - 1] === idx;
     return '<section class="stop' + (last ? " s-last" : "") + '" id="stop-' + esc(p.id) + '" data-section data-idx="' + idx + '" data-amb="' + ambOf(idx) + '" aria-labelledby="t-' + esc(p.id) + '">' +
       '<p class="s-rule"><span class="s-div" aria-hidden="true"></span><span class="s-num" aria-hidden="true">' + esc(p.no) + '</span><span class="lbl">Project ' + esc(p.no) + " of " + TOTAL + '</span><span class="lbl">' + esc(ch.name) + "</span></p>" +
-      '<div class="sgrid' + rev + '">' +
+      '<div class="sgrid' + rev + (HERO_PHOTO[p.id] ? " wide" : "") + '">' +
         '<div class="s-text">' +
           '<p class="s-meta lbl"><span>' + esc(p.kicker) + '</span><span class="st">' + esc(p.status) + '</span><a class="seemap" href="#map" data-map="' + esc(p.id) + '">See on the map</a></p>' +
           '<h3 class="s-title" id="t-' + esc(p.id) + '" tabindex="-1">' + esc(p.title) + "</h3>" +
@@ -1561,7 +1600,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
         "</div>" +
         '<div class="s-media">' +
           '<figure class="fig frame ' + fit + '">' + img(p, true) + "</figure>" +
-          '<p class="fig-cap lbl" aria-hidden="true"><span>Fig. ' + esc(p.no) + " · " + (fit === "contain" ? "Diagram" : "Photo") + "</span><span>" + esc(p.title) + "</span></p>" +
+          '<p class="fig-cap lbl" aria-hidden="true"><span>Fig. ' + esc(p.no) + " · " + (/contain/.test(fit) ? (HERO_SVG[p.id] ? "Drawing" : "Diagram") : "Photo") + "</span><span>" + esc(p.title) + "</span></p>" +
         "</div>" +
       "</div>" +
       (last ? '<div class="s-end" aria-hidden="true"><span class="s-div"></span></div>' : "") +
@@ -1826,7 +1865,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       "</nav></div>");
     var ix = idxHTML(secs);
     return ('<article class="dpage" id="d-' + esc(p.id) + '" data-id="' + esc(p.id) + '" data-side="' + (idx % 2 === 1 ? "l" : "r") + '" hidden>' +
-      '<div class="d-top">' +
+      '<div class="d-top' + (HERO_PHOTO[p.id] ? " wide" : "") + '">' +
         '<div class="d-head">' +
           '<p class="d-meta lbl"><span>Project ' + esc(p.no) + " / " + TOTAL + "</span><span>" + esc(p.kicker) + '</span><span class="st">' + esc(p.status) + "</span></p>" +
           '<h2 class="d-t" id="dt-' + esc(p.id) + '" tabindex="-1">' + esc(p.title) + "</h2>" +
@@ -3969,7 +4008,17 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
      the dark box fill (drawn at 28%) -> --plate-fill, dark text on the one solid box -> --plate. Embedded brand icons
      (<image>) keep their own colours. Ids are made unique per copy so arrowheads resolve inside their own copy.
      If the fetch fails (for example opened from disk), the images and the token plates stay as they were. */
-  var DG_FILES = ["img/b/homelab.svg", "img/b/cameras.svg", "img/b/remote-access.svg"], DG = {}, DG_OK = false, dgN = 0;
+  var DG_FILES = ["img/b/homelab.svg", "img/b/cameras.svg", "img/b/remote-access.svg", "img/b/hero-cameras.svg", "img/b/hero-remote.svg"], DG = {}, DG_OK = false, dgN = 0;
+  /* the hero drawings gate their own animation behind the OS setting; the page's motion mode decides instead */
+  function unwrapMotionMedia(t) {
+    var key = "@media (prefers-reduced-motion:no-preference){", i;
+    while ((i = t.indexOf(key)) >= 0) {
+      var j = i + key.length, depth = 1;
+      while (j < t.length && depth) { if (t[j] === "{") depth++; else if (t[j] === "}") depth--; j++; }
+      t = t.slice(0, i) + t.slice(i + key.length, j - 1) + t.slice(j);
+    }
+    return t;
+  }
   var DG_MAP = { "#f6efe4": "--plate-ink", "#ffd9a0": "--plate-highlight", "#140c0a": "--plate-fill", "#1f1512": "--plate" };
   function dgKey(src) { var k = String(src || "").split("?")[0]; return DG[k] ? k : null; }
   function diagramEl(src, alt) {
@@ -3977,19 +4026,21 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     var doc = new DOMParser().parseFromString(DG[key], "image/svg+xml"), sv = doc.documentElement;
     if (!sv || sv.nodeName.toLowerCase() !== "svg") return null;
     sv = document.importNode(sv, true);
-    var uid = "-dg" + (++dgN);
+    var uid = "-dg" + (++dgN), hero = /hero-/.test(key);
     [].forEach.call(sv.querySelectorAll("[id]"), function (n) { n.id = n.id + uid; });
     [].forEach.call(sv.querySelectorAll("*"), function (n) {
       ["marker-end", "marker-start", "marker-mid", "clip-path", "mask", "filter", "fill", "stroke"].forEach(function (a) {
         var v = n.getAttribute(a);
         if (v && v.indexOf("url(#") >= 0) n.setAttribute(a, v.replace(/url\(#([^)]+)\)/g, "url(#$1" + uid + ")"));
       });
+      if (hero) return;   /* the hero drawings already use the plate variables */
       ["fill", "stroke"].forEach(function (a) {
         var v = (n.getAttribute(a) || "").toLowerCase();
         if (DG_MAP[v]) { n.style.setProperty(a, "var(" + DG_MAP[v] + ")"); n.removeAttribute(a); }
       });
     });
-    sv.setAttribute("class", "dg"); sv.setAttribute("data-dg", key);
+    sv.classList.add("dg"); sv.setAttribute("data-dg", key); sv.removeAttribute("aria-labelledby");
+    if (hero) sv.classList.toggle("live", MODE === "full");
     sv.setAttribute("role", "img"); sv.setAttribute("focusable", "false");
     if (alt != null) sv.setAttribute("aria-label", alt);
     sv.removeAttribute("width"); sv.removeAttribute("height");
@@ -4009,7 +4060,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     ms.forEach(function (m) { [].forEach.call(m.addedNodes, function (n) { if (n.nodeType === 1 && (n.tagName === "IMG" || n.querySelector)) scanImgs(n); }); });
   }).observe(document.body, { childList: true, subtree: true });
   if (window.fetch) {
-    Promise.all(DG_FILES.map(function (f) { return fetch(f).then(function (r) { if (!r.ok) throw new Error(f); return r.text(); }).then(function (t) { DG[f] = t; }); }))
+    Promise.all(DG_FILES.map(function (f) { return fetch(f).then(function (r) { if (!r.ok) throw new Error(f); return r.text(); }).then(function (t) { DG[f] = /hero-/.test(f) ? unwrapMotionMedia(t) : t; }); }))
       .then(function () { DG_OK = true; document.documentElement.classList.add("dg-ok"); scanImgs(document.body); })
       .catch(function () { DG = {}; });
   }
@@ -4018,13 +4069,15 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
      img/b/{base}--{scope}-{theme}.jpg; scope is "main" on the main page (rail, stops, map panel) or the id of the
      expanded page the image sits in. Falls back to the main variant for the theme, then to the plain file.
      A theme change swaps them with a 200ms crossfade, preloading first. */
-  var VAR = null, VRX = /^img\/b\/(automation-hub|tablet-camera-mode|tablet-photo-mode)(?:--[a-z0-9-]+-(?:light|dark))?\.jpg$/;
+  var VAR = null, VRX = /^img\/b\/(automation-hub|tablet-camera-mode|tablet-photo-mode|hero-(?:robot|displays|film|automations|services))(?:--[a-z0-9-]+-(?:light|dark))?\.jpg$/;
   function photoFor(src, scope) {
     var m = VRX.exec(String(src || "").split("?")[0]);
     if (!m || !VAR) return src;
     var t = themeNow(), a = m[1] + "--" + scope + "-" + t + ".jpg", b = m[1] + "--main-" + t + ".jpg";
-    var out = "img/b/" + (VAR[a] ? a : VAR[b] ? b : m[1] + ".jpg");
-    if (out !== "img/b/" + m[1] + ".jpg") FALLBACK[out] = "img/b/" + m[1] + ".jpg";
+    var isHero = /^hero-/.test(m[1]), plain = isHero ? "img/b/" + b : "img/b/" + m[1] + ".jpg";
+    var out = "img/b/" + (VAR[a] ? a : VAR[b] ? b : plain.slice(6));
+    if (out !== plain) FALLBACK[out] = plain;
+    if (isHero && FALLBACK["img/b/" + m[1] + "--main-" + THEME0 + ".jpg"] && !FALLBACK[plain]) FALLBACK[plain] = FALLBACK["img/b/" + m[1] + "--main-" + THEME0 + ".jpg"];
     return out;
   }
   function scopeOf(el) { var pg = el.closest && el.closest(".dpage"); return pg ? pg.getAttribute("data-id") : "main"; }
@@ -4112,6 +4165,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       c.removeAttribute("id"); c.removeAttribute("loading"); c.setAttribute("aria-hidden", "true");
       if (c.tagName.toLowerCase() === "svg") { c.setAttribute("width", nat[0]); c.setAttribute("height", nat[1]); }
       c.style.cssText = "position:absolute;left:0;top:0;margin:0;max-width:none;max-height:none;padding:0;width:" + nat[0] + "px;height:" + nat[1] + "px;transform-origin:0 0;object-fit:fill;scale:none;translate:none;filter:" + ms.filter;
+      if (ms.maskImage && ms.maskImage !== "none") { c.style.maskImage = ms.maskImage; c.style.webkitMaskImage = ms.maskImage; c.style.maskComposite = ms.maskComposite; c.style.webkitMaskComposite = ms.webkitMaskComposite || ""; }
       L.appendChild(c);
     }
     return { el: L, media: c, nat: nat, fit: fig.classList.contains("cover") ? "cover" : "contain", bw: bw, src: fig };
@@ -4565,7 +4619,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     function measureM() { var sy = window.scrollY; items.forEach(function (it) { var r = it.sec.getBoundingClientRect(); it.top = r.top + sy; it.h = r.height; }); }
     try {
     /* 6. the plate reacts to you: a small tilt toward the pointer on fine pointers */
-    [].forEach.call(document.querySelectorAll(".s-media .fig,.tp-plate .fig"), function (f) {
+    [].forEach.call(document.querySelectorAll(".s-media .fig:not(.timg),.tp-plate .fig:not(.timg)"), function (f) {
       var t = { el: f, x: 0, y: 0, tx: 0, ty: 0 };
       f.addEventListener("pointermove", function (e) {
         if (e.pointerType !== "mouse" || !FINE.matches || still() || lite()) return;

@@ -28,5 +28,55 @@
       "light": "img/b/tablet-photo-mode--displays-light.jpg",
       "dark": "img/b/tablet-photo-mode--displays-dark.jpg"
     }
+  },
+  "hero-robot": {
+    "main": {
+      "light": "img/b/hero-robot--main-light.jpg",
+      "dark": "img/b/hero-robot--main-dark.jpg"
+    },
+    "robot": {
+      "light": "img/b/hero-robot--robot-light.jpg",
+      "dark": "img/b/hero-robot--robot-dark.jpg"
+    }
+  },
+  "hero-displays": {
+    "main": {
+      "light": "img/b/hero-displays--main-light.jpg",
+      "dark": "img/b/hero-displays--main-dark.jpg"
+    },
+    "displays": {
+      "light": "img/b/hero-displays--displays-light.jpg",
+      "dark": "img/b/hero-displays--displays-dark.jpg"
+    }
+  },
+  "hero-film": {
+    "main": {
+      "light": "img/b/hero-film--main-light.jpg",
+      "dark": "img/b/hero-film--main-dark.jpg"
+    },
+    "film": {
+      "light": "img/b/hero-film--film-light.jpg",
+      "dark": "img/b/hero-film--film-dark.jpg"
+    }
+  },
+  "hero-automations": {
+    "main": {
+      "light": "img/b/hero-automations--main-light.jpg",
+      "dark": "img/b/hero-automations--main-dark.jpg"
+    },
+    "automations": {
+      "light": "img/b/hero-automations--automations-light.jpg",
+      "dark": "img/b/hero-automations--automations-dark.jpg"
+    }
+  },
+  "hero-services": {
+    "main": {
+      "light": "img/b/hero-services--main-light.jpg",
+      "dark": "img/b/hero-services--main-dark.jpg"
+    },
+    "services": {
+      "light": "img/b/hero-services--services-light.jpg",
+      "dark": "img/b/hero-services--services-dark.jpg"
+    }
   }
 }
