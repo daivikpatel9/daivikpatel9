@@ -235,8 +235,8 @@ main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
    (they carry labels); a soft mask on the outer 6% so no rectangle edge can show against the screen's light */
 .frame.bare{background:none;border:0;border-radius:0;overflow:visible;box-shadow:none}
 .frame.bare img{width:100%;height:100%;object-fit:contain;filter:none;
-  -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent);-webkit-mask-composite:source-in;
-  mask-image:linear-gradient(90deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 6%,var(--base-ink) 94%,transparent);mask-composite:intersect}
+  -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent);mask-composite:intersect}
 .fig.bare,.d-fig.bare,.mp-fig.bare{aspect-ratio:16/10;box-shadow:none;max-height:none}
 .card-p.frame.bare{border-bottom:1px solid var(--rule)}
 /* a stop with a photo composition gives the picture about 58% of the row */
@@ -1346,9 +1346,9 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
      plate variables); five projects have photo compositions as theme and scope variants (img/b/hero-{id}--{scope}-{theme}.jpg),
      shown bare, fitted whole, at a generous size. The old diagrams are still used inside the case studies. */
   var HERO_PHOTO = { robot: 1, displays: 1, film: 1, automations: 1, services: 1 };
-  var HERO_SVG = { cameras: "img/b/hero-cameras.svg", remote: "img/b/hero-remote.svg" };
+  var HERO_SVG = { homelab: "img/b/hero-homelab.svg", cameras: "img/b/hero-cameras.svg", remote: "img/b/hero-remote.svg" };
   var THEME0 = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
-  var THEMED = { homelab: "img/b/homelab.svg", cameras: HERO_SVG.cameras, remote: HERO_SVG.remote };
+  var THEMED = { homelab: HERO_SVG.homelab, cameras: HERO_SVG.cameras, remote: HERO_SVG.remote };
   Object.keys(HERO_PHOTO).forEach(function (id) { THEMED[id] = "img/b/hero-" + id + "--main-" + THEME0 + ".jpg"; });
   /* the labels in the photo compositions, for screen readers */
   var HERO_ALT = {
@@ -4008,7 +4008,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
      the dark box fill (drawn at 28%) -> --plate-fill, dark text on the one solid box -> --plate. Embedded brand icons
      (<image>) keep their own colours. Ids are made unique per copy so arrowheads resolve inside their own copy.
      If the fetch fails (for example opened from disk), the images and the token plates stay as they were. */
-  var DG_FILES = ["img/b/homelab.svg", "img/b/cameras.svg", "img/b/remote-access.svg", "img/b/hero-cameras.svg", "img/b/hero-remote.svg"], DG = {}, DG_OK = false, dgN = 0;
+  var DG_FILES = ["img/b/homelab.svg", "img/b/cameras.svg", "img/b/remote-access.svg", "img/b/hero-cameras.svg", "img/b/hero-remote.svg", "img/b/hero-homelab.svg"], DG = {}, DG_OK = false, dgN = 0;
   /* the hero drawings gate their own animation behind the OS setting; the page's motion mode decides instead */
   function unwrapMotionMedia(t) {
     var key = "@media (prefers-reduced-motion:no-preference){", i;
