@@ -2242,30 +2242,39 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     for (var k = 0; k < 10; k++) { var dl = line(-60 + k * GAP, k); if (k % 2) b += dl; else a += dl; }
     $("topo-a").setAttribute("d", a); $("topo-b").setAttribute("d", b);
   })();
-  /* ---------- contour lines of the light (reason: the lines are the shape of the light, so they move with it) ----------
-     A scalar field is summed from the page's lights: the three colour-engine lights (bottom-right core, left bounce,
-     top wash; their strength is the alpha the engine is blending) and the three ambient glows (left, right, low; their
-     strength is the opacity the scroll blend gives them), plus a gentle slope so empty areas still get long curves.
-     Level curves of that one smooth field never cross. Marching squares on a 48x30 grid, levels at even area quantiles
-     (the innermost few skipped so a core never knots), each chain smoothed (Chaikin) and stroked once in the ink, then
-     again through a soft radial gradient of each light's colour so lines glow where they pass through it. The light
-     centres wander a few pixels on slow out-of-phase sines. Redrawn on a canvas at about 14 updates a second while
-     the light is blending and 5 a second when idle; nothing on scroll itself, nothing while the tab is hidden or a
-     transition is flying. Reduced: redrawn only when the light changes; Off: drawn once. Any error: the old waves. */
+  /* ---------- contour lines of a terrain under the light (reason: a topographic map of the page, lit, that moves) ----------
+     One field, recomputed every frame: a seeded terrain of soft hills and hollows (about six to a screen, each with
+     2 to 4 nested rings 40 to 90px apart) plus a low hill under each of the page's lights (the colour engine's three
+     lights and the three ambient glows; they glide). Levels are evenly spaced, so the lines are round rings, beans and
+     curves between them; level curves of one field never cross. Scrolling slides the terrain past (eased, it coasts
+     to a stop); at rest the hills only breathe a few px. Lines thin by opacity, by position only, where they would
+     bunch or where the ground is flat. Marching squares on a grid of about 24px cells (coarser for a frame after a
+     slow one), Chaikin smoothing, every fourth level heavier, stroked in the ink and again through each light's colour.
+     Reduced and Off: still contours. An error: the old waves for now, logged, retried on the next resize or return. */
   (function () {
-    var box = $("topo"); if (!box || !window.HTMLCanvasElement || /[?&]lines=waves(&|$)/.test(location.search)) return;   /* ?lines=waves: the previous lines, for comparison */
-    /* two stacked canvases: the current set, and the next one that cross-fades in (opacity only: the compositor's job) */
+    var box = $("topo"); if (!box || !window.HTMLCanvasElement || /[?&]lines=waves(&|$)/.test(location.search)) return;
     var cv = document.createElement("canvas"), ctx = cv.getContext && cv.getContext("2d");
-    var cv2 = document.createElement("canvas"), ctx2 = cv2.getContext && cv2.getContext("2d");
     if (!ctx) return;
-    cv.className = "topo-cv"; cv.setAttribute("aria-hidden", "true"); cv2.className = "topo-cv"; cv2.setAttribute("aria-hidden", "true"); cv2.style.opacity = "0";
-    var W = 0, H = 0, DPR = 1, GX = 48, GY = 30, toks = null, lastSig = "", lastDraw = 0, raf = 0, failed = false, t0 = performance.now();
-    var scrollAt = 0, quietUntil = 0;
-    window.addEventListener("scroll", function () { scrollAt = performance.now(); }, { passive: true });
-    function readToks() {
-      var cs = getComputedStyle(document.documentElement);
-      function c(n) { var v = parse(cs.getPropertyValue(n)); return v || [200, 80, 50, 1]; }
-      toks = { ink: c("--base-ink"), amb: [c("--amb-0"), c("--amb-1"), c("--amb-2"), c("--amb-3")], ambMax: parseFloat(cs.getPropertyValue("--amb-max")) || .15 };
+    cv.className = "topo-cv"; cv.setAttribute("aria-hidden", "true");
+    var W = 0, H = 0, DPR = 1, GX = 56, GY = 35, toks = null, raf = 0, failed = false, t0 = performance.now();
+    /* sYs: the scroll, eased. LAGY: the lights lag the scroll a little (up to 40px) and spring back. */
+    var sYs = 0, LAGY = 0, lastPhT = 0, CSF = 1;
+    /* S = distance scrolled this visit, page and open project together; a jump made by code (opening, closing,
+       restoring a position) is not a scroll and is left out, so S only ever changes smoothly */
+    var S = 0, refs = {}, layEl2 = $("dlayer"), dlgEl2 = $("dialog"), lockSig = "", quietUntil = 0;
+    function readScroll() {
+      var lk = document.documentElement.classList.contains("d-lock"), now = performance.now();
+      var src = { w: lk ? null : window.scrollY,
+        l: layEl2 && !layEl2.hidden ? layEl2.scrollTop : null, d: dlgEl2 && !dlgEl2.hidden ? dlgEl2.scrollTop : null };
+      /* for 0.9s after a project opens or closes, positions set by code (restoring, centring) are not scrolls */
+      var sg = (lk ? 1 : 0) + "" + (src.l === null ? 0 : 1) + (src.d === null ? 0 : 1);
+      if (sg !== lockSig) { lockSig = sg; quietUntil = now + 900; }
+      Object.keys(src).forEach(function (k) {
+        var v = src[k];
+        if (v === null || !isFinite(v)) { refs[k] = null; return; }
+        if (refs[k] !== null && refs[k] !== undefined && now >= quietUntil) { var dv = v - refs[k]; if (Math.abs(dv) < 240) S += dv; }
+        refs[k] = v;
+      });
     }
     function parse(s) {
       s = String(s || "").trim(); var m;
@@ -2273,54 +2282,100 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       if ((m = /^rgba?\(([^)]+)\)$/i.exec(s))) { var p = m[1].split(/[\s,\/]+/).filter(Boolean).map(parseFloat); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
       return null;
     }
+    function readToks() {
+      var cs = getComputedStyle(document.documentElement);
+      function c(n) { return parse(cs.getPropertyValue(n)) || [200, 80, 50, 1]; }
+      toks = { ink: c("--base-ink"), amb: [c("--amb-0"), c("--amb-1"), c("--amb-2"), c("--amb-3")], ambMax: parseFloat(cs.getPropertyValue("--amb-max")) || .15 };
+    }
     function size() {
       DPR = Math.min(1.25, window.devicePixelRatio || 1); W = window.innerWidth; H = window.innerHeight;
-      cv.width = cv2.width = Math.round(W * DPR); cv.height = cv2.height = Math.round(H * DPR);
-      lastSig = "";
+      cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
     }
-    /* the lights, in viewport pixels: [x, y, sigmaX, sigmaY, strength, colour] */
-    function lights(now) {
-      var vmin = Math.min(W, H), vmax = Math.max(W, H), L = [], cur = CE.cur ? CE.cur() : {}, amb = window.__ambV || [];
-      var still0 = still() || lite(), t = still0 ? 0 : (now - t0) / 1000;
-      function wob(k, T) { return still0 ? 0 : 30 * Math.sin(t * 2 * Math.PI / T + k); }
-      function ce(k) { var v = cur["--ce-g" + k]; return v ? [v[3] * 2.2, v] : [0, null]; }
+    /* light targets, in viewport pixels: [x, y, sigmaX, sigmaY, strength, colour] */
+    function targets(t, moving) {
+      var vmin = Math.min(W, H), vmax = Math.max(W, H), L = [], c = CE.cur ? CE.cur() : {}, amb = window.__ambV || [];
+      function wob(k, T, A) { return moving ? A * .14 * Math.sin(t * 2 * Math.PI / (T * 2.2) + k) : 0; }   /* a slow breath */
+      function ce(k) { var v = c["--ce-g" + k]; return v ? [v[3] * 2.2, v] : [0, null]; }
       var r1 = Math.max(.88 * vmin, 340), r2 = Math.max(.66 * vmin, 260), g;
-      g = ce(1); L.push([W + wob(1, 53), H + wob(2, 61), r1 * .42, r1 * .42, g[0], g[1]]);
-      g = ce(2); L.push([wob(3, 47), .46 * H + wob(4, 67), r2 * .42, r2 * .42, g[0], g[1]]);
-      g = ce(3); L.push([W / 2 + wob(5, 58), -.08 * H, .55 * W, .2 * H, g[0] * .8, g[1]]);
-      /* ambient glows: 12 opacities, 3 positions x 4 hues */
+      g = ce(1); L.push([W - 40 + wob(1, 31, 60), H - 30 + wob(2, 37, 50) + LAGY, r1 * .42, r1 * .42, g[0], g[1]]);
+      g = ce(2); L.push([30 + wob(3, 27, 55), .46 * H + wob(4, 41, 65) + LAGY, r2 * .42, r2 * .42, g[0], g[1]]);
+      g = ce(3); L.push([W / 2 + wob(5, 43, 70), -.08 * H + wob(6, 33, 30), .55 * W, .2 * H, g[0] * .8, g[1]]);
       [[0, .68 * H], [W, .36 * H], [W / 2, H + .2 * vmax]].forEach(function (pos, i) {
         var s = 0, col = [0, 0, 0], k;
         for (k = 0; k < 4; k++) { var o = amb[i * 4 + k] || 0; s += o; col[0] += toks.amb[k][0] * o; col[1] += toks.amb[k][1] * o; col[2] += toks.amb[k][2] * o; }
-        if (s > .001) { col = [col[0] / s, col[1] / s, col[2] / s, 1]; L.push([pos[0] + wob(6 + i, 44 + i * 9), pos[1] + wob(9 + i, 52 + i * 7), .2 * vmax, .2 * vmax, s * toks.ambMax * 2.4, col]); }
+        col = s > .001 ? [col[0] / s, col[1] / s, col[2] / s, 1] : toks.amb[1];
+        L.push([pos[0] + wob(7 + i, 29 + i * 6, 45), pos[1] + wob(10 + i, 35 + i * 5, 40) + LAGY, .2 * vmax, .2 * vmax, s * toks.ambMax * 2.4, col]);
       });
       return L;
     }
-    function field(L) {
-      var F = new Float32Array((GX + 1) * (GY + 1)), sx = W / GX, sy = H / GY, smax = .02, i, j, k;
-      L.forEach(function (l) { smax = Math.max(smax, l[4]); });
+    /* the lights glide: every value follows its target through a 0.5s lag (the colour engine has already eased them) */
+    var LS = null, lastT = 0;
+    function lights(now) {
+      var moving = !(still() || lite()), T = targets((now - t0) / 1000, moving), dt = lastT ? Math.min(.1, (now - lastT) / 1000) : 1;
+      lastT = now;
+      if (!LS || LS.length !== T.length) { LS = T.map(function (l) { return l.slice(0, 5).concat([l[5] ? l[5].slice() : null]); }); return LS; }
+      var k = 1 - Math.exp(-dt / .5);
+      LS.forEach(function (l, i) {
+        var tg = T[i];
+        for (var q = 0; q < 4; q++) l[q] = isFinite(tg[q]) ? tg[q] : l[q];   /* positions are already continuous (anchors plus wander) */
+        l[2] = Math.max(8, l[2] || 8); l[3] = Math.max(8, l[3] || 8);
+        if (isFinite(tg[4])) l[4] += (tg[4] - l[4]) * k;
+        if (!isFinite(l[4])) l[4] = 0;
+        if (tg[5]) { if (!l[5]) l[5] = tg[5].slice(); for (q = 0; q < 3; q++) l[5][q] += (tg[5][q] - l[5][q]) * k; }
+      });
+      return LS;
+    }
+    /* g = the lights' part (grows with distance from each light, then levels off far away) + a gentle diagonal slope
+       with a slow S-bend, so away from the lights lines sweep steadily across the screen instead of racing */
+    /* the terrain: a jittered grid of soft hills and hollows laid down the page (seeded, so it is the same every
+       visit), about six to a screen, radii 12 to 30 percent of the screen's shorter side, each tall enough for 2 to 4
+       nested rings about 40 to 90px apart (a hill is a soft bump 0.6 times its ring radius wide). Merging hills make beans and kidneys, saddles make the curves between.
+       The layer is fixed, so scrolling slides the terrain past at K of the scroll (eased, so it coasts to a stop); at
+       rest each hill only breathes a few px. The page's lights are the tallest hills on top, and they glide. */
+    var K = .15, LHA = 1;   /* K: share of the scroll the terrain slides by; LHA: a light hill's height in rings (a light is fixed to the screen while the terrain slides, so a tall light hill would warp the passing rings fast) */
+    function hsh(a, b, k) { var x = Math.sin(a * 127.1 + b * 311.7 + k * 74.7) * 43758.5453; return x - Math.floor(x); }
+    function terrain(t, moving, off) {
+      var vmin = Math.min(W, H), c = Math.sqrt(W * H / 6.5), cols = Math.max(2, Math.round(W / c)), cw = W / cols, out = [];
+      var r0 = Math.floor((off - 1.6 * c) / c), r1 = Math.ceil((off + H + 1.6 * c) / c);
+      for (var rj = r0; rj <= r1; rj++) for (var ci = 0; ci < cols; ci++) {
+        var h = function (k) { return hsh(ci, rj, k); }, w = moving ? 1 : 0;
+        var r = .6 * vmin * (.12 + .18 * h(3)), rings = Math.max(r / 55, Math.min(2 + 2.4 * h(5), r / 24));
+        var x = (ci + .12 + .76 * h(1)) * cw + w * 5 * Math.sin(t * 6.283 / (24 + 16 * h(8)) + 7 * h(9));
+        var y = (rj + .12 + .76 * h(2)) * c - off + w * 5 * Math.sin(t * 6.283 / (27 + 15 * h(10)) + 7 * h(11));
+        out.push([x, y, r * (.8 + .4 * h(6)), r * (.8 + .4 * h(7)), (h(4) < .32 ? -1 : 1) * rings]);
+      }
+      return out;
+    }
+    function field(L, B) {
+      var N = GX + 1, F = new Float32Array(N * (GY + 1)), sx = W / GX, sy = H / GY, i, j, k, KB = 0;
+      /* a light's hill: a steady low height (LHA rings) and a width set by its strength. When a light brightens or dims
+         the hill widens or narrows, so its rings spread or gather calmly instead of racing out of the top of a hill
+         that grows taller; only a nearly dark light also sinks, while it is small */
+      var LH = L.map(function (l) {
+        var st = l[4] > 0 ? l[4] : 0, rel = Math.min(1, st / .6), w = .62 + .38 * rel, e = Math.min(1, st / .06);
+        return [l[0], l[1], l[2] * w, l[3] * w, LHA * e * e * (3 - 2 * e)];
+      }).concat(B);
       for (j = 0; j <= GY; j++) for (i = 0; i <= GX; i++) {
-        var x = i * sx, y = j * sy, v = smax * .6 * ((x / W) * .55 + (y / H) * .45 + .35 * Math.sin(x / W * 2.2 + y / H * 1.3));   /* a firm slope: no flat areas where a line could race */
-        for (k = 0; k < L.length; k++) { var l = L[k]; if (l[4] <= 0) continue; var dx = (x - l[0]) / l[2], dy = (y - l[1]) / l[3]; v += l[4] * Math.exp(-.5 * (dx * dx + dy * dy)); }
-        F[j * (GX + 1) + i] = Math.sqrt(Math.max(0, v));   /* square root: rings around a light spread out instead of bunching */
+        var x = i * sx, y = j * sy, f = KB * (x * .62 + y * .48);
+        for (k = 0; k < LH.length; k++) { var q = LH[k]; if (!q[4]) continue; var ex = (x - q[0]) / q[2], ey = (y - q[1]) / q[3], e2 = ex * ex + ey * ey; if (e2 < 14) f += q[4] * Math.exp(-.5 * e2); }
+        F[j * N + i] = isFinite(f) ? f : 0;
       }
       return F;
     }
-    /* marching squares: segments joined into chains by shared edge ids */
     function contours(F, lv) {
-      var sx = W / GX, sy = H / GY, segs = {}, ends = {}, chains = [], N = GX + 1;
+      var sx = W / GX, sy = H / GY, ends = {}, chains = [], N = GX + 1;
       function P(i, j) { return F[j * N + i]; }
       function ept(e) {
         var hz = e % 2 === 0, idx = e >> 1, i = idx % N, j = (idx / N) | 0, a, b, t;
         if (hz) { a = P(i, j); b = P(i + 1, j); t = (lv - a) / (b - a); return [(i + t) * sx, j * sy]; }
         a = P(i, j); b = P(i, j + 1); t = (lv - a) / (b - a); return [i * sx, (j + t) * sy];
       }
-      function H_(i, j) { return (j * N + i) * 2; } function V_(i, j) { return (j * N + i) * 2 + 1; }
+      function Hz(i, j) { return (j * N + i) * 2; } function Vt(i, j) { return (j * N + i) * 2 + 1; }
       var list = [];
       for (var j = 0; j < GY; j++) for (var i = 0; i < GX; i++) {
         var c = (P(i, j) > lv ? 8 : 0) | (P(i + 1, j) > lv ? 4 : 0) | (P(i + 1, j + 1) > lv ? 2 : 0) | (P(i, j + 1) > lv ? 1 : 0);
         if (c === 0 || c === 15) continue;
-        var top = H_(i, j), bot = H_(i, j + 1), lef = V_(i, j), rig = V_(i + 1, j);
+        var top = Hz(i, j), bot = Hz(i, j + 1), lef = Vt(i, j), rig = Vt(i + 1, j);
         var mid = (P(i, j) + P(i + 1, j) + P(i + 1, j + 1) + P(i, j + 1)) / 4 > lv;
         switch (c) {
           case 1: case 14: list.push([lef, bot]); break;
@@ -2339,7 +2394,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
         if (used[k]) continue;
         used[k] = 1;
         var chain = [list[k][0], list[k][1]];
-        [1, 0].forEach(function (dir) {
+        for (var dir = 1; dir >= 0; dir--) {
           for (;;) {
             var e = dir ? chain[chain.length - 1] : chain[0], nx = -1, cand = ends[e] || [];
             for (var q = 0; q < cand.length; q++) if (!used[cand[q]]) { nx = cand[q]; break; }
@@ -2348,8 +2403,8 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
             var o = list[nx][0] === e ? list[nx][1] : list[nx][0];
             if (dir) chain.push(o); else chain.unshift(o);
           }
-        });
-        if (chain.length > 3) chains.push(chain.map(ept));
+        }
+        if (chain.length > 2) chains.push(chain.map(ept));
       }
       return chains;
     }
@@ -2365,131 +2420,148 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       }
       return pts;
     }
-    /* motion model (reason: lines must glide, never teleport):
-       - between changes of the light, the one visible line set is recomputed every frame from the slowly wandering
-         lights: each line moves a fraction of a pixel per frame;
-       - when the light changes (a section, a theme, a project opening), the set is not reshaped frame by frame (level
-         lines can reconnect at a saddle and jump); instead a new set is computed for the current light and cross-faded
-         in over 700ms while the old set fades out, both standing still; while the light keeps changing, a new key set
-         follows every 450ms, and a last one when it settles; then the wander takes over again from that set.
-       The check below (?motiondebug=1) measures each frame's sample points against the previous frame's segments of
-       the same set; a set that is fading in is counted as a fade, not as movement. */
-    var MLINE = window.__motion ? (window.__motion.lines = { frames: 0, sum: 0, max: 0, jumps: 0, faded: 0, gapMax: 0, drift: 0,
-      reset: function () { this.frames = 0; this.sum = 0; this.max = 0; this.jumps = 0; this.faded = 0; this.gapMax = 0; this.drift = 0; prevGrid = null; lastT = 0; },
-      get summary() { return { frames: this.frames, meanPx: +(this.frames ? this.sum / this.frames : 0).toFixed(3), maxPx: +this.max.toFixed(2), jumps: this.jumps, faded: this.faded, gapMaxMs: Math.round(this.gapMax), driftPx: +this.drift.toFixed(1) }; } }) : null;
-    var MEAS = /[?&]motiondebug=1(&|$)/.test(location.search), prevGrid = null, lastT = 0;
-    function gridOf(segs) {
-      var C = 24, grid = {};
-      segs.forEach(function (sg) {
-        var x0 = Math.min(sg[0], sg[2]), x1 = Math.max(sg[0], sg[2]), y0 = Math.min(sg[1], sg[3]), y1 = Math.max(sg[1], sg[3]);
-        for (var gx = (x0 / C) | 0; gx <= ((x1 / C) | 0); gx++) for (var gy = (y0 / C) | 0; gy <= ((y1 / C) | 0); gy++) { var k = gx + "," + gy; (grid[k] = grid[k] || []).push(sg); }
-      });
-      return grid;
-    }
-    function measure(set, now, frozen) {
-      if (!MLINE || !MEAS) return;
-      if (lastT) MLINE.gapMax = Math.max(MLINE.gapMax, now - lastT);
-      lastT = now;
-      MLINE.frames++;
-      if (frozen) { prevGrid = null; return; }
-      var C = 24, grid = gridOf(set.segs);
-      if (prevGrid) {
-        var maxD = 0, sumD = 0, n = 0;
-        set.pts.forEach(function (q) {
-          var gx = (q[0] / C) | 0, gy = (q[1] / C) | 0, best = 1e9;
-          for (var dx = -1; dx <= 1; dx++) for (var dy = -1; dy <= 1; dy++) {
-            var cell = prevGrid[(gx + dx) + "," + (gy + dy)]; if (!cell) continue;
-            for (var i = 0; i < cell.length; i++) {
-              var sg = cell[i], vx = sg[2] - sg[0], vy = sg[3] - sg[1], wx = q[0] - sg[0], wy = q[1] - sg[1], l2 = vx * vx + vy * vy;
+    /* ---- instrumentation (?motiondebug=1): points are tracked by level identity n (stable while levels flow) ---- */
+    var MEAS = /[?&]motiondebug=1(&|$)/.test(location.search), prevByLevel = null, lastFrameT = 0;
+    var ML = window.__motion ? (window.__motion.lines = {
+      frames: 0, gapMax: 0, jumps: 0, setFades: 0, speeds: [], moved: 0, comp: [], stT: 0, stS: 0, straightNow: 0, fallback: "", loopsMin: 1e9, radMax: 0, linesMin: 1e9, linesMax: 0,
+      seek: function (v) { S = v; sYs = v; }, setK: function (v) { K = v; }, setLHA: function (v) { LHA = v; },   /* tests: place the terrain as if the page had been scrolled to v */
+      reset: function () { this.frames = 0; this.gapMax = 0; this.jumps = 0; this.setFades = 0; this.speeds = []; this.moved = 0; this.comp = []; this.stT = 0; this.stS = 0; this.loopsMin = 1e9; this.radMax = 0; this.jumps60 = 0; this.linesMin = 1e9; this.linesMax = 0; prevByLevel = null; lastFrameT = 0; },
+      get summary() {
+        function med(a) { if (!a.length) return 0; var b = a.slice().sort(function (x, y) { return x - y; }); return b[Math.floor(b.length / 2)]; }
+        return { frames: this.frames, speedPxPerSec: +med(this.speeds).toFixed(1), movedPx: +this.moved.toFixed(1), jumps: this.jumps, jumpsPer60Hz: this.jumps60 || 0, setFades: this.setFades,
+          straightShare: this.stT ? +(this.stS / this.stT).toFixed(3) : 0, loopsMin: this.loopsMin, radiusRelMax: +this.radMax.toFixed(3), lines: [this.linesMin, this.linesMax], fallback: this.fallback,
+          gapMaxMs: Math.round(this.gapMax), computeMsMedian: +med(this.comp).toFixed(2), computeMsMax: +Math.max.apply(null, this.comp.concat([0])).toFixed(2) };
+      } }) : null;
+    function track(byLevel, now) {
+      if (!ML || !MEAS) return;
+      var dt = lastFrameT ? (now - lastFrameT) / 1000 : 0;
+      if (lastFrameT) ML.gapMax = Math.max(ML.gapMax, now - lastFrameT);
+      lastFrameT = now; ML.frames++;
+      if (prevByLevel && dt > 0) {
+        var ds = [], maxD = 0;
+        Object.keys(byLevel).forEach(function (n) {
+          var prev = prevByLevel[n]; if (!prev) return;
+          byLevel[n].pts.forEach(function (q) {
+            if (q[0] < 30 || q[1] < 30 || q[0] > W - 30 || q[1] > H - 30) return;   /* where a line enters or leaves the screen its end slides along the edge: not a jump */
+            var best = 1e9;
+            for (var i = 0; i < prev.length; i++) {
+              var sg = prev[i], vx = sg[2] - sg[0], vy = sg[3] - sg[1], wx = q[0] - sg[0], wy = q[1] - sg[1], l2 = vx * vx + vy * vy;
               var t = l2 ? Math.max(0, Math.min(1, (wx * vx + wy * vy) / l2)) : 0, ex = wx - t * vx, ey = wy - t * vy, d = ex * ex + ey * ey;
               if (d < best) best = d;
             }
-          }
-          best = Math.min(Math.sqrt(best), C * 1.5); maxD = Math.max(maxD, best); sumD += best; n++;
+            best = Math.sqrt(best); if (best < 60) { ds.push(best); if (best > maxD) { maxD = best; ML.lastJumpAt = [Math.round(q[0]), Math.round(q[1]), +n]; } }
+          });
         });
-        var mean = n ? sumD / n : 0;
-        MLINE.sum += mean; MLINE.max = Math.max(MLINE.max, maxD); MLINE.drift += mean;
-        if (maxD > 6) MLINE.jumps++;
+        if (ds.length) {
+          ds.sort(function (a, b) { return a - b; });
+          var m = ds[Math.floor(ds.length / 2)];
+          ML.speeds.push(m / dt); ML.moved += m;
+          if (maxD / (dt * 60) > 8) { ML.jumps60 = (ML.jumps60 || 0) + 1; (ML.j60Log = ML.j60Log || []).push(ML.lastJumpAt.concat([+(maxD / (dt * 60)).toFixed(1)])); if (ML.j60Log.length > 30) ML.j60Log.shift(); }   /* the same, per 60Hz frame: does not depend on how fast this browser draws */
+          if (maxD > 8) { ML.jumps++; (ML.jumpLog = ML.jumpLog || []).push(ML.lastJumpAt.concat([+maxD.toFixed(1)])); if (ML.jumpLog.length > 30) ML.jumpLog.shift(); }
+        }
       }
-      prevGrid = grid;
+      var nb = {}; Object.keys(byLevel).forEach(function (n) { nb[n] = byLevel[n].segs; });
+      prevByLevel = nb;
     }
-    /* one line set for the light at "now" */
-    function computeSet(now) {
-      var L = lights(now), F = field(L), vals = Array.prototype.slice.call(F).sort(function (a, b) { return a - b; });
-      var path = new Path2D(), faint = [], NL = 9, pts = [], segs = [];
-      var lo = vals[Math.floor(vals.length * .04)], hi = vals[Math.floor(vals.length * .97)];
-      for (var k = 0; k < NL; k++) {
-        var lv = lo + (hi - lo) * (k + 1) / (NL + 1);   /* even steps; nothing above the 97th percentile, so no knot at a core */
-        contours(F, lv + 1e-6).forEach(function (ch) {
+    function frame(now) {
+      var tS = performance.now();
+      if (!(W >= 2 && H >= 2)) { size(); if (!(W >= 2 && H >= 2)) return; }   /* a hidden or zero-sized pane: wait */
+      var cs = Math.max(W, H) / 56 * CSF; GX = Math.max(8, Math.round(W / cs)); GY = Math.max(8, Math.round(H / cs));
+      var flowing = !(still() || lite()), dtF = lastPhT ? Math.min(.1, (now - lastPhT) / 1000) : 0;
+      lastPhT = now;
+      readScroll();
+      sYs += (S - sYs) * (dtF ? 1 - Math.exp(-dtF / .26) : 1);   /* the scroll, eased: momentum that settles within about 0.8s after it stops */
+      LAGY = flowing ? Math.max(-40, Math.min(40, (sYs - S) * .25)) : 0;
+      var tt = (now - t0) / 1000, L = lights(now), F = field(L, terrain(tt, flowing, flowing ? sYs * K : 0)), N = GX + 1;
+      var gmin = 1e9, gmax = -1e9; for (var q = 0; q < F.length; q++) { if (F[q] < gmin) gmin = F[q]; if (F[q] > gmax) gmax = F[q]; }
+      /* levels at half steps (n + .5): the flat ground between hills (f near 0) never carries a line */
+      var nLo = Math.ceil(gmin - .5), nHi = Math.floor(gmax - .5);
+      if (nHi - nLo > 60) nHi = nLo + 60;
+      /* where lines would bunch (steep ground) they thin by opacity; spacing in px is 1 / slope */
+      var sxp = W / GX, syp = H / GY, G = new Float32Array(F.length);
+      for (var jj = 0; jj <= GY; jj++) for (var ii = 0; ii <= GX; ii++) {
+        var i0 = Math.max(0, ii - 1), i1 = Math.min(GX, ii + 1), j0 = Math.max(0, jj - 1), j1 = Math.min(GY, jj + 1);
+        var gx = (F[jj * N + i1] - F[jj * N + i0]) / ((i1 - i0) * sxp), gy = (F[j1 * N + ii] - F[j0 * N + ii]) / ((j1 - j0) * syp);
+        G[jj * N + ii] = Math.sqrt(gx * gx + gy * gy);
+      }
+      function dense(x, y) {
+        var ii = Math.max(0, Math.min(GX, Math.round(x / sxp))), jj = Math.max(0, Math.min(GY, Math.round(y / syp))), sp = 1 / Math.max(G[jj * N + ii], 1e-6);
+        /* and where the ground is nearly flat (saddles between hills, where lines reconnect as hills slide past) they fade too */
+        return sp <= 16 ? .2 : sp < 40 ? .2 + .8 * (sp - 16) / 24 : sp <= 100 ? 1 : sp >= 170 ? .12 : 1 - .88 * (sp - 100) / 70;
+      }
+      /* paths: [opacity bucket][index line or not]; every fourth level is a heavier index line, as on a survey map */
+      var buckets = [[new Path2D(), new Path2D()], [new Path2D(), new Path2D()], [new Path2D(), new Path2D()]], BA = [1, .55, .22], byLevel = {};
+      function bucketOf(al) { return al >= .8 ? 0 : al >= .4 ? 1 : al >= .1 ? 2 : -1; }
+      var stT = 0, stS = 0, loops = 0, nLines = 0, rads = [];   /* shape metrics (?motiondebug=1) */
+      for (var n = nLo; n <= nHi; n++) {
+        var lv = n + .5, heavy = ((n % 4) + 4) % 4 === 0 ? 1 : 0;
+        contours(F, lv).forEach(function (ch) {
           var a = ch[0], b = ch[ch.length - 1], closed = Math.abs(a[0] - b[0]) < 1 && Math.abs(a[1] - b[1]) < 1;
           var p = chaikin(ch, closed), len = 0, i;
           for (i = 1; i < p.length; i++) len += Math.abs(p[i][0] - p[i - 1][0]) + Math.abs(p[i][1] - p[i - 1][1]);
-          var alpha = closed ? Math.min(1, len / 260) : 1, pth = alpha < 1 ? new Path2D() : path;   /* small rings are faint */
-          pth.moveTo(p[0][0], p[0][1]);
-          for (i = 1; i < p.length; i++) pth.lineTo(p[i][0], p[i][1]);
-          if (closed) pth.closePath();
-          if (alpha < 1) faint.push([pth, alpha]);
-          if (MEAS) for (i = 0; i < p.length; i++) { if (i) segs.push([p[i - 1][0], p[i - 1][1], p[i][0], p[i][1]]); if (alpha >= .5 && i % 3 === 0) pts.push(p[i]); }
+          /* a very small ring (the top of a hill) is faint, by size */
+          var ringA = closed ? Math.min(1, len / 160) : 1, cur = -2;
+          var rec = MEAS ? (byLevel[n] || (byLevel[n] = { pts: [], segs: [] })) : null, wl = 0, wt = 0, ph = null, vis = 0, turnAll = 0, ph2 = null;
+          function closeWin() { if (wl >= 60) { stT += wl; if (wt * 200 / wl < .1396) stS += wl; rads.push(wt > 1e-4 ? wl / wt : 1e6); } wl = 0; wt = 0; ph = null; }
+          for (i = 1; i < p.length; i++) {
+            var mx = (p[i - 1][0] + p[i][0]) / 2, my = (p[i - 1][1] + p[i][1]) / 2, al = ringA * dense(mx, my), bk = bucketOf(al);
+            if (bk >= 0) { if (bk !== cur) buckets[bk][heavy].moveTo(p[i - 1][0], p[i - 1][1]); buckets[bk][heavy].lineTo(p[i][0], p[i][1]); }
+            cur = bk;
+            if (rec) {
+              rec.segs.push([p[i - 1][0], p[i - 1][1], p[i][0], p[i][1]]); if (al >= .5 && i % 4 === 0) rec.pts.push(p[i]);
+              /* turning per 200px of the visible (opacity at least .4) parts: under 8 degrees counts as straight */
+              var sl = Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]);
+              if (bk < 0 || bk > 1) closeWin();
+              else if (sl > .01) {
+                var hd = Math.atan2(p[i][1] - p[i - 1][1], p[i][0] - p[i - 1][0]);
+                if (ph !== null) { var dh = hd - ph; dh -= Math.round(dh / 6.2832) * 6.2832; wt += Math.abs(dh); }
+                if (ph2 !== null) { var d2 = hd - ph2; d2 -= Math.round(d2 / 6.2832) * 6.2832; turnAll += d2; }
+                ph = hd; ph2 = hd; wl += sl; vis += sl;
+                if (wl >= 200) { var keep = ph; closeWin(); ph = keep; }
+              }
+            }
+          }
+          if (rec) {
+            closeWin();
+            if (vis > 100) nLines++;
+            /* a loop: closed (so wholly on screen), not tiny and at least partly drawn strongly, or an open line that winds at least 270 degrees on screen */
+            if ((closed && len > 150 && vis > .3 * len) || Math.abs(turnAll) > 4.71) loops++;
+          }
         });
       }
-      return { path: path, faint: faint, pts: pts, segs: segs, L: L };
-    }
-    var cur = null, fade = null, pending = false, lastChange = 0, lastKey = 0, lastRender = 0;
-    function paint(c, set) {
-      var L = set.L;
-      c.setTransform(DPR, 0, 0, DPR, 0, 0);
-      c.clearRect(0, 0, W, H);
-      c.lineJoin = "round"; c.lineCap = "round";
-      var ink = toks.ink, inkS = "rgba(" + ink[0] + "," + ink[1] + "," + ink[2] + ",.8)";
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineJoin = "round"; ctx.lineCap = "round";
+      var ink = toks.ink;
       function strokeAll(style, w) {
-        c.strokeStyle = style; c.lineWidth = w;
-        c.globalAlpha = 1; c.stroke(set.path);
-        set.faint.forEach(function (f) { c.globalAlpha = f[1]; c.stroke(f[0]); });
-        c.globalAlpha = 1;
+        ctx.strokeStyle = style;
+        buckets.forEach(function (pr, k) { ctx.globalAlpha = BA[k]; ctx.lineWidth = w; ctx.stroke(pr[0]); ctx.lineWidth = w * 1.6; ctx.stroke(pr[1]); });
+        ctx.globalAlpha = 1;
       }
-      strokeAll(inkS, 1.1);
+      strokeAll("rgb(" + ink[0] + "," + ink[1] + "," + ink[2] + ")", 1.15);
       /* where a light falls, the lines take its colour and brighten */
       L.forEach(function (l) {
         if (!l[5] || l[4] < .04) return;
-        var R = Math.max(l[2], l[3]) * 2.2, g = c.createRadialGradient(l[0], l[1], 0, l[0], l[1], R), col = l[5], a = Math.min(.9, l[4] * 1.6);
-        g.addColorStop(0, "rgba(" + Math.round(col[0]) + "," + Math.round(col[1]) + "," + Math.round(col[2]) + "," + a.toFixed(3) + ")");
-        g.addColorStop(1, "rgba(" + Math.round(col[0]) + "," + Math.round(col[1]) + "," + Math.round(col[2]) + ",0)");
+        var R = Math.max(l[2], l[3]) * 2.2, g = ctx.createRadialGradient(l[0], l[1], 0, l[0], l[1], R), c = l[5], a = Math.min(.9, l[4] * 1.6);
+        g.addColorStop(0, "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + "," + a.toFixed(3) + ")");
+        g.addColorStop(1, "rgba(" + Math.round(c[0]) + "," + Math.round(c[1]) + "," + Math.round(c[2]) + ",0)");
         strokeAll(g, 1.4);
       });
+      var ms = performance.now() - tS;
+      /* budget: after a slow frame, the next one is computed on a coarser grid (never skipped) */
+      if (ms > 9) CSF = 1.35; else if (ms < 4) CSF = 1;
+      if (ML && MEAS) {
+        ML.comp.push(ms); if (ML.comp.length > 4000) ML.comp.shift();
+        rads.sort(function (x, y) { return x - y; });
+        var rMed = rads.length ? rads[Math.floor(rads.length / 2)] / Math.min(W, H) : 0;
+        ML.stT += stT; ML.stS += stS; ML.straightNow = stT ? +(stS / stT).toFixed(3) : 0;
+        ML.shapeNow = { loops: loops, lines: nLines, straight: ML.straightNow, radiusRel: +rMed.toFixed(3) };
+        ML.loopsMin = Math.min(ML.loopsMin, loops); ML.radMax = Math.max(ML.radMax, rMed);
+        ML.linesMin = Math.min(ML.linesMin, nLines); ML.linesMax = Math.max(ML.linesMax, nLines);
+      }
+      track(byLevel, now);
     }
-    function draw(now) {
-      var tStart = performance.now();
-      try {
-        if (!cur) { cur = computeSet(now); prevGrid = null; paint(ctx, cur); }
-        if (fade) { measure(cur, now, true); return; }   /* the cross-fade runs on the compositor; nothing to paint */
-        if (pending && (now - lastKey >= 450 || now - lastChange > 160)) {
-          /* the light changed: a new set is painted once on the back canvas and cross-faded in; the old one fades out */
-          pending = now - lastChange <= 160;
-          lastKey = now;
-          var next = computeSet(now), dur = still() ? 200 : 700;
-          paint(ctx2, next);
-          if (MLINE) MLINE.faded++;
-          measure(next, now, true);
-          var o = { duration: dur, easing: "ease-in-out", fill: "forwards" };
-          var a1 = cv2.animate([{ opacity: 0 }, { opacity: 1 }], o), a2 = cv.animate([{ opacity: 1 }, { opacity: 0 }], o);
-          fade = { a1: a1, a2: a2 };
-          var done = function () {
-            if (!fade || fade.a1 !== a1) return;
-            /* the incoming canvas becomes the current one; the old one is cleared and waits at the back */
-            var tc = cv; cv = cv2; cv2 = tc; var tx = ctx; ctx = ctx2; ctx2 = tx;
-            cv.style.opacity = "1"; cv2.style.opacity = "0"; a1.cancel(); a2.cancel();
-            box.insertBefore(cv, cv2);
-            cur = next; fade = null; prevGrid = null;
-          };
-          a1.finished.then(done, done);
-          setTimeout(done, dur + 250);
-          return;
-        }
-        if (!(still() || lite())) { cur = computeSet(now); measure(cur, now, false); paint(ctx, cur); }   /* idle: the wander, frame by frame */
-        else measure(cur, now, true);
-      } finally { if (window.__motion) { var m = window.__motion; m.lineMs = +(performance.now() - tStart).toFixed(2); m.lineMax = Math.max(m.lineMax || 0, m.lineMs); } }
-    }
-    /* what the light is doing (engine and ambient values only, not the idle wander): a change means "blending" */
+    var lastDraw = 0, lastSig = "";
     function sig() {
       var c = CE.cur ? CE.cur() : {}, amb = window.__ambV || [], out = [];
       ["--ce-g1", "--ce-g2", "--ce-g3"].forEach(function (k) { var v = c[k]; out.push(v ? v.map(function (x) { return Math.round(x * 100); }).join(",") : "-"); });
@@ -2499,22 +2571,41 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       raf = 0;
       if (failed) return;
       try {
-        var sg = sig();
-        if (sg !== lastSig) { lastSig = sg; pending = true; lastChange = now; }
-        var busy = fade || pending || !(still() || lite());
-        if (busy && now - lastRender >= 15) { draw(now); lastRender = now; }
-      } catch (e) { fail(); return; }
+        /* Full: a frame every animation frame. Reduced and Off: only while the light is still settling. */
+        var flowing = !(still() || lite()), sg = flowing ? "" : sig();
+        if (flowing || sg !== lastSig || now - lastDraw < 1500) {
+          if (!flowing && sg !== lastSig) { lastSig = sg; lastDraw = now; }
+          if (flowing) lastDraw = now;
+          frame(now);
+        }
+      } catch (e) { fail(e); return; }
       raf = requestAnimationFrame(tick);
     }
-    function fail() { failed = true; cv.remove(); cv2.remove(); box.classList.remove("cv-on"); }
-    try {
-      readToks(); size();
-      box.insertBefore(cv2, box.firstChild); box.insertBefore(cv, cv2);
-      box.classList.add("cv-on");
-      lastSig = sig(); draw(performance.now());
-      raf = requestAnimationFrame(tick);
-    } catch (e) { fail(); return; }
-    window.addEventListener("resize", function () { if (!failed) { size(); cur = null; if (fade) { fade.a1.cancel(); fade.a2.cancel(); cv.style.opacity = "1"; cv2.style.opacity = "0"; } fade = null; } });
+    /* on an error the old waves show for now, the reason is logged, and the contours try again on the next resize or
+       return to the tab */
+    function fail(e) {
+      failed = true; if (raf) cancelAnimationFrame(raf); raf = 0; cv.remove(); box.classList.remove("cv-on");
+      var why = String(e && (e.stack || e.message) || e).slice(0, 300);
+      try { console.warn("lines: fallback", e); } catch (x) {}
+      if (window.__motion && window.__motion.lines) window.__motion.lines.fallback = why;
+    }
+    function start() {
+      try {
+        failed = false; readToks(); size();
+        if (cv.parentNode !== box) box.insertBefore(cv, box.firstChild);
+        box.classList.add("cv-on");
+        frame(performance.now());
+        if (!raf) raf = requestAnimationFrame(tick);
+      } catch (e) { fail(e); }
+    }
+    start();
+    /* ?linesdebug=1: the line layer at three times its strength, so shapes read clearly in a still */
+    if (/[?&]linesdebug=1(&|$)/.test(location.search)) box.style.opacity = "calc(var(--topo-o) * 3)";
+    function retry() { if (failed) { ctx = cv.getContext("2d"); if (ctx) start(); } }
+    cv.addEventListener("contextlost", function (ev) { ev.preventDefault(); fail("canvas context lost"); });
+    cv.addEventListener("contextrestored", retry);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) retry(); });
+    window.addEventListener("resize", function () { if (!failed) size(); else retry(); });
     new MutationObserver(function () { if (!failed) { readToks(); lastSig = ""; } }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   })();
 
