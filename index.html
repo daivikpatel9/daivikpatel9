@@ -54,6 +54,8 @@
      dark   cream on the dark glass card 15.2:1 | light red link #ff9d8f on the card 8.4:1
             cream on glass over the bright corner 13.7:1 | cream on glass plus glow peak 9.2:1
             link #ff9d8f on the glow peak about 5.8:1 (the old #f0786a was 4.0:1 there)
+   BASES: white (light) and a warm near-black #0b0808 (dark); ink #1f1512 on white 17.4:1, cream #f1e9dc on #0b0808 16.1:1,
+   light accent #86251c on white 9.0:1, dark accent #e0685c on #0b0808 5.9:1. Colour arrives as light (--ce-g*) on top.
    WHOLE-SCREEN TONES (--tone-*): the fixed colour layer behind everything takes one of these per section
    (named by the 4th field of each section's data-amb preset). Small steps only: chapter two is redder,
    the back matter cooler. Body text on every tone: dark cream 15:1 or more, light ink 14:1 or more;
@@ -61,15 +63,15 @@
    ===================================================================== */
 :root,:root[data-theme="light"]{
   color-scheme:light;
-  --base-bg:#efe7da; --base-ink:#1f1512; --base-muted:#1f1512; --base-line:rgba(31,21,18,.16); --base-hover:rgba(31,21,18,.05); --base-chrome:rgba(239,231,218,.82);
-  --tone-hero:#efe7da; --tone-map:#ebe5dd; --tone-ch1:#f2e5d3; --tone-h0:#f3e4d1; --tone-h1:#f0dfcc; --tone-h2:#f4e7d8; --tone-h3:#f1e1ce;
-  --tone-ch2:#f5dfcf; --tone-o0:#f6dccb; --tone-o1:#f4d8c7; --tone-o2:#f6e0d2; --tone-o3:#f3dacb; --tone-back:#e8e4de; --tone-ai:#e6e3de; --tone-end:#eae4dc;
+  --base-bg:#ffffff; --base-ink:#1f1512; --base-muted:#1f1512; --base-line:rgba(31,21,18,.14); --base-hover:rgba(31,21,18,.05); --base-chrome:rgba(255,255,255,.82);
+  --tone-hero:#ffffff; --tone-map:#fdfcfc; --tone-ch1:#fffdfb; --tone-h0:#fffcfa; --tone-h1:#fefbf9; --tone-h2:#fffdfc; --tone-h3:#fefaf8;
+  --tone-ch2:#fffaf8; --tone-o0:#fff9f7; --tone-o1:#fff8f5; --tone-o2:#fffaf8; --tone-o3:#fff9f6; --tone-back:#fcfcfd; --tone-ai:#fbfbfc; --tone-end:#fcfbfb;
   /* blended by the colour engine (these are the no-JS / first-paint values): screen gradient stops and the top bar */
-  --ce-1:#efe7da; --ce-2:#efe7da; --ce-3:#efe7da;
-  --bar-bg:rgba(239,231,218,.86); --bar-ink:#1f1512; --bar-line:rgba(31,21,18,.16); --bar-btn:#941819; --bar-btn-ink:#f6efe4; --bar-acc:#86251c;
+  --ce-1:#ffffff;
+  --bar-bg:rgba(255,255,255,.86); --bar-ink:#1f1512; --bar-line:rgba(31,21,18,.16); --bar-btn:#941819; --bar-btn-ink:#f6efe4; --bar-acc:#86251c;
   /* the two divider lines while a project is expanded (over the sunset) */
   --ln-open:rgba(246,239,228,.42);
-  --card-bg:#f6efe4; --card-ink:#1f1512; --card-line:rgba(31,21,18,.16);
+  --card-bg:#ffffff; --card-ink:#1f1512; --card-line:rgba(31,21,18,.16);
   /* text boxes: one ember-glow set for every card that holds text (glow rises from the bottom edge) */
   --card-glow:rgba(240,128,96,.13); --card-glow-2:rgba(255,180,140,.06); --card-glow-size:60% 120px; --card-line-warm:rgba(196,52,31,.22);
   --card-shadow:0 18px 40px -28px rgba(240,128,96,.4); --card-blur:none;
@@ -84,58 +86,80 @@
   --topo-detail:#f6efe4; --topo-do:.13;
   --plate-bg:linear-gradient(160deg,#360b0b,#7d1c17); --plate-line:rgba(31,21,18,.16);
   --photo-line:rgba(31,21,18,.16); --photo-filter:sepia(.08) saturate(1.05) contrast(1.02);
-  --skip-bg:#1f1512; --skip-ink:#efe7da;
+  --skip-bg:#1f1512; --skip-ink:#ffffff;
   --shadow:rgba(31,16,12,.42); --shadow-soft:rgba(31,16,12,.22);
   --topo-o:.1;
   /* detail pages: identical in both themes */
   --detail-bg:linear-gradient(160deg,#360b0b 0%,#6a1513 32%,#a3241d 62%,#ee4f2a 100%);
   --detail-solid:#4e110e; --detail-bar:rgba(54,11,11,.92);
   --detail-ink:#f6efe4; --detail-onbg:#e9c69b; --detail-line:rgba(246,239,228,.3); --detail-btn-bg:#f6efe4; --detail-btn-ink:#1f1512;
-  --detail-card-bg:#f6efe4; --detail-card-solid:#f6efe4; --detail-card-ink:#1f1512; --detail-card-line:rgba(31,21,18,.16); --detail-card-hover:rgba(31,21,18,.05); --detail-link:#86251c; --detail-link-ink:#f6efe4;
-  --detail-sheet-btn:#86251c; --detail-sheet-btn-ink:#f6efe4; --c-code-bg:#e6dccb;
+  --detail-card-bg:#ffffff; --detail-card-solid:#ffffff; --detail-card-ink:#1f1512; --detail-card-line:rgba(31,21,18,.16); --detail-card-hover:rgba(31,21,18,.05); --detail-link:#86251c; --detail-link-ink:#f6efe4;
+  --detail-sheet-btn:#86251c; --detail-sheet-btn-ink:#f6efe4; --c-code-bg:#f4f1ee;
   --detail-plate-bg:rgba(20,12,10,.35); --detail-plate-line:rgba(246,239,228,.3);
   --detail-route-1:#8f1f18; --detail-route-2:#c4341f;
   --detail-shadow:rgba(20,6,4,.45);
   /* the live sketch: ink on paper in both themes (it is a sketch); its accent is the detail-route red */
   --s4-hit:rgba(0,0,0,.001);
-  --sketch-paper:#efe7da; --sketch-ink:#1f1512; --sketch-label:#3a2a24; --sketch-note:#f8f2e7; --sketch-photo-bg:#d9cfc0;
+  --sketch-paper:#ffffff; --sketch-ink:#1f1512; --sketch-label:#3a2a24; --sketch-note:#fdfbf9; --sketch-photo-bg:#ece7e2;
   /* case-study content inside expanded pages */
-  --c-mat:#e6dccb; --lbox-bg:rgba(20,8,6,.94);
+  --c-mat:#f4f1ee; --lbox-bg:rgba(20,8,6,.94);
   --svg-bg:#4a120e; --svg-surface:#5c1712; --svg-ink:#f6efe4; --svg-ink-soft:rgba(246,239,228,.72); --svg-line:rgba(246,239,228,.28); --svg-accent:#ffd9a0; --svg-accent-soft:rgba(255,217,160,.22);
   --sketch-line:rgba(31,21,18,.22); --sketch-rule:rgba(31,21,18,.14); --sketch-shadow:rgba(31,21,18,.55); --sketch-shadow-2:rgba(31,21,18,.18);
   /* theme switch (same in both themes): the knob's sun colour, and the light wash the page gets during the light-mode joke */
-  --tt-sun:#f0a050; --peek:#efe7da;
+  --tt-sun:#f0a050; --peek:#ffffff;
+  /* coloured light on the plain base (written by the colour engine): bottom-right core, left bounce, faint top wash.
+     Strengths: --exp-* while a project is expanded, --main-* on the main page; --exp-intensity scales the --exp-* set. */
+  --ce-g1:rgba(239,129,97,0);
+  --ce-g2:rgba(239,129,97,0);
+  --ce-g3:rgba(239,129,97,0);
+  --exp-glow-1:.3;
+  --exp-glow-2:.2;
+  --exp-fill:.08;
+  --main-glow-1:.14;
+  --main-glow-2:.09;
+  --main-fill:.035;
+  --exp-intensity:1;
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --base-bg:#140c0a; --base-ink:#f1e9dc; --base-muted:#f1e9dc; --base-line:rgba(241,233,220,.14); --base-hover:rgba(241,233,220,.06); --base-chrome:rgba(20,12,10,.8);
-  --tone-hero:#140c0a; --tone-map:#160d12; --tone-ch1:#1a0e0b; --tone-h0:#1c0e0b; --tone-h1:#200f0d; --tone-h2:#1e0d0c; --tone-h3:#1b100c;
-  --tone-ch2:#250e0b; --tone-o0:#2a0f0b; --tone-o1:#2d0e0a; --tone-o2:#280f0d; --tone-o3:#2b0f0c; --tone-back:#121013; --tone-ai:#111014; --tone-end:#151013;
-  --ce-1:#140c0a; --ce-2:#140c0a; --ce-3:#140c0a;
-  --bar-bg:rgba(20,12,10,.86); --bar-ink:#f1e9dc; --bar-line:rgba(241,233,220,.14); --bar-btn:#973314; --bar-btn-ink:#f1e9dc; --bar-acc:#e0685c;
+  --base-bg:#0b0808; --base-ink:#f1e9dc; --base-muted:#f1e9dc; --base-line:rgba(241,233,220,.14); --base-hover:rgba(241,233,220,.06); --base-chrome:rgba(11,8,8,.8);
+  --tone-hero:#0b0808; --tone-map:#0b080a; --tone-ch1:#0d0808; --tone-h0:#0e0808; --tone-h1:#0f0909; --tone-h2:#0e0909; --tone-h3:#0d0908;
+  --tone-ch2:#120808; --tone-o0:#140808; --tone-o1:#150807; --tone-o2:#130909; --tone-o3:#140908; --tone-back:#0a090a; --tone-ai:#09090b; --tone-end:#0b090a;
+  --ce-1:#0b0808;
+  --bar-bg:rgba(11,8,8,.86); --bar-ink:#f1e9dc; --bar-line:rgba(241,233,220,.14); --bar-btn:#973314; --bar-btn-ink:#f1e9dc; --bar-acc:#e0685c;
   --ln-open:rgba(241,233,220,.3);
-  --card-bg:#1f1412; --card-ink:#f1e9dc; --card-line:rgba(241,233,220,.14);
+  --card-bg:#141010; --card-ink:#f1e9dc; --card-line:rgba(241,233,220,.14);
   --card-glow:rgba(194,40,26,.24); --card-glow-2:rgba(238,79,42,.1); --card-line-warm:rgba(238,79,42,.3);
   --card-shadow:0 18px 44px -26px rgba(194,40,26,.45); --card-blur:blur(10px);
   /* the expanded page, dark version: a deeper sunset, warm dark glass cards, the light accent red */
   --detail-bg:linear-gradient(160deg,#1c0606 0%,#3e0d0b 32%,#6f1712 62%,#c23a20 100%);
   --detail-solid:#2a0909; --detail-bar:rgba(28,6,6,.92);
   --detail-ink:#f1e9dc; --detail-onbg:#e9c69b; --detail-line:rgba(241,233,220,.14); --detail-btn-bg:var(--accent-gradient); --detail-btn-ink:#f1e9dc;
-  --detail-card-bg:rgba(20,12,10,.8); --detail-card-solid:#1d1210; --detail-card-ink:#f1e9dc; --detail-card-line:rgba(241,233,220,.14); --detail-card-hover:rgba(241,233,220,.06);
-  --detail-link:#ff9d8f; --detail-link-ink:#140c0a; --detail-sheet-btn:var(--accent-gradient); --detail-sheet-btn-ink:#f1e9dc;
+  --detail-card-bg:rgba(18,12,12,.8); --detail-card-solid:#141010; --detail-card-ink:#f1e9dc; --detail-card-line:rgba(241,233,220,.14); --detail-card-hover:rgba(241,233,220,.06);
+  --detail-link:#ff9d8f; --detail-link-ink:#0b0808; --detail-sheet-btn:var(--accent-gradient); --detail-sheet-btn-ink:#f1e9dc;
   --detail-plate-line:rgba(241,233,220,.14); --detail-route-1:#e0685c; --detail-route-2:#f0786a; --detail-shadow:rgba(0,0,0,.6);
-  --c-mat:#140c0a; --c-code-bg:#140c0a; --lbox-bg:rgba(8,4,3,.95);
-  --sketch-paper:#1d1210; --sketch-ink:#f1e9dc; --sketch-label:#e6d9c7; --sketch-note:#241714; --sketch-photo-bg:#2a1a16;
+  --c-mat:#0b0808; --c-code-bg:#0b0808; --lbox-bg:rgba(8,4,3,.95);
+  --sketch-paper:#141010; --sketch-ink:#f1e9dc; --sketch-label:#e6d9c7; --sketch-note:#1b1515; --sketch-photo-bg:#221a1a;
   --sketch-line:rgba(241,233,220,.14); --sketch-rule:rgba(241,233,220,.1); --sketch-shadow:rgba(0,0,0,.6); --sketch-shadow-2:rgba(0,0,0,.4);
-  --accent:#e0685c; --accent-ink:#140c0a;
+  --accent:#e0685c; --accent-ink:#0b0808;
   --btn-ink:#f1e9dc;
   --route-1:#d8452a; --route-2:#f08a5a;
   --amb-0:#a3241d; --amb-1:#e0502a; --amb-2:#e89040; --amb-3:#9a5a50; --amb-max:.2;
   --plate-line:rgba(241,233,220,.14);
   --photo-line:rgba(241,233,220,.14);
-  --skip-bg:#f1e9dc; --skip-ink:#140c0a;
+  --skip-bg:#f1e9dc; --skip-ink:#0b0808;
   --shadow:rgba(0,0,0,.55); --shadow-soft:rgba(0,0,0,.35);
   --topo-o:.09;
+  --ce-g1:rgba(172,60,24,0);
+  --ce-g2:rgba(172,60,24,0);
+  --ce-g3:rgba(172,60,24,0);
+  --exp-glow-1:.36;
+  --exp-glow-2:.24;
+  --exp-fill:.1;
+  --main-glow-1:.16;
+  --main-glow-2:.1;
+  --main-fill:.04;
+  --exp-intensity:1;
 }
 /* ===================== end of colour tokens ===================== */
 
@@ -165,13 +189,17 @@ svg path{stroke-linecap:round;stroke-linejoin:round}
 
 /* contour lines: the printed paper of a map; static */
 .topo{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;color:var(--base-ink);opacity:var(--topo-o);transition:color .6s ease,opacity .6s ease}
-/* over the sunset of an expanded project the same contour lines turn cream */
-body.d-open .topo{color:var(--topo-detail);opacity:var(--topo-do)}
 /* whole-screen colour (reason: the screen itself tells you that you have moved on).
    Two stacked tone layers cross-fade by opacity when the section at the viewport centre changes;
    the sunset layer on top fades in while a project expands, in step with the divider lines. */
 .scr{position:fixed;inset:0;z-index:0;pointer-events:none}
-.scr i{position:absolute;inset:0;background:linear-gradient(160deg,var(--ce-1) 0%,var(--ce-2) 55%,var(--ce-3) 100%)}
+/* light falling on a plain surface: a large soft core at the bottom-right corner, a fainter bounce on the left,
+   a faint wash from the top; each has a bright centre and a long falloff. Only these colours change. */
+.scr i{position:absolute;inset:0;background:
+  radial-gradient(95vmax 80vmax at 100% 100%,var(--ce-g1),color-mix(in srgb,var(--ce-g1) 42%,transparent) 32%,transparent 72%),
+  radial-gradient(70vmax 85vmax at 0% 42%,var(--ce-g2),color-mix(in srgb,var(--ce-g2) 38%,transparent) 30%,transparent 70%),
+  radial-gradient(130vmax 55vmax at 50% -8%,var(--ce-g3),transparent 70%),
+  var(--ce-1)}
 .topo path{fill:none;stroke:currentColor;vector-effect:non-scaling-stroke}
 main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
 
@@ -334,7 +362,11 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .h-body{max-width:var(--max);margin:0 auto}
 .tp{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(24px,4vw,72px);align-items:center}
 .tp-cap{margin:0 0 .9rem}
-.tp-name{margin:0 0 .6rem;font-weight:700;font-size:clamp(2.6rem,6vw,5rem);line-height:1.02;letter-spacing:-.02em}
+/* the name as the big wordmark, on one line (keeps the first screen's height): the caps are 2/3 of the serif's size
+   with the same .14em spacing, as in the bar (1.35rem : .9rem) */
+.tp-name{margin:0 0 .6rem;font-size:clamp(2.9rem,7vw,5.8rem);line-height:1.02;letter-spacing:0;overflow-wrap:anywhere}
+.tn-1{font:italic 400 1em/1 var(--serif)}
+.tn-2{font:800 .667em/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;margin-left:.06em}
 .tp-name:focus{outline:none}
 .tp-id{display:flex;flex-wrap:wrap;gap:.3rem 1.4rem;margin:0 0 clamp(1rem,2.6vh,1.5rem);font-size:1.0625rem;font-weight:500}
 .tp-st{margin:0 0 clamp(1rem,2.6vh,1.4rem);max-width:60ch;font:400 clamp(1.3rem,1.6vw,1.5rem)/1.45 var(--serif)}
@@ -411,7 +443,13 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .mconn circle{fill:var(--link)}
 .map-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:clamp(16px,2.5vw,36px);align-items:start}
 .stage{position:relative;height:clamp(480px,66vh,620px);border:1px solid var(--rule);border-radius:16px;overflow:hidden;background-image:radial-gradient(circle,var(--rule) 1px,transparent 1.3px);background-size:28px 28px}
-.edges{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+/* calm the map: a veil in the (engine-blended) screen base, clear at the box's edges and about 87% in the middle,
+   so the contour lines run into the edges and fade to ~13% behind the markers; it softens the dotted grid too */
+.stage::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:color-mix(in srgb,var(--ce-1) 87%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 60px,var(--base-ink) calc(100% - 60px),transparent),linear-gradient(180deg,transparent,var(--base-ink) 60px,var(--base-ink) calc(100% - 60px),transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,var(--base-ink) 60px,var(--base-ink) calc(100% - 60px),transparent),linear-gradient(180deg,transparent,var(--base-ink) 60px,var(--base-ink) calc(100% - 60px),transparent);
+  mask-composite:intersect}.edges{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 /* route highlight: hover state, shows which routes belong to the marker */
 .edge{fill:none;stroke:currentColor;stroke-width:1.3;opacity:.45;transition:opacity .2s,stroke-width .2s}
 .edge.on{stroke:var(--link);stroke:var(--route) var(--link);stroke-width:2.8;opacity:1}
@@ -437,7 +475,8 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .lg-r{width:22px;height:3px;background:var(--underline-gradient);vertical-align:.2em!important}
 .secnote{margin:1rem 0 0;max-width:62ch;font-size:1rem;font-weight:500;line-height:1.55;border:1px solid var(--rule);border-left:3px solid var(--link);border-radius:8px;padding:.7rem .9rem}
 .secnote b{font-weight:700}
-.mpanel{border:1px solid var(--rule);border-radius:16px;padding:clamp(1rem,1.6vw,1.35rem);min-width:0;box-shadow:0 18px 40px -28px var(--shadow)}
+.mp-x{position:absolute;top:6px;right:6px;z-index:2;width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:var(--card);color:var(--fg);font-size:1.7rem;line-height:1;cursor:pointer}
+.mpanel{position:relative;border:1px solid var(--rule);border-radius:16px;padding:clamp(1rem,1.6vw,1.35rem);min-width:0;box-shadow:0 18px 40px -28px var(--shadow)}
 .mp-fig{margin:0 0 1rem}
 .mp-fig.cover{aspect-ratio:4/3}
 .mp-fig.contain{aspect-ratio:16/9}
@@ -553,7 +592,7 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 /* per-project colours: the colour engine writes blended --p-* (open project) and --m-* (main page diagram plate) values
    on :root from project-colors.js; these rules bind every colour-carrying token to them (only once html.pc-on is set,
    so without the data file the token blocks apply). See the mapping table in the script. */
-html.pc-on .dlayer{--detail-ink:var(--p-ink);--detail-onbg:var(--p-onbg);--detail-link:var(--p-accent);--detail-route-1:var(--p-accent);--detail-route-2:var(--p-accent);
+html.pc-on .dlayer{--detail-ink:var(--p-ink);--detail-line:var(--p-line);--detail-onbg:var(--p-onbg);--detail-link:var(--p-accent);--detail-route-1:var(--p-accent);--detail-route-2:var(--p-accent);
   --detail-sheet-btn:var(--p-btn);--detail-sheet-btn-ink:var(--p-btn-ink);--detail-btn-bg:var(--p-btn);--detail-btn-ink:var(--p-btn-ink);
   --card-glow:var(--p-glow);--card-glow-2:transparent;--card-line-warm:var(--p-glow);--card-shadow:0 18px 44px -26px var(--p-glow);
   --c-mat:var(--p-plate);--lbox-bg:var(--p-plate);--svg-bg:var(--p-plate);--svg-ink:var(--p-plate-ink);--svg-ink-soft:var(--p-plate-ink);
@@ -587,6 +626,7 @@ svg.dg{display:block;width:100%;height:100%;max-width:100%}
 .d-ln{position:fixed;left:0;top:0;width:100px;height:1px;z-index:46;pointer-events:none;background:var(--base-line);transition:background-color .6s ease}
 .d-ln[hidden]{display:none}
 body.d-open .d-ln{background:var(--ln-open)}
+html.pc-on body.d-open .d-ln{background:var(--p-line)}
 .d-seam{position:absolute;left:0;top:0;height:1px;background:var(--ln-open);pointer-events:none}
 /* the corner widgets belong to the main page; they step aside while a project is expanded */
 body.d-open .c-bl,body.d-open .c-br{opacity:0!important;visibility:hidden!important;transition:opacity .3s,visibility 0s .3s}
@@ -655,6 +695,9 @@ body.d-open .ctr-mini{display:none}
 /* touch: the first tap previews the route and shows this button; the second tap (on it or the row) opens it */
 .br-open{display:none;align-self:flex-start;align-items:center;gap:.4rem;min-height:44px;margin-top:.4rem;padding:0 1rem;border-radius:999px;background:var(--btn);color:var(--btn-fg);font-weight:600;font-size:.95rem}
 .br.on[data-armed="1"] .br-open{display:inline-flex}
+.br-x{display:none;position:absolute;top:0;right:0;z-index:2;width:44px;height:44px;place-items:center;padding:0;border:0;border-radius:50%;background:transparent;color:var(--fg);font-size:1.7rem;line-height:1;cursor:pointer}
+.br.on[data-armed="1"] .br-x{display:grid}
+.br.on[data-armed="1"] .br-map{visibility:hidden}
 .br-pl{flex:none;width:112px;aspect-ratio:4/3}
 .br.main .br-pl{width:140px}
 .br.on .br-pl{box-shadow:0 0 0 2px var(--link)}
@@ -831,7 +874,7 @@ body.d-open .ctr-mini{display:none}
 .s4-card{position:absolute;left:0;top:0;z-index:6;width:min(280px,calc(100vw - 32px));pointer-events:none;visibility:hidden;transition:visibility 0s linear .26s;will-change:transform}
 .s4-card.is-on{visibility:visible;transition-delay:0s}
 .s4-card.is-pin{pointer-events:auto;width:min(300px,calc(100vw - 32px))}
-.s4-card-in{background:var(--s4-note);color:var(--s4-ink);border:1px solid var(--sketch-line);border-radius:6px 10px 7px 11px/10px 6px 11px 7px;overflow:hidden;
+.s4-card-in{position:relative;background:var(--s4-note);color:var(--s4-ink);border:1px solid var(--sketch-line);border-radius:6px 10px 7px 11px/10px 6px 11px 7px;overflow:hidden;
   box-shadow:0 22px 40px -22px var(--sketch-shadow),0 2px 6px -2px var(--sketch-shadow-2);
   opacity:0;transform:scale(.55);transform-origin:0 0;transition:opacity .22s ease,transform .28s var(--s4-ease)}
 .s4-card.is-on .s4-card-in{opacity:1;transform:none}
@@ -859,6 +902,22 @@ span.s4-card-go{border-style:dashed}
 .s4-ticks li.is-done{opacity:.7}
 .s4-ticks li.is-cur{opacity:1;background:var(--s4-accent);transform:scaleX(1.6)}
 .s4-list{display:none}
+/* the step bar: always there; on touch and narrow screens it is the way through the drawing */
+.s4-ctl{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.3rem .7rem;margin:.35rem auto 0}
+.s4-arw{display:inline-flex;align-items:center;gap:.35rem;min-height:44px;min-width:44px;padding:0 1rem;border:1px solid var(--sketch-line);border-radius:999px;background:transparent;color:var(--s4-ink);font:600 .95rem/1 var(--s4-sans);cursor:pointer}
+.s4-arw:hover:not(:disabled){border-color:var(--s4-link);color:var(--s4-link)}
+.s4-arw:disabled{opacity:.4;cursor:default}
+.s4-count{min-width:3.6em;text-align:center;font:600 .8rem/1 var(--mono);color:var(--s4-ink)}
+.s4 .s4-ctl .s4-ticks{position:static;transform:none;display:flex;flex-direction:row;gap:0;margin:0}
+.s4 .s4-ctl .s4-ticks li{width:auto;height:auto;background:none;opacity:1;transform:none!important;border-radius:0}
+.s4-dot{position:relative;display:block;width:24px;height:44px;padding:0;border:0;background:none;cursor:pointer}
+.s4-dot::before{content:"";position:absolute;left:5px;right:5px;top:21px;height:2px;border-radius:2px;background:var(--s4-ink);opacity:.25;transition:opacity .3s,background-color .3s}
+.s4-ticks li.is-done .s4-dot::before{opacity:.7}
+.s4-ticks li.is-cur .s4-dot::before{top:20px;height:4px;background:var(--s4-accent);opacity:1}
+/* arrow mode: a normal-height card, no tall scroll track and no pinning */
+.s4.s4--arrow .s4-track{height:auto}
+.s4.s4--arrow .s4-stage{position:relative;top:0;height:auto}
+.s4.s4--arrow .s4-art{flex:none;aspect-ratio:var(--s4-ar,5 / 3);width:min(100%,calc(66vh * var(--s4-arn,1.667)));margin:.4rem auto 0}
 .s4--phone .s4-track{height:310vh}
 .s4--phone .s4-title{font-size:1.4rem}
 .s4--phone .s4-capline{padding:0;font-size:1.25rem}
@@ -868,6 +927,9 @@ span.s4-card-go{border-style:dashed}
 /* touch: the card is docked inside the stage (in flow with the drawing), unfolding from the part you tapped */
 .s4-card.is-dock{left:8px;right:8px;top:auto;bottom:8px;width:auto;max-width:440px;margin:0 auto;transform:none!important;z-index:7}
 .s4-card.is-dock .s4-card-in{border-radius:12px}
+/* the close button on every tapped or pinned preview */
+.s4-card-close{position:absolute;top:4px;right:4px;z-index:2;width:44px;height:44px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:var(--s4-note);color:var(--s4-ink);font:400 1.7rem/1 var(--s4-sans);cursor:pointer}
+.s4-card-close:hover{color:var(--s4-link)}
 .s4-card-more{display:inline-flex;align-items:center;min-height:44px;margin-top:.6rem;padding:0 1.1rem;border:1px solid var(--s4-link);border-radius:8px;background:transparent;color:var(--s4-link);font:600 .95rem/1.2 var(--s4-sans);cursor:pointer}
 @media (hover:none){.s4-card-go,.s4-card-x{display:inline-flex;align-items:center;min-height:44px}.s4-card-go{padding:0 1rem}.s4-card-x{padding:0 .4rem}}
 .s4--static .s4-track{height:auto}
@@ -1270,7 +1332,9 @@ span.s4-card-go{border-style:dashed}
         '<div class="tp">' +
           "<div>" +
             '<p class="tp-cap lbl">' + N + " projects</p>" +
-            '<h1 class="tp-name" id="hl" tabindex="-1">' + esc(ME.name) + "</h1>" +
+            /* the big version of the top-bar wordmark: first name in the serif italic, surname in heavy spaced caps */
+            '<h1 class="tp-name" id="hl" tabindex="-1" aria-label="' + esc(ME.name) + '"><span class="tn-1" aria-hidden="true">' + esc(nFirst) + "</span> " +
+              '<span class="tn-2" aria-hidden="true">' + esc(nLast) + "</span></h1>" +
             '<p class="tp-id"><span>' + esc(ME.role) + '</span><span class="now">Now: ' + esc(ME.now) + "</span></p>" +
             '<p class="tp-st">' + statement + "</p>" +
             '<div class="tp-links">' + (ME.links || []).map(function (l) {
@@ -1398,6 +1462,7 @@ span.s4-card-go{border-style:dashed}
           "</span>" +
         "</a>" +
         '<a class="br-map" href="#map" data-pair="' + esc(p.id + "|" + t.id) + '" aria-label="See the route from ' + esc(p.title) + " to " + esc(t.title) + ' on the map">' + MAPICON + "</a>" +
+        '<button type="button" class="br-x" aria-label="Close preview">&times;</button>' +
       "</li>";
     }).join("");
     return '<div class="fork-wrap" aria-label="Where ' + esc(p.title) + ' leads" role="group">' +
@@ -1722,9 +1787,9 @@ span.s4-card-go{border-style:dashed}
                ease-in-out, started with the movement and still flowing after the content has arrived;
                reduced motion: 200ms linear. A new target mid-way continues from the current blend (no snap).
        text colours that flip (ink to cream) cross over in the middle ~70ms rather than fading through grey.
-     Screen gradient: three stops at 0 / 55 / 100% and 160deg for every state (a main tone is three equal stops;
-     project gradients use the file's own three "stops"). <meta name="theme-color"> follows the top stop at the
-     start, middle and end of each blend. */
+     Screen: a plain base (--ce-1: white or near-black, per section tone on the main page) with three coloured lights
+     (--ce-g1..3, colour plus strength as alpha) drawn as soft radial glows. <meta name="theme-color"> follows the base
+     at the start, middle and end of each blend. */
   var TONE = "hero", TONE_OF = null, scrBox = $("scr"), PC = window.PROJECT_COLORS || null;
   if (PC && PC.main) document.documentElement.classList.add("pc-on");
   var CE = (function () {
@@ -1742,21 +1807,27 @@ span.s4-card-go{border-style:dashed}
     }
     function tok(n) { return getComputedStyle(root).getPropertyValue(n); }
     function al(c, a) { return c ? [c[0], c[1], c[2], a] : null; }
+    function num(n, d) { var v = parseFloat(tok(n)); return isNaN(v) ? d : v; }
+    /* the target of a state: a plain base (white or near-black) with the colour as light on it.
+       Main page: the section's tone with the main red at main-page strength. Expanded: the theme's base with the
+       project's light at the --exp-* strengths times --exp-intensity ("slightly more filled"). Light colours come
+       from the file: glow (core), the gradient's middle stop (bounce) and accent (top wash). */
     function target(st) {
       var th = themeNow(), m = PC && PC.main ? PC.main[th] : null, o = {}, ps = st.mode === "p" ? pset(st.id) : null;
-      var c = (ps && ps[th]) || m;   /* credits, or a project without a set: the main red */
-      if (st.mode === "p" && c && c.stops) {
-        var sp = c.stops.map(parse);
-        o["--ce-1"] = sp[0]; o["--ce-2"] = sp[1]; o["--ce-3"] = sp[2];
-        o["--bar-bg"] = al(sp[0], .86); o["--bar-ink"] = parse(c.bgInk); o["--bar-line"] = al(parse(c.bgInk), .2); o["--bar-acc"] = parse(c.accentOnBg);
-      } else {
-        var tn = parse(tok("--tone-" + (st.tone || "hero"))) || parse(tok("--base-bg")), ink = parse(tok("--base-ink"));
-        o["--ce-1"] = tn; o["--ce-2"] = tn; o["--ce-3"] = tn;
-        o["--bar-bg"] = al(tn, .86); o["--bar-ink"] = ink; o["--bar-line"] = al(ink, .16); o["--bar-acc"] = parse(tok("--accent"));
-      }
+      var c = (ps && ps[th]) || m, exp = st.mode === "p" && !!c, ink = parse(tok("--base-ink")), base, I, src = c || m;
+      if (exp) { base = parse(tok("--base-bg")); I = num("--exp-intensity", 1); }
+      else base = parse(tok("--tone-" + (st.tone || "hero"))) || parse(tok("--base-bg"));
+      var s1 = exp ? num("--exp-glow-1", .34) * I : num("--main-glow-1", .15), s2 = exp ? num("--exp-glow-2", .22) * I : num("--main-glow-2", .1), s3 = exp ? num("--exp-fill", .08) * I : num("--main-fill", .04);
+      var g1 = src ? parse(src.glow) : parse(tok("--accent")), g2 = src && src.stops ? parse(src.stops[1]) : g1, g3 = src ? parse(src.accent) : g1;
+      o["--ce-1"] = base; o["--ce-g1"] = al(g1, s1); o["--ce-g2"] = al(g2, s2); o["--ce-g3"] = al(g3, s3);
+      /* the top bar: the same plain base, lightly see-through, with ink text; its hairline takes the accent when expanded */
+      o["--bar-bg"] = al(base, .86); o["--bar-ink"] = ink;
+      o["--bar-line"] = exp ? al(parse(c.accent), .35) : al(ink, .14);
+      o["--bar-acc"] = exp ? parse(c.accent) : parse(tok("--accent"));
       if (c) {
         if (c.button) { o["--bar-btn"] = parse(c.button.fill); o["--bar-btn-ink"] = parse(c.button.label); o["--p-btn"] = parse(c.button.fill); o["--p-btn-ink"] = parse(c.button.label); }
-        o["--p-ink"] = parse(c.bgInk); o["--p-onbg"] = parse(c.accentOnBg); o["--p-accent"] = parse(c.accent); o["--p-glow"] = parse(c.glow);
+        /* text on the expanded screen is the theme's ink (it sits on the plain base now); accents stay at full strength */
+        o["--p-ink"] = ink; o["--p-onbg"] = parse(c.accent); o["--p-accent"] = parse(c.accent); o["--p-line"] = al(parse(c.accent), .3); o["--p-glow"] = parse(c.glow);
         o["--p-plate"] = parse(c.plate); o["--p-plate-ink"] = parse(c.plateInk); o["--p-plate-fill"] = parse(c.plateFill); o["--p-plate-hl"] = parse(c.plateHighlight);
       }
       if (m) { o["--m-plate"] = parse(m.plate); o["--m-plate-ink"] = parse(m.plateInk); o["--m-plate-fill"] = parse(m.plateFill); o["--m-plate-hl"] = parse(m.plateHighlight); }
@@ -2161,7 +2232,8 @@ span.s4-card-go{border-style:dashed}
           '<ul class="mp-conns">' + P.map(function (p) { return '<li><button type="button" data-goto="' + esc(p.id) + '"><span class="lbl">' + esc(p.no) + "</span>" + esc(p.title) + "</button></li>"; }).join("") + "</ul>";
       }
       var p = byId(id), r = routes(id);
-      return '<figure class="mp-fig frame ' + fitOf(p) + '">' + img(p, false) + "</figure>" +
+      return '<button type="button" class="mp-x" data-mpx aria-label="Close preview">&times;</button>' +
+        '<figure class="mp-fig frame ' + fitOf(p) + '">' + img(p, false) + "</figure>" +
         '<p class="lbl">Project ' + esc(p.no) + " / " + TOTAL + " · " + esc(p.kicker) + "</p>" +
         '<h3 class="mp-t">' + esc(p.title) + '</h3><p class="mp-line">' + esc(p.line) + "</p>" +
         ((p.facts || []).length ? '<dl class="mp-facts">' + p.facts.map(function (f) { return "<div><dt>" + esc(f[0]) + "</dt><dd>" + esc(f[1]) + "</dd></div>"; }).join("") + "</dl>" : "") +
@@ -2187,6 +2259,7 @@ span.s4-card-go{border-style:dashed}
       drawConn();
     }
     pan.addEventListener("click", function (e) {
+      if (e.target.closest("[data-mpx]")) { var was = selected; hovered = null; select(null); if (was && nodes[was]) nodes[was].el.focus({ preventScroll: true }); return; }
       var b = e.target.closest("[data-goto]"); if (!b) return;
       var id = b.getAttribute("data-goto"); select(id); nodes[id].el.focus({ preventScroll: true });
     });
@@ -2282,7 +2355,7 @@ span.s4-card-go{border-style:dashed}
   }
   /* split an element into its rendered lines and let each rise from behind a mask, starting after delay ms */
   function splitLines(h, delay) {
-    var orig = h.innerHTML, label = h.textContent.replace(/\s+/g, " ").trim(), toks = [];
+    var had = h.getAttribute("aria-label"), orig = h.innerHTML, label = had || h.textContent.replace(/\s+/g, " ").trim(), toks = [];
     [].forEach.call(h.childNodes, function (n) {
       if (n.nodeType === 3) n.nodeValue.split(/\s+/).forEach(function (w) { if (w) toks.push(esc(w)); });
       else if (n.nodeType === 1) toks.push(n.outerHTML);
@@ -2303,7 +2376,7 @@ span.s4-card-go{border-style:dashed}
     h.classList.add("lr-go");
     h.classList.remove("lr-arm", "lf-arm");
     setTimeout(function () {
-      h.innerHTML = orig; h.removeAttribute("aria-label"); h.classList.remove("lr-go"); h.style.removeProperty("--d");
+      h.innerHTML = orig; if (had) h.setAttribute("aria-label", had); else h.removeAttribute("aria-label"); h.classList.remove("lr-go"); h.style.removeProperty("--d");
     }, delay + LR_MS + LR_STEP * (lines.length - 1) + 80);
     return lines.length;
   }
@@ -2398,6 +2471,13 @@ span.s4-card-go{border-style:dashed}
       openDetail(id, { from: a });
     });
   });
+  /* the × on a tapped route preview, and a tap anywhere else, close it */
+  [].forEach.call(document.querySelectorAll(".br-x"), function (b) {
+    b.addEventListener("click", function () { var li = b.parentNode; setOn(li, false); var a = li.querySelector(".br-a"); if (a) a.focus({ preventScroll: true }); });
+  });
+  document.addEventListener("pointerdown", function (e) {
+    [].forEach.call(document.querySelectorAll('.br.on[data-armed="1"]'), function (li) { if (!li.contains(e.target)) setOn(li, false); });
+  }, true);
   /* draw each visible fork's curves from the "you are here" marker to the start of each route line */
   forks = [].slice.call(document.querySelectorAll(".fork"));
   function drawForks() {
@@ -2537,8 +2617,9 @@ span.s4-card-go{border-style:dashed}
     /* what to do: one plain line under the title, until the drawing has finished */
     var how = mk("p", { "class": "s4-how" }, head);
     function setHow() {
-      var act = window.matchMedia("(hover: none)").matches ? "Tap a line to see more." : "Hover over a line to see more.";
-      var lead = isStatic ? (root.classList.contains("s4--rm") ? "Press Play to watch it draw. " : "") : "Scroll to watch it draw. ";
+      var touch = window.matchMedia("(hover: none)").matches;
+      var act = touch ? "Tap a line to see more." : "Hover over a line to see more.";
+      var lead = touch ? "Tap the arrows to watch it draw. " : arrow ? "Use the arrows to watch it draw. " : "Scroll or use the arrows to watch it draw. ";
       how.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="7" y="2.5" width="10" height="16" rx="5"/><path d="M12 6.5v3M9 21.5l3 1.5 3-1.5"/></svg><span></span>';
       how.lastChild.textContent = lead + act;
       how.classList.remove("is-done");
@@ -2547,7 +2628,13 @@ span.s4-card-go{border-style:dashed}
     var svg = sv("svg", { "class": "s4-svg", "aria-hidden": "true", focusable: "false", preserveAspectRatio: "xMidYMid meet", viewBox: "0 0 1000 600" }, art);
     var ov = mk("div", { "class": "s4-ov" }, art);
     var capline = mk("div", { "class": "s4-capline", "aria-hidden": "true" }, stage);
-    var tickList = mk("ol", { "class": "s4-ticks", "aria-hidden": "true" }, stage);
+    /* the step bar: Back, one dot per step, the counter and Next (Replay at the end) */
+    var ctl = mk("div", { "class": "s4-ctl", role: "group", "aria-label": "Step through the drawing" }, stage);
+    var bBack = mk("button", { type: "button", "class": "s4-arw", "aria-label": "Previous step" }, ctl);
+    bBack.innerHTML = '<span aria-hidden="true">&lsaquo;</span> Back';
+    var tickList = mk("ol", { "class": "s4-ticks" }, ctl);
+    var counter = mk("span", { "class": "s4-count", "aria-live": "polite" }, ctl);
+    var bNext = mk("button", { type: "button", "class": "s4-arw", "aria-label": "Next step" }, ctl);
     var staticList = mk("ol", { "class": "s4-list" }, stage);
     var playBtn = mk("button", { type: "button", "class": "s4-play" }, stage);
     playBtn.textContent = "Play the drawing";
@@ -2834,7 +2921,9 @@ span.s4-card-go{border-style:dashed}
         "aria-label": "Step " + (i + 1) + ": " + (st.caption || "") + ". More details" }, ov);
       btns.push(b);
       bindStep(b, i);
-      ticks.push(mk("li", null, tickList));
+      var tli = mk("li", null, tickList), dot = mk("button", { type: "button", "class": "s4-dot", "aria-label": "Step " + (i + 1) + ": " + (st.caption || "") }, tli);
+      dot.addEventListener("click", function () { goStep(i); });
+      ticks.push(tli);
       mk("li", null, staticList).textContent = st.caption || "";
       mk("li", null, textList).textContent = (st.caption || "") + " " + (st.detail || "") + " Handled by: " + projTitle(st.by) + ".";
       done.push(false);
@@ -2903,7 +2992,7 @@ span.s4-card-go{border-style:dashed}
         hint.style.top = ((up ? hq.y - 4 : hq.y + hq.h + 4) / vh * 100) + "%";
       }
     }
-    var layoutName = "", scale = 1, curStep = -2, isStatic = false;
+    var layoutName = "", scale = 1, curStep = -2, isStatic = false, arrow = false, aStep = -1, dA = 0, aAnim = 0, lastD = 0;
     function setLayout(name) {
       layoutName = name; LAY = LAYS[name];
       root.classList.toggle("s4--phone", name === "phone");
@@ -2939,6 +3028,7 @@ span.s4-card-go{border-style:dashed}
     /* ---------- scroll to drawing: reason: the drawing follows your reading, so you set the pace ---------- */
     var artVisible = false;
     function render(d) {
+      lastD = d;
       var x = d * N, nibIt = null, nibT = 0, n, j;
       for (n = 0; n < items.length; n++) {
         var it = items[n], t = clamp((x - it.s - it.a) / Math.max(1e-4, it.b - it.a));
@@ -2968,6 +3058,7 @@ span.s4-card-go{border-style:dashed}
           caps[j].classList.toggle("is-on", on);
           ticks[j].classList.toggle("is-cur", on);
         }
+        if (!arrow) { aStep = x >= 0.999 ? Math.min(N - 1, Math.floor(x - 0.999 + 1e-6)) : -1; updCtl(); }
       }
       for (j = 0; j < N; j++) {
         done[j] = isStatic || x - j >= 0.999;
@@ -2996,6 +3087,12 @@ span.s4-card-go{border-style:dashed}
     function update() {
       ticking = false;
       if (!active) return;
+      if (arrow) {
+        if (hintState === 0) { var ar0 = art.getBoundingClientRect(); artVisible = ar0.top < window.innerHeight * 0.8 && ar0.bottom > window.innerHeight * 0.2; }
+        if (!aAnim) render(dA);
+        if (pin && Math.abs(SC() - pin.y) > 32) closeCard(false);
+        return;
+      }
       var d = 1;
       if (!isStatic) {
         var r = track.getBoundingClientRect(), span = r.height - stage.offsetHeight;
@@ -3040,6 +3137,11 @@ span.s4-card-go{border-style:dashed}
       cardImg.style.display = "";
       if (cardImg.getAttribute("src") !== src) cardImg.setAttribute("src", src);
     }
+    function closeBtn() {
+      var xb = mk("button", { type: "button", "class": "s4-card-close", "aria-label": "Close preview" }, cardBody);
+      xb.textContent = "\u00d7";
+      xb.addEventListener("click", function () { closeCard(true); });
+    }
     function lbl(p) { var e = mk("p", { "class": "s4-card-lbl" }); e.textContent = p ? "Project " + (p.no || "") + " · " + (p.title || "") : ""; return e; }
     function fillPeek(i, how) {
       var key = "peek" + i + how;
@@ -3070,6 +3172,7 @@ span.s4-card-go{border-style:dashed}
           a.textContent = "Go to " + projTitle(st.by) + " →";
         }
       });
+      closeBtn();
       var x = mk("button", { type: "button", "class": "s4-card-x" }, cardBody);
       x.textContent = "Close";
       x.addEventListener("click", function () { closeCard(true); });
@@ -3124,6 +3227,7 @@ span.s4-card-go{border-style:dashed}
       cardBody.appendChild(lbl(p));
       mk("p", { "class": "s4-card-cap" }, cardBody).textContent = st.caption || "";
       mk("p", { "class": "s4-card-txt" }, cardBody).textContent = firstSentence(st.detail);
+      closeBtn();
       var more = mk("button", { type: "button", "class": "s4-card-more" }, cardBody);
       more.textContent = "See more";
       more.addEventListener("click", function () {
@@ -3323,19 +3427,83 @@ span.s4-card-go{border-style:dashed}
     /* testing override and visitor choice: ?motion=on, localStorage s4-motion=on, or "Play the drawing" */
     var motionOn = /[?&]motion=on(&|$)/.test(window.location.search);
     try { if (window.localStorage.getItem("s4-motion") === "on") motionOn = true; } catch (e) {}
+    /* modes: scroll-drawn (desktop with a fine pointer, as before) or ARROW mode: a normal-height card stepped with the
+       bar, time-driven (each step draws in about 900ms). Arrow mode is the only mode on touch and narrow screens, with
+       reduced motion, and wherever the page cannot scroll; on desktop the first arrow press switches to it. */
+    var TOUCHY = window.matchMedia("(hover: none)");
     function decideStatic() {
       var rm = mqRM.matches && !motionOn;
       isStatic = false; root.classList.remove("s4--static");
       root.classList.toggle("s4--rm", rm);
-      if (rm || !scrollable()) { isStatic = true; root.classList.add("s4--static"); }
+      if (!arrow && (rm || TOUCHY.matches || mqPhone.matches || !scrollable())) {
+        arrow = true; root.classList.add("s4--arrow");
+        if (rm) { aStep = N - 1; dA = (N - 1 + 0.9995) / N; }
+      }
       items.forEach(function (it) { it.t = -1; });
       curStep = -2;
-      setHow();
+      setHow(); updCtl();
     }
+    function updCtl() {
+      counter.textContent = Math.max(1, aStep + 1) + " / " + N;
+      bBack.disabled = aStep <= 0;
+      var last = aStep >= N - 1;
+      bNext.innerHTML = last ? 'Replay <span aria-hidden="true">&#8635;</span>' : 'Next <span aria-hidden="true">&rsaquo;</span>';
+      bNext.setAttribute("aria-label", last ? "Replay the drawing" : "Next step");
+    }
+    /* leave the scroll-drawn mode without moving the page: keep the stage where it is on screen */
+    function enterArrow() {
+      if (arrow) return;
+      var before = stage.getBoundingClientRect().top;
+      var dn = 0; for (var j = 0; j < N; j++) if (done[j]) dn = j + 1;
+      arrow = true; root.classList.add("s4--arrow");
+      aStep = dn - 1; dA = dn ? (dn - 1 + 0.9995) / N : 0;
+      fitOverlay(); fitHits();
+      scrollByPx(stage.getBoundingClientRect().top - before);
+      setHow(); updCtl(); render(dA);
+    }
+    function animTo(dt, ms) {
+      cancelAnimationFrame(aAnim); aAnim = 0;
+      var d0 = dA, t0 = performance.now();
+      if (rmNow() && !motionOn) { dA = dt; render(dA); nib.setAttribute("opacity", 0); return; }
+      function fr(now) {
+        var t = clamp((now - t0) / ms), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        dA = d0 + (dt - d0) * e; render(dA);
+        if (t < 1) aAnim = requestAnimationFrame(fr); else { aAnim = 0; nib.setAttribute("opacity", 0); }
+      }
+      aAnim = requestAnimationFrame(fr);
+    }
+    function goStep(k) {
+      if (!arrow) enterArrow();
+      k = Math.max(-1, Math.min(N - 1, k));
+      var span = Math.max(1, Math.abs(k - aStep));
+      aStep = k;
+      animTo(k < 0 ? 0 : (k + 0.9995) / N, Math.min(1600, 900 + 140 * (span - 1)));
+      updCtl();
+    }
+    bNext.addEventListener("click", function () {
+      hideHint();
+      if (aStep >= N - 1) { cancelAnimationFrame(aAnim); aAnim = 0; aStep = -1; dA = 0; render(0); goStep(0); }
+      else goStep(aStep + 1);
+    });
+    bBack.addEventListener("click", function () { hideHint(); goStep(Math.max(0, aStep - 1)); });
+    /* left and right arrow keys step too, while focus is in the sketch (not inside an open card) */
+    root.addEventListener("keydown", function (e) {
+      if ((e.key !== "ArrowRight" && e.key !== "ArrowLeft") || card.contains(e.target)) return;
+      e.preventDefault();
+      if (e.key === "ArrowRight") bNext.click(); else if (aStep > 0) goStep(aStep - 1);
+    });
     sizeStage();
     setLayout(mqPhone.matches ? "phone" : "desk");
     decideStatic();
     fitOverlay(); fitHits(); update();
+    if (arrow && aStep < 0) {
+      if ("IntersectionObserver" in window) {
+        var aio = new IntersectionObserver(function (es) {
+          if (es[0].isIntersecting && active && aStep < 0) { aio.disconnect(); goStep(0); }
+        }, { root: IS_WIN ? null : SCR, threshold: 0.4 });
+        aio.observe(art);
+      } else goStep(0);
+    }
     function resetPointer() { closeCard(false); hoverZ = null; hideCard(); applyHot(); }
     function onMq() { if (!active) { layoutDirty = true; return; } resetPointer(); setLayout(mqPhone.matches ? "phone" : "desk"); }
     function onRM() { if (!active) { layoutDirty = true; return; } resetPointer(); decideStatic(); fitOverlay(); fitHits(); update(); }
@@ -3557,10 +3725,11 @@ span.s4-card-go{border-style:dashed}
      The main page never takes these: it stays red. The colour engine (above) blends file fields into a few root
      variables; CSS rules (html.pc-on ...) bind the page's tokens to them. Nothing is derived by hand.
      MAPPING  file field        -> engine variable -> tokens bound to it
-              stops[0..2]       -> --ce-1..3        -> the whole-screen gradient (160deg, 0/55/100%), html/body, --solid
-              stops[0], bgInk   -> --bar-bg (86%), --bar-ink, --bar-line (20%) -> top bar backing, text, hairline, switch
-              accentOnBg        -> --p-onbg, --bar-acc -> --detail-onbg (links, status dot, focus on the gradient), Back chip hover
-              bgInk             -> --p-ink          -> --detail-ink (title, line, labels, tags on the gradient)
+              theme base        -> --ce-1           -> the plain screen base, html/body, --solid, top bar backing (86%)
+              glow, stops[1], accent -> --ce-g1..3 (alpha = --exp-* x --exp-intensity) -> the three lights on the screen
+              accent            -> --p-onbg, --p-line, --bar-acc, --bar-line -> links/focus on the screen, divider lines,
+                                   tags, top bar hairline, Back chip hover
+              (theme ink)       -> --p-ink, --bar-ink -> --detail-ink (title, line, labels on the screen), top bar text
               accent            -> --p-accent       -> --detail-link, --detail-route-1/2 (links and highlights on cards, fork
                                                        line, "On this page" marker, sketch active stroke and ticks)
               button.fill/label -> --p-btn(-ink), --bar-btn(-ink) -> --detail-sheet-btn(-ink), --detail-btn-bg/ink, Contact pill, selection
