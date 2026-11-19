@@ -118,6 +118,7 @@
   --main-glow-1:.24;
   --main-glow-2:.15;
   --main-fill:.07;
+  --hv-sheen:rgba(255,255,255,.24);
   --exp-intensity:1; --exp-card-glow:.18;
 }
 :root[data-theme="dark"]{
@@ -159,6 +160,7 @@
   --main-glow-1:.16;
   --main-glow-2:.1;
   --main-fill:.04;
+  --hv-sheen:rgba(255,255,255,.14);
   --exp-intensity:1;
 }
 /* ===================== end of colour tokens ===================== */
@@ -311,7 +313,7 @@ html.theme-fade,html.theme-fade *{transition:background-color .7s ease,color .7s
 .theme-joke .cta{padding:.7rem 1.1rem;font-size:.95rem}
 @keyframes joke-in{from{opacity:0;transform:scale(.15)}60%{opacity:1}to{opacity:1;transform:none}}
 @keyframes joke-out{to{opacity:0;transform:scale(.2)}}
-@media (prefers-reduced-motion:reduce){html:not(.mo-on) .tt-knob{transition:none}html:not(.mo-on) .theme-joke,html:not(.mo-on) .theme-joke.is-leaving{animation:none}}
+/* (formerly only with OS reduced motion; now the mode classes decide) */html:not(.mo-on) .tt-knob{transition:none}html:not(.mo-on) .theme-joke,html:not(.mo-on) .theme-joke.is-leaving{animation:none}
 .cwrap{position:relative}
 /* Contact is the loud pill: the sunset gradient, small */
 .pill{display:inline-flex;align-items:center;gap:.5rem;border:0;cursor:pointer;background:var(--btn);color:var(--btn-fg);font:600 .92rem/1 var(--sans);padding:.72rem 1.1rem;border-radius:999px;text-decoration:none}
@@ -437,8 +439,10 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .map-sub{margin:0;max-width:52ch;font:400 1.3rem/1.4 var(--serif)}
 .map-how{margin:0;max-width:34ch;font-size:1rem}
 .map-count{margin:.6rem 0 0}
+.map-drag{display:flex;align-items:center;gap:.45rem;margin:.7rem 0 0;font:500 .85rem/1.4 var(--sans)}
+.map-drag .ico{width:1.1em;height:1.1em}
 /* the connector from the selected marker to its panel (drawn by JS) */
-.mconn{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:4}
+.mconn{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:7}
 .mconn path{fill:none;stroke:var(--link);stroke-width:1.5}
 .mconn circle{fill:var(--link)}
 .map-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:clamp(16px,2.5vw,36px);align-items:start}
@@ -454,7 +458,14 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .edge{fill:none;stroke:currentColor;stroke-width:1.3;opacity:.45;transition:opacity .2s,stroke-width .2s}
 .edge.on{stroke:var(--link);stroke:var(--route) var(--link);stroke-width:2.8;opacity:1}
 .edge.dim{opacity:.18}
-.node{position:absolute;left:0;top:0;z-index:3;display:flex;flex-direction:column;align-items:center;gap:.35rem;background:none;border:0;padding:0;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;will-change:transform}
+/* map layers, back to front: veil and grid (0), unselected routes (1), unselected markers (2), highlighted routes (3),
+   connected markers (4), reason boxes (5), the selected, hovered or dragged marker (6), the connector to the panel (7) */
+.edges{z-index:1}
+.edges-on{z-index:3}
+.node.near{z-index:4}
+.node.on,.node.sel,.node.dragging{z-index:6}
+.node.covered .nl{opacity:.25;transition:opacity .2s}
+.node{position:absolute;left:0;top:0;z-index:2;display:flex;flex-direction:column;align-items:center;gap:.35rem;background:none;border:0;padding:0;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;will-change:transform}
 .node.dragging{cursor:grabbing}
 .node:focus-visible{outline-offset:4px}
 .mk{position:relative;width:34px;height:34px;border-radius:50%;border:1.5px solid currentColor;background:var(--solid);display:grid;place-items:center;font:600 .75rem/1 var(--mono)}
@@ -466,7 +477,7 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .node.dim{opacity:.6}
 .node.visited .mk::after{content:"";position:absolute;right:-4px;top:-4px;width:11px;height:11px;border-radius:50%;background:var(--fg);border:2px solid var(--solid)}
 /* reason boxes appear on hover: they explain the highlighted route */
-.elabel{position:absolute;left:0;top:0;z-index:2;max-width:13rem;font-size:.875rem;font-weight:500;line-height:1.4;border:1px solid var(--link);border-radius:8px;padding:.3rem .5rem;opacity:0;pointer-events:none;transition:opacity .2s}
+.elabel{position:absolute;left:0;top:0;z-index:5;max-width:13rem;font-size:.875rem;font-weight:500;line-height:1.4;border:1px solid var(--link);border-radius:8px;padding:.3rem .5rem;opacity:0;pointer-events:none;transition:opacity .2s}
 .elabel.on{opacity:1}
 .legend{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin:.8rem 0 0}
 .legend i{display:inline-block;vertical-align:-.15em;margin-right:.45em}
@@ -944,16 +955,17 @@ span.s4-card-go{border-style:dashed}
 .s4-play:hover{color:var(--s4-link)}
 .s4--static.s4--rm .s4-play{display:block}
 .s4--static{padding-bottom:16px}
-@media (prefers-reduced-motion:reduce){
+/* (formerly only with OS reduced motion; now the mode classes decide) */
   html:not(.mo-on) .s4 *,html:not(.mo-on) .s4 *::before,html:not(.mo-on) .s4 *::after{transition:none!important}
   html:not(.mo-on) .s4 .s4-card-in{transform:none!important;transition:opacity .2s ease!important}
-}
+
 
 /* ---------- ONE text-box style for the whole page (reason: every box is lit by the same ember as the page) ----------
    Paper with a warm glow in light, dark glass with an ember glow in dark; the glow rises from the bottom edge,
    at most 120px tall, so it never grows behind long text. Chips, buttons and table cells do not get it. */
 .card,.mpanel,.elabel,.secnote,.c-call,.d-sheet,.d-story,.s4-card-in,.pop,.tourbox,.ctr-box,.theme-joke,.c-card,.c-embed,.c-tbl,.d-idx,.lbox p,.b-block,.ai-box,.foot{
-  background-image:radial-gradient(var(--card-glow-size) at var(--glow-x,50%) 100%,var(--card-glow),var(--card-glow-2) 55%,transparent 100%);background-repeat:no-repeat;
+  --gx:var(--glow-x,50%);--gy:100%;
+  background-image:radial-gradient(var(--card-glow-size) at var(--gx) var(--gy),var(--card-glow),var(--card-glow-2) 55%,transparent 100%);background-repeat:no-repeat;
   border:1px solid var(--rule);border-bottom-color:var(--card-line-warm);box-shadow:var(--card-shadow)}
 .secnote,.c-call{border-left:3px solid var(--link)}
 .card:hover,.card:focus-visible{border-color:currentColor}
@@ -965,6 +977,96 @@ span.s4-card-go{border-style:dashed}
 .ai-box{padding:clamp(20px,3vw,36px);border-radius:16px}
 .foot{padding:1.2rem 1.4rem;border-radius:16px}
 .c-card,.c-embed{border-radius:12px}
+
+/* =====================================================================
+   HOVER RESPONSES (fine pointers): one delegated pointermove writes --mx / --my (0..1 inside the element) on the
+   one element under the pointer, and adds .hv plus a recipe class (.hv-cards, .hv-fig ...). Everything here is
+   transform, opacity or paint (custom properties, colours); nothing changes layout. In 180ms, out 350ms.
+   Keyboard focus gets the same resting look (centred light, no pointer-follow).
+   Mode classes: html.mo-lite (Reduced) keeps light, border and colour with at most 1.01 scale and no tilt;
+   without .mo-on (Off) only colours change.
+   ===================================================================== */
+@property --mx{syntax:"<number>";inherits:true;initial-value:.5}
+@property --my{syntax:"<number>";inherits:true;initial-value:.5}
+@property --gx{syntax:"<percentage>";inherits:false;initial-value:50%}
+@property --gy{syntax:"<percentage>";inherits:false;initial-value:100%}
+[class*="hv-"]{transition-property:scale,translate,transform,box-shadow,border-color,background-color,color,filter,--gx,--gy,text-decoration-color,text-decoration-thickness;
+  transition-duration:.35s;transition-timing-function:cubic-bezier(.2,.7,.1,1)}
+.hv{transition-duration:.18s}
+/* light follows the pointer: the card's ember glow moves toward it and rises a little */
+.hv-cards.hv,.hv-cardw.hv{--gx:calc(var(--mx) * 100%);--gy:calc(72% + var(--my) * 28%)}
+/* the hairline brightens toward the accent on the edge nearest the pointer */
+.hv-cards,.hv-cardw{position:relative}
+.d-idx.hv-cards{position:sticky}
+.hv-cards::after,.hv-cardw::after{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;padding:1px;pointer-events:none;
+  background:radial-gradient(180px circle at calc(var(--mx) * 100%) calc(var(--my) * 100%),var(--link),transparent 70%);
+  -webkit-mask:linear-gradient(var(--base-ink) 0 0) content-box,linear-gradient(var(--base-ink) 0 0);-webkit-mask-composite:xor;
+  mask-image:linear-gradient(var(--base-ink) 0 0),linear-gradient(var(--base-ink) 0 0);mask-clip:content-box,border-box;mask-composite:exclude;
+  opacity:0;transition:opacity .35s ease}
+.hv-cards.hv::after,.hv-cardw.hv::after{opacity:.85;transition-duration:.18s}
+/* lift and size: small cards most, wide text boxes barely (reading is never disturbed), back matter in between */
+.hv-cards.hv{scale:1.02;translate:0 -3px}
+.mpanel.hv-cards.hv,.d-idx.hv-cards.hv{scale:1.01;translate:0 -2px}
+.hv-cardw.hv{scale:1.005}
+:is(.b-block,.ai-box,.foot).hv-cardw.hv{scale:1.008;translate:0 -2px}
+/* image plates and content figures: tilt toward the pointer, the picture leans in, the caption settles */
+.hv-fig.hv{transform:perspective(900px) rotateX(calc((.5 - var(--my)) * 5deg)) rotateY(calc((var(--mx) - .5) * 5deg))}
+:is(.hv-fig,.hv-plate) :is(img,svg.dg){transition:scale .35s cubic-bezier(.2,.7,.1,1),filter .35s ease}
+:is(.hv-fig,.hv-plate).hv :is(img,svg.dg){scale:1.03;transition-duration:.18s}
+/* diagrams: lines and the highlighted path gain a touch of contrast */
+:is(.hv-fig,.hv-plate).hv svg.dg{filter:contrast(1.08) saturate(1.12)}
+.hv-fig figcaption{transition:translate .35s ease}
+.hv-fig.hv figcaption{translate:0 2px;transition-duration:.18s}
+/* fact numbers nudge up and an underline draws */
+.hv-fact dd:not(.n){background-image:linear-gradient(var(--link),var(--link));background-repeat:no-repeat;background-position:0 100%;background-size:0% 2px;
+  transition:translate .35s cubic-bezier(.2,.7,.1,1),background-size .35s ease}
+.hv-fact.hv dd:not(.n){translate:0 -2px;background-size:100% 2px;transition-duration:.18s}
+/* tags: the fill warms and the chip grows a little */
+.hv-chip.hv{scale:1.04;border-color:var(--link);background-color:color-mix(in srgb,var(--link) 14%,transparent)}
+/* buttons and pills: a sheen follows the pointer across the fill (the gradient's light shifts), slight grow */
+.hv-btn{position:relative;isolation:isolate}
+.hv-btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(circle at calc(var(--mx) * 100%) calc(var(--my) * 100%),var(--hv-sheen),transparent 68%);opacity:0;transition:opacity .35s ease}
+.hv-btn.hv::before{opacity:1;transition-duration:.18s}
+.hv-btn.hv{scale:1.03}
+.cta:active,.ghost:active,.pill:active,.btn-tour:active,.rbtn:active,.cue:active,.bchip:active,.tourbox button:active,.s4-arw:active{scale:.97!important}
+/* links in text: the underline thickens and turns to the accent */
+.hv-link.hv{color:var(--link);text-decoration-line:underline;text-decoration-color:var(--link);text-decoration-thickness:2.5px}
+#chrome .hv-link.hv{color:var(--bar-acc);text-decoration-color:var(--bar-acc)}
+/* list items (On this page, prev/next, links, chapter and end indexes, map list): indent 4px, the marker warms */
+.hv-item.hv{translate:4px 0}
+.d-nav a.nx.hv-item.hv{translate:-4px 0}
+.d-idx .hv-item.hv a{border-left-color:var(--link)}
+/* table rows: a tint follows the pointer along the row; the first cell's accent bar grows */
+.hv-row.hv{background-image:radial-gradient(260px 100% at calc(var(--mx) * 100%) 50%,color-mix(in srgb,var(--link) 12%,transparent),transparent)}
+.hv-row td:first-child{box-shadow:inset 0 0 0 var(--link);transition:box-shadow .35s ease}
+.hv-row.hv td:first-child{box-shadow:inset 3px 0 0 var(--link);transition-duration:.18s}
+/* code: a faint band marks the line under the pointer */
+.hv-code.hv{background-image:linear-gradient(180deg,transparent calc(var(--my) * 100% - .8em),color-mix(in srgb,var(--link) 10%,transparent) calc(var(--my) * 100% - .8em),color-mix(in srgb,var(--link) 10%,transparent) calc(var(--my) * 100% + .8em),transparent calc(var(--my) * 100% + .8em))}
+/* the wordmark: the italic leans a little further, the caps track out (scaled, so nothing reflows) */
+.hv-mark .mk-1,.hv-mark .mk-2{transition:transform .35s cubic-bezier(.2,.7,.1,1)}
+.hv-mark .mk-2{transform-origin:0 50%}
+.hv-mark.hv .mk-1{transform:skewX(-4deg)}
+.hv-mark.hv .mk-2{transform:scaleX(1.05)}
+/* the theme switch: the knob leans toward the pointer */
+.hv-theme .tt-knob{transition:transform .35s cubic-bezier(.3,1.5,.5,1),background-color .3s ease,box-shadow .3s ease,translate .25s ease}
+.hv-theme.hv .tt-knob{translate:calc((var(--mx) - .5) * 6px) 0}
+/* Reduced: light, border and colour stay; at most 1.01, no tilt, no travel */
+html.mo-lite :is(.hv-cards,.hv-cardw,.hv-btn,.hv-chip).hv{scale:1.01;translate:none}
+html.mo-lite :is(.hv-item,.hv-fact dd).hv,html.mo-lite .hv-fact.hv dd:not(.n){translate:none}
+html.mo-lite .hv-fig.hv{transform:none}
+html.mo-lite :is(.hv-fig,.hv-plate).hv :is(img,svg.dg){scale:1.01}
+html.mo-lite .hv-theme.hv .tt-knob{translate:none}
+/* Off: colours only */
+html:not(.mo-on) .hv,html:not(.mo-on) .hv *{scale:none!important;translate:none!important}
+html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) .hv-mark.hv .mk-2{transform:none}
+/* the quiet offer to reduce motion (only shown when the OS asks for reduced motion) */
+.mo-hint{display:inline-flex;align-items:center;gap:.2rem;font-size:.85rem;font-weight:600}
+.mo-hint[hidden]{display:none}
+.mo-hint button{padding:0;border:0;background:none;color:inherit;font:inherit;cursor:pointer}
+.mo-hint [data-mo-reduce]{text-decoration:underline;text-underline-offset:.2em}
+.mo-hint [data-mo-dismiss]{width:28px;height:28px;font-size:1.2rem;line-height:1}
+@media (max-width:1023px){#chrome .mo-hint{display:none}}
 /* the sketch is a text box like the others: the same rounded glass or paper card with the ember glow, inset from the edges
    (solid, not blurred glass: a backdrop filter would re-anchor the sketch's fixed phone card to the box) */
 .d-story.s4,.d-story{--s4-paper:var(--detail-card-solid);background-color:var(--detail-card-solid);border-radius:16px;padding:clamp(6px,1.4vw,16px)}
@@ -1063,7 +1165,7 @@ span.s4-card-go{border-style:dashed}
 @media (max-width:599px){.tp-plate{display:none}}
 @media (max-width:399px){.toplink{display:none}}
 /* reduced motion: everything static (unless ?motion=on adds .mo-on for testing) */
-@media (prefers-reduced-motion:reduce){
+/* (formerly only with OS reduced motion; now the mode classes decide) */
   html:not(.mo-on) .lr-arm,html:not(.mo-on) .lf-arm,html:not(.mo-on) .ta-arm,html:not(.mo-on) .cr-arm{opacity:1!important}
   html:not(.mo-on) .dv-arm{transform:none!important}
   html:not(.mo-on) .lr-go .lr-i,html:not(.mo-on) .lf-go{animation:none!important}
@@ -1074,7 +1176,7 @@ span.s4-card-go{border-style:dashed}
   html:not(.mo-on) .rail-frame::before,html:not(.mo-on) .rail-frame::after{transition:none!important}
   html:not(.mo-on) :is(a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:focus-visible .card-ar,.bchip:hover .ico,.card:hover,.card:focus-visible,.card:hover .card-p img,.card:focus-visible .card-p img){transform:none!important}
   html:not(.mo-on) :is(.cta,.ghost,.pill,.btn-tour,.rbtn,.cue,.theme,.bchip,.tourbox button,.s4-card-go,.d-nav a,.br-a):active{scale:none}
-}
+
 /* text arrival: armed only by JS while off screen */
 .ta-arm{opacity:0}
 </style>
@@ -1179,7 +1281,7 @@ span.s4-card-go{border-style:dashed}
       setTimeout(function () { root.classList.remove("theme-fade"); }, 750);
     }
     function protest() {
-      var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var still = !document.documentElement.classList.contains("mo-on");   // the page's motion mode, not the OS setting
       if (!still) {                                   // the switch slides over, strains, and gets shoved back
         btn.classList.add("is-resisting");
         var peek = document.createElement("div");     // the page only lightens a touch, it never really switches
@@ -1245,34 +1347,36 @@ span.s4-card-go{border-style:dashed}
   /* ?motion=on (or localStorage s4-motion=on) forces motion for testing, even with reduced motion set */
   /* motion modes (reason: "reduce" in the OS should calm the page, not freeze it):
        full    everything
-       reduced (default when the OS asks for reduced motion) keeps the essential, gentle motion: the line-stretch
+       reduced (chosen by the visitor) keeps the essential, gentle motion: the line-stretch
                expand and collapse, the gradual colour change, heading and text arrivals, the image reveal, the sketch
                drawn with the arrows; drops parallax, pointer tilt, the magnetic button, rail physics and the long
                project-to-project sweep (a short crossfade instead), and shortens the colour blend
        off     nothing moves (?motion=off only)
      ?motion=on / ?motion=off force a mode and are remembered; the footer switch toggles Full / Reduced. */
-  var MODE = RM.matches ? "reduced" : "full";
+  var MODE = "full";   /* the owner's choice: full for everyone; the OS "reduce" setting only offers a link to reduce */
   try { var ms0 = localStorage.getItem("fg-motion"); if (ms0 === "full" || ms0 === "reduced" || ms0 === "off") MODE = ms0; if (localStorage.getItem("s4-motion") === "on") MODE = "full"; } catch (e) {}
   var mq0 = /[?&]motion=(on|off|full|reduced)(&|$)/.exec(location.search);
   if (mq0) { MODE = mq0[1] === "on" ? "full" : mq0[1]; try { localStorage.setItem("fg-motion", MODE); } catch (e) {} }
   var FORCE = MODE !== "off";
   /* .mo-on lets the CSS animations run even when the OS asks for reduced motion (the JS decides what runs) */
   if (MODE !== "off") document.documentElement.classList.add("mo-on");
+  if (MODE === "reduced") document.documentElement.classList.add("mo-lite");
   function still() { return MODE === "off"; }
   function lite() { return MODE === "reduced"; }
   function setMode(m) {
     MODE = m; try { localStorage.setItem("fg-motion", m); } catch (e) {}
     document.documentElement.classList.toggle("mo-on", m !== "off");
+    document.documentElement.classList.toggle("mo-lite", m === "reduced");
     if (window.__motion) window.__motion.mode = m;
   }
   /* ?motiondebug=1: one console line per kind of motion event, and window.__motion with live counts */
   var MDEBUG = /[?&]motiondebug=1(&|$)/.test(location.search), mlogged = {};
-  var MSTAT = window.__motion = { enabled: true, reduced: RM.matches, mode: MODE, touch: matchMedia("(hover: none)").matches,
+  var MSTAT = window.__motion = { enabled: true, osReduced: RM.matches, reduced: MODE === "reduced", mode: MODE, touch: matchMedia("(hover: none)").matches,
     pointer: matchMedia("(pointer: fine)").matches ? "fine" : "coarse", viewport: innerWidth + "x" + innerHeight,
     counts: { reveal: 0, parallax: 0, expand: 0, travel: 0, colour: 0 } };
-  if (MDEBUG) try { console.log("motion: mode " + MODE + ", OS reduced " + RM.matches + ", pointer " + MSTAT.pointer + ", viewport " + MSTAT.viewport); } catch (e) {}
+  if (MDEBUG) try { console.log("motion: mode " + MODE + ", osReduced " + RM.matches + ", pointer " + MSTAT.pointer + ", viewport " + MSTAT.viewport); } catch (e) {}
   function mlog(kind, msg) {
-    MSTAT.enabled = !still(); MSTAT.reduced = RM.matches; MSTAT.mode = MODE; MSTAT.viewport = innerWidth + "x" + innerHeight;
+    MSTAT.enabled = !still(); MSTAT.osReduced = RM.matches; MSTAT.reduced = MODE === "reduced"; MSTAT.mode = MODE; MSTAT.viewport = innerWidth + "x" + innerHeight;
     if (MSTAT.counts[kind] != null) MSTAT.counts[kind]++;
     var key = msg.replace(/#\S+/, "#");
     if (MDEBUG && !mlogged[key]) { mlogged[key] = 1; try { console.log("motion: " + msg); } catch (e) {} }
@@ -1398,16 +1502,17 @@ span.s4-card-go{border-style:dashed}
         '<div class="map-head"><div><p class="lbl">The map</p><h2 class="map-t" id="map-t">How the pieces connect</h2>' +
           '<p class="map-sub">None of these projects stands alone. Pick one to see what it depends on and what depends on it, then open its page.</p>' +
           '<p class="map-count lbl">' + N + " projects and " + EDGES.length + " routes between them, drawn from each project's own links.</p></div>" +
-          '<p class="map-how">Click a project to select it, then choose Read more to open it. Drag one to move it. Arrow keys follow routes.</p></div>' +
+          '<p class="map-how">Pick a project to see its routes, then Read more to open it. Arrow keys follow routes.</p></div>' +
         '<div class="map-grid">' +
           "<div>" +
-            '<div class="stage" id="stage"><svg class="edges" id="edges" aria-hidden="true" focusable="false"></svg>' +
+            '<div class="stage" id="stage"><svg class="edges" id="edges" aria-hidden="true" focusable="false"></svg><svg class="edges edges-on" id="edges-on" aria-hidden="true" focusable="false"></svg>' +
               P.map(function (p, i) {
                 var r = routes(p.id).length;
                 return '<button type="button" class="node' + (i === 0 ? " hub" : "") + '" id="node-' + esc(p.id) + '" data-node="' + esc(p.id) + '" aria-pressed="false" aria-label="Project ' + esc(p.no) + ", " + esc(p.title) + ", " + r + (r === 1 ? " route" : " routes") + '">' +
                   '<span class="mk" aria-hidden="true">' + esc(p.no) + '</span><span class="nl" aria-hidden="true">' + esc(p.title) + "</span></button>";
               }).join("") +
             "</div>" +
+            '<p class="map-drag" id="map-drag"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11.5v-2a1.5 1.5 0 0 1 3 0V12M14 10.5a1.5 1.5 0 0 1 3 0V12M17 11.5a1.5 1.5 0 0 1 3 0V16a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-5-2.7L5 16a1.5 1.5 0 0 1 2.5-1.7L8 15"/></svg><span>Click and drag the pieces to see the text better.</span></p>' +
             '<p class="legend lbl"><span><i class="lg-hub"></i>Hub</span><span><i class="lg-v"></i>Visited</span><span><i class="lg-r"></i>Selected route</span></p>' +
             secNote() +
           "</div>" +
@@ -2146,7 +2251,7 @@ span.s4-card-go{border-style:dashed}
 
   /* ---------- the map ---------- */
   MAP = (function () {
-    var stage = $("stage"), svg = $("edges"), pan = $("mp-in"), sec = $("map");
+    var stage = $("stage"), svg = $("edges"), svgOn = $("edges-on"), pan = $("mp-in"), sec = $("map");
     if (!stage) return null;
     /* hand-tuned rest positions in % of the stage: [wide, tall]. Projects added later fall back to a ring. */
     var LAYOUT = {
@@ -2171,7 +2276,7 @@ span.s4-card-go{border-style:dashed}
     function measureMap() {
       var r = stage.getBoundingClientRect(); if (!r.width) return;
       W = r.width; H = r.height; tall = W < 640;
-      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H); svgOn.setAttribute("viewBox", "0 0 " + W + " " + H);
       ids.forEach(function (id) {
         var n = nodes[id], pos = n.lay[tall ? 1 : 0];
         n.hw = n.el.offsetWidth / 2; n.mr = n.mk.offsetHeight / 2; n.bh = n.el.offsetHeight;
@@ -2192,7 +2297,8 @@ span.s4-card-go{border-style:dashed}
       moving = false;
       ids.forEach(function (id) {
         var n = nodes[id];
-        if (!n.drag) {
+        if (!n.drag && n.hold > now) { /* a dropped marker stays where it was put, long enough to read */ }
+        else if (!n.drag) {
           if (stillNow) { n.dx = n.dy = n.vx = n.vy = 0; }
           else {
             n.vx += (-38 * n.dx - 7.5 * n.vx) * dt; n.vy += (-38 * n.dy - 7.5 * n.vy) * dt; n.dx += n.vx * dt; n.dy += n.vy * dt;
@@ -2268,6 +2374,13 @@ span.s4-card-go{border-style:dashed}
         placed.push(pick);
         e.lab.style.transform = "translate3d(" + pick[0].toFixed(1) + "px," + pick[1].toFixed(1) + "px,0)";
       });
+      /* a reason box always wins over an unselected label it covers: that label fades to about a quarter */
+      ids.forEach(function (id, i) {
+        var el = nodes[id].el, cov = false;
+        if (!el.classList.contains("on") && !el.classList.contains("sel") && !el.classList.contains("near") && !el.classList.contains("dragging"))
+          for (var q = 0; q < placed.length; q++) if (hit(boxes[i], placed[q])) { cov = true; break; }
+        el.classList.toggle("covered", cov);
+      });
     }
     function live() { return visible && W > 0 && (dirty || moving || ids.some(function (id) { return nodes[id].drag; })); }
     function paint() {
@@ -2280,11 +2393,14 @@ span.s4-card-go{border-style:dashed}
         el.classList.toggle("on", id === f);
         el.classList.toggle("sel", id === selected);
         el.classList.toggle("dim", !!f && !near[id]);
+        el.classList.toggle("near", !!f && !!near[id] && id !== f);
         el.setAttribute("aria-pressed", id === selected ? "true" : "false");
       });
       EDGES.forEach(function (e) {
         var on = pr ? ((e.a === pr[0] && e.b === pr[1]) || (e.a === pr[1] && e.b === pr[0])) : !!f && (e.a === f || e.b === f);
         e.path.setAttribute("class", "edge" + (on ? " on" : f ? " dim" : ""));
+        /* highlighted routes live on the upper route layer (above the unselected markers) */
+        var layerSvg = on ? svgOn : svg; if (e.path.parentNode !== layerSvg) layerSvg.appendChild(e.path);
         if (on && !tall) {
           var o = e.a === f ? e.b : e.a;
           e.ci = null;
@@ -2319,6 +2435,8 @@ span.s4-card-go{border-style:dashed}
     /* the panel unfolds from its left edge, the side facing the map (reason: it belongs to the marker you picked) */
     var panReady = false;
     function select(id, other) {
+      /* a new selection lets any dropped markers drift home */
+      if (id !== selected) ids.forEach(function (k) { if (nodes[k].hold) { nodes[k].hold = 0; moving = true; } });
       selected = id; pair = other ? [id, other] : null; pan.className = "mp-in" + (id ? " has-fig" : ""); pan.innerHTML = panelHTML(id); paint();
       if (panReady && !still() && pan.animate) {
         pan.animate([{ opacity: 0, transform: "translateX(-14px) scale(.985)", transformOrigin: "0 30%" }, { opacity: 1, transform: "none", transformOrigin: "0 30%" }], { duration: 260, easing: EOUT });
@@ -2353,6 +2471,7 @@ span.s4-card-go{border-style:dashed}
       function end(e) {
         if (!n.drag || (e && e.pointerId !== pid)) return;
         n.drag = false; el.classList.remove("dragging");
+        if (n.moved) { n.hold = performance.now() + 6000; setTimeout(function () { dirty = true; moving = true; last = performance.now(); kick(); }, 6050); }
         try { el.releasePointerCapture(pid); } catch (err) {}
         last = performance.now(); dirty = true; moving = true; kick();
       }
@@ -2376,6 +2495,7 @@ span.s4-card-go{border-style:dashed}
     } else visible = true;
     if ("ResizeObserver" in window) new ResizeObserver(function () { measureMap(); }).observe(stage);
     select(P[0].id);
+    var md = $("map-drag"); if (md) md.lastChild.textContent = matchMedia("(hover: none)").matches ? "Tap and drag the pieces to see the text better." : "Click and drag the pieces to see the text better.";
     return {
       live: live, step: step, measure: measureMap,
       visit: function (id) { if (nodes[id]) nodes[id].el.classList.add("visited"); },
@@ -4384,6 +4504,108 @@ span.s4-card-go{border-style:dashed}
     function label() { var f = MODE === "full"; b.textContent = "Motion: " + (f ? "Full" : MODE === "off" ? "Off" : "Reduced"); b.setAttribute("aria-pressed", f ? "true" : "false"); }
     b.addEventListener("click", function () { setMode(MODE === "full" ? "reduced" : "full"); label(); kick(); });
     label();
+  })();
+
+  /* ---------- hover responses: one delegated listener, one tracked element (fine pointers only) ----------
+     Recipes, by selector (first match wins, innermost element under the pointer is the one that tracks):
+       btn   buttons and pills: sheen follows the pointer, 1.03
+       chip  tags: fill warms, 1.04
+       fact  fact numbers: nudge up 2px, underline draws
+       row   table rows: tint follows the pointer, first-cell accent bar
+       link  links in text, top bar and footer: underline thickens to the accent
+       item  list items (On this page, prev/next, link lists, indexes, map list, back-matter entries): indent 4px
+       mark  the wordmark: italic leans, caps track out
+       theme the theme switch: knob leans toward the pointer
+       code  code blocks: band under the pointer's line
+       fig   content figures, the film poster, route thumbnails, map and expanded hero images: tilt, image 1.03
+       plate main-page image plates (their tilt is the motion layer's): image 1.03, diagram contrast
+       cards small cards (rail, content cards, map panel, counter, On this page): glow follows, edge lights, lift
+       cardw wide text boxes (case-study sections, callouts, tables, back matter, footer): glow follows, edge, 1.005
+     The card around a hovered inner element keeps its lit state (without tracking). */
+  (function () {
+    var FH = matchMedia("(hover: hover) and (pointer: fine)");
+    var R = [
+      ["btn", ".cta,.ghost,.pill,.btn-tour,.rbtn,.cue,.bchip,.tourbox button,.s4-arw"],
+      ["chip", ".tags li"],
+      ["fact", ".fact,.c-stat"],
+      ["row", ".c-tbl tbody tr"],
+      ["link", ".d-sec a:not([class]),.d-intro a:not([class]),.c-la,.s-leads a,.end-links a,.foot ul a,.toplink,.mo-ctl,.c-cap a,.seemap"],
+      ["item", ".d-idx li,.d-nav a,.c-links:not(.btns) li,.ch-idx li,.end-idx li,.mp-conns li,.entry"],
+      ["mark", ".mark"],
+      ["theme", ".theme"],
+      ["code", ".c-code"],
+      ["fig", ".c-fig,.c-yt,.br-pl,.mp-fig,.d-fig"],
+      ["plate", ".s-media .fig,.tp-plate .fig"],
+      ["cards", ".card,.c-card,.c-embed,.mpanel,.ctr-box,.d-idx"],
+      ["cardw", ".d-sheet,.c-call,.secnote,.c-tbl,.b-block,.ai-box,.foot"]
+    ];
+    var ALL = R.map(function (x) { return x[1]; }).join(","), CARD = R[11][1] + "," + R[12][1];
+    var cur = null, box = null, px = 0, py = 0, raf = 0;
+    function recipe(el) { for (var i = 0; i < R.length; i++) if (el.matches(R[i][1])) return R[i][0]; return null; }
+    function on(el) {
+      var r = recipe(el); if (!r) return;
+      el.classList.add("hv-" + r, "hv");
+      if (r === "fig" || r === "cards" || r === "btn" || r === "chip") el.style.willChange = "transform";
+    }
+    function off(el) {
+      if (!el) return;
+      el.classList.remove("hv");
+      setTimeout(function () { if (!el.classList.contains("hv")) el.style.willChange = ""; }, 400);
+    }
+    function set(t) {
+      if (t === cur) return;
+      var nb = t && t.parentElement ? t.parentElement.closest(CARD) : null;
+      if (cur && cur !== nb) off(cur);
+      if (box && box !== nb && box !== t) off(box);
+      cur = t; box = nb && nb !== t ? nb : null;
+      if (cur) on(cur);
+      if (box) on(box);
+    }
+    function frame() {
+      raf = 0;
+      if (!cur) return;
+      var r = cur.getBoundingClientRect(); if (!r.width || !r.height) return;
+      cur.style.setProperty("--mx", clamp((px - r.left) / r.width, 0, 1).toFixed(3));
+      cur.style.setProperty("--my", clamp((py - r.top) / r.height, 0, 1).toFixed(3));
+    }
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse" || !FH.matches) return;
+      set(e.target.closest ? e.target.closest(ALL) : null);
+      px = e.clientX; py = e.clientY;
+      if (cur && !raf) raf = requestAnimationFrame(frame);
+    }, { passive: true });
+    document.addEventListener("pointerout", function (e) { if (!e.relatedTarget) set(null); });
+    /* keyboard: the same resting look, centred, no pointer-follow */
+    document.addEventListener("focusin", function (e) {
+      var t = e.target.closest && e.target.closest(ALL);
+      if (!t || !e.target.matches(":focus-visible")) return;
+      t.style.removeProperty("--mx"); t.style.removeProperty("--my");
+      on(t); t.__kf = 1;
+    });
+    document.addEventListener("focusout", function (e) {
+      var t = e.target.closest && e.target.closest(ALL);
+      if (t && t.__kf) { t.__kf = 0; if (t !== cur && t !== box) off(t); }
+    });
+  })();
+
+  /* ---------- the quiet offer to reduce motion: only when the OS asks for it, once, remembered ---------- */
+  (function () {
+    var seen = false; try { seen = !!localStorage.getItem("fg-motion") || localStorage.getItem("fg-motion-hint") === "1"; } catch (e) {}
+    if (!RM.matches || seen || MODE !== "full") return;
+    function hint() {
+      var s = document.createElement("span");
+      s.className = "mo-hint";
+      s.innerHTML = '<button type="button" data-mo-reduce>Too much motion? Reduce it</button><button type="button" data-mo-dismiss aria-label="Dismiss">&times;</button>';
+      return s;
+    }
+    var spots = [], ctl = $("mo-ctl"), about = document.querySelector("#chrome .toplink");
+    if (ctl && ctl.parentNode) { var a = hint(); ctl.parentNode.appendChild(a); spots.push(a); }
+    if (about) { var b = hint(); about.parentNode.insertBefore(b, about); spots.push(b); }
+    function done() { spots.forEach(function (x) { x.remove(); }); try { localStorage.setItem("fg-motion-hint", "1"); } catch (e) {} }
+    spots.forEach(function (sp) {
+      sp.querySelector("[data-mo-reduce]").addEventListener("click", function () { if (MODE === "full" && ctl) ctl.click(); else setMode("reduced"); done(); });
+      sp.querySelector("[data-mo-dismiss]").addEventListener("click", done);
+    });
   })();
 
   /* ---------- contact popover ---------- */
