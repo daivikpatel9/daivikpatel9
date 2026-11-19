@@ -1,6 +1,6 @@
 /* Shared project data for the three front-page concepts.
    Every concept reads this one list, so projects and their connections are fed in dynamically. */
-window.SITE = "../";
+window.SITE = "";
 window.ME = {
   name: "Daivik Patel",
   role: "Computer Science · UMass Lowell",
