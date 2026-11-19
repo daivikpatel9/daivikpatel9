@@ -171,7 +171,7 @@ body{--fg:var(--base-ink);--muted:var(--base-muted);--rule:var(--base-line);--ho
 .card,.mpanel,.elabel,.secnote,.nl,.pop,.tourbox,.ctr-box,.cue,.c-call,.c-card,.c-embed,.d-idx,.lbox p,.b-block,.ai-box,.foot,.theme-joke{--fg:var(--card-fg);--muted:var(--card-fg);--rule:var(--card-rule);--link:var(--card-link);--focus:var(--card-link);--solid:var(--card);background:var(--card);color:var(--fg)}
 
 *,*::before,*::after{box-sizing:border-box}
-html{background:var(--ce-1);-webkit-text-size-adjust:100%}
+html{background:var(--ce-1);-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
 body{margin:0;background:transparent;color:var(--fg);font-family:var(--sans);font-size:1.0625rem;font-weight:500;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .d-lock,.d-lock body{overflow:hidden}
 img{max-width:100%;display:block}
@@ -1343,6 +1343,9 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
   }, true);
   var N = P.length;
   var body = document.body, main = $("main");
+  /* Back would otherwise restore the scroll position saved when the project opened, after we had already placed the
+     page and measured the stop: everything then landed some pixels off and snapped. The page places itself. */
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
   var RM = matchMedia("(prefers-reduced-motion: reduce)");
   /* ?motion=on (or localStorage s4-motion=on) forces motion for testing, even with reduced motion set */
   /* motion modes (reason: "reduce" in the OS should calm the page, not freeze it):
@@ -1379,7 +1382,9 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     MSTAT.enabled = !still(); MSTAT.osReduced = RM.matches; MSTAT.reduced = MODE === "reduced"; MSTAT.mode = MODE; MSTAT.viewport = innerWidth + "x" + innerHeight;
     if (MSTAT.counts[kind] != null) MSTAT.counts[kind]++;
     var key = msg.replace(/#\S+/, "#");
-    if (MDEBUG && !mlogged[key]) { mlogged[key] = 1; try { console.log("motion: " + msg); } catch (e) {} }
+    var once = kind === "parallax" || kind === "reveal";
+    if (MDEBUG && !once) { (MSTAT.log = MSTAT.log || []).push(msg); if (MSTAT.log.length > 200) MSTAT.log.shift(); }
+    if (MDEBUG && (!once || !mlogged[key])) { mlogged[key] = 1; try { console.log("motion: " + msg); } catch (e) {} }
   }
   var NARROW = matchMedia("(max-width: 767px)");
   var FINE = matchMedia("(hover: hover) and (pointer: fine)");
@@ -2028,7 +2033,10 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       lin = still(); dur = lin ? 200 : Math.round((ms || 1200) * (lite() ? .6 : 1)); t0 = performance.now(); metaAt = -1;
       mlog("colour", "colour tween start (" + dur + "ms)");
       if (!raf) raf = requestAnimationFrame(frame);
+      clearTimeout(ceT);
+      ceT = setTimeout(function () { if (raf) { cancelAnimationFrame(raf); raf = 0; } frame(t0 + dur + 1); }, dur + 250);
     }
+    var ceT = 0;
     function snap(st) {
       if (st) state = st;
       to = target(state); cur = {}; from = {};
@@ -3810,11 +3818,13 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
   var layer = $("dlayer"), dlg = $("dialog"), DT = { open: false, closing: false, opening: false, trav: false, closeWait: false, id: null, pushed: false, after: null, doneFn: null };
   var OUTSIDE = [main, $("cbl"), $("cbr"), $("tourbox")];   /* the top bar stays usable: it does not change */
   function setInert(on) { OUTSIDE.forEach(function (el) { if (!el) return; if (on) { el.setAttribute("inert", ""); el.setAttribute("aria-hidden", "true"); } else { el.removeAttribute("inert"); el.removeAttribute("aria-hidden"); } }); }
-  function lock() { var sb = window.innerWidth - document.documentElement.clientWidth; document.documentElement.classList.add("d-lock"); if (sb > 0) body.style.paddingRight = sb + "px"; }
+  function lock() { document.documentElement.classList.add("d-lock"); }   /* scrollbar-gutter: stable keeps the width */
   function unlock() { document.documentElement.classList.remove("d-lock"); body.style.paddingRight = ""; }
   var lnT = $("ln-t"), lnB = $("ln-b"), chip = $("d-back");
   var canAnim = typeof layer.animate === "function";
-  var EXPAND_MS = 600, TRAVEL_EASE = "cubic-bezier(.65,0,.35,1)";
+  /* ?slow=N stretches every movement by N (debugging aid) */
+  var SLOW = (function () { var m = /[?&]slow=([0-9.]+)/.exec(location.search); return m ? Math.max(.1, parseFloat(m[1]) || 1) : 1; })();
+  var EXPAND_MS = 600 * SLOW, TRAVEL_EASE = "cubic-bezier(.65,0,.35,1)";
   function ty(y) { return "translateY(" + y.toFixed(1) + "px)"; }
   /* where the two lines rest while open: just under the bar, and at the bottom edge (the --ln-gap insets) */
   function edges() { var vh = window.innerHeight, g = 10; return { t: barPx() + g - 1, b: vh - g, vh: vh }; }
@@ -3878,7 +3888,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     s.down.forEach(function (el) { go(el, pl.dDown); });
     /* the stop itself rides up with the top line while its own copy of the content gives way to the expanded one */
     var self = [{ transform: "translateY(0px)", opacity: 1 }, { transform: ty(-pl.dLine * .4), opacity: 0, offset: .4 }, { transform: ty(-pl.dLine), opacity: 0 }];
-    if (!opening) self = [{ transform: ty(-pl.dLine), opacity: 0 }, { transform: ty(-pl.dLine * .4), opacity: 0, offset: .6 }, { transform: "translateY(0px)", opacity: 1 }];
+    if (!opening) self = [{ transform: ty(-pl.dLine), opacity: 0 }, { transform: ty(-pl.dLine * .6), opacity: 1, offset: .4 }, { transform: "translateY(0px)", opacity: 1 }];
     A.push(g.a.animate(self, opt));
     return A;
   }
@@ -4067,9 +4077,122 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     });
   }
 
+  /* ---------- exact handovers (reason: a transition must end exactly where the real layout puts things) ----------
+     Rects are measured from the real states (the final state is laid out first, scroll positions included), and every
+     moving piece ends on its measured real rect, so there is nothing to swap at the end.
+     Image: one fixed wrapper flies from the first frame's rect to the last's (position, size, corner radius), holding two
+     layers, each a copy of one end's frame (its plate, border, shadow, filter and own diagram colours, read live) with the
+     picture fitted to the wrapper the same way the real frame fits it (cover or contain, so it never distorts); the two
+     layers cross-fade on the same clock. At the end the wrapper is exactly on the real figure and is removed in the same
+     frame the figure is shown.
+     Text: line breaks differ between sizes, so the outgoing text moves toward the target while fading out and the
+     incoming real text fades in at its real place, moving its last few pixels; the two overlap in the middle. */
+  function settleReveals(root) {
+    if (!root) return;
+    [].forEach.call(root.querySelectorAll(".lr-arm,.lf-arm,.ta-arm,.dv-arm,.cr-arm"), function (x) { x.classList.remove("lr-arm", "lf-arm", "ta-arm", "dv-arm", "cr-arm"); });
+    [].forEach.call(root.querySelectorAll("[data-lr]"), function (h) { h.setAttribute("data-lr", "done"); });
+    [].forEach.call(root.querySelectorAll("*"), function (x) { if (x.__en === 1) { x.__en = 2; x.style.clipPath = ""; x.style.opacity = ""; } });
+    if (root.getAnimations) root.getAnimations({ subtree: true }).forEach(function (a) { try { a.finish(); } catch (e) {} });
+  }
+  function rectOf(el) { var r = el.getBoundingClientRect(); return { l: r.left, t: r.top, w: r.width, h: r.height }; }
+  function natOf(m) {
+    if (!m) return [400, 300];
+    if (m.tagName === "IMG") return [m.naturalWidth || 400, m.naturalHeight || 300];
+    var vb = m.viewBox && m.viewBox.baseVal; return vb && vb.width ? [vb.width, vb.height] : [400, 300];
+  }
+  var PLATE_VARS = ["--plate", "--plate-bg", "--plate-ink", "--plate-fill", "--plate-highlight"];
+  function figLayer(fig) {
+    var cs = getComputedStyle(fig), m = fig.querySelector("svg.dg, img"), L = document.createElement("div"), bw = parseFloat(cs.borderTopWidth) || 0;
+    var cut = fig.classList.contains("cutout");
+    L.style.cssText = "position:absolute;inset:0;box-sizing:border-box;border-radius:inherit;overflow:" + (cut ? "visible" : "hidden") +
+      ";background-color:" + cs.backgroundColor + ";background-image:" + cs.backgroundImage + ";border:" + bw + "px solid " + cs.borderTopColor + ";box-shadow:" + cs.boxShadow;
+    var nat = natOf(m), c = m ? m.cloneNode(true) : null;
+    if (c) {
+      var ms = getComputedStyle(m);
+      c.removeAttribute("id"); c.removeAttribute("loading"); c.setAttribute("aria-hidden", "true");
+      if (c.tagName.toLowerCase() === "svg") { c.setAttribute("width", nat[0]); c.setAttribute("height", nat[1]); }
+      c.style.cssText = "position:absolute;left:0;top:0;margin:0;max-width:none;max-height:none;padding:0;width:" + nat[0] + "px;height:" + nat[1] + "px;transform-origin:0 0;object-fit:fill;scale:none;translate:none;filter:" + ms.filter;
+      L.appendChild(c);
+    }
+    return { el: L, media: c, nat: nat, fit: fig.classList.contains("cover") ? "cover" : "contain", bw: bw, src: fig };
+  }
+  function placeOf(ly, box) {
+    var iw = box.w - 2 * ly.bw, ih = box.h - 2 * ly.bw, n = ly.nat;
+    var sc = ly.fit === "cover" ? Math.max(iw / n[0], ih / n[1]) : Math.min(iw / n[0], ih / n[1]);
+    return "translate(" + ((iw - n[0] * sc) / 2).toFixed(2) + "px," + ((ih - n[1] * sc) / 2).toFixed(2) + "px) scale(" + sc.toFixed(5) + ")";
+  }
+  function flyFig(fromFig, toFig, dur, ease) {
+    var F = rectOf(fromFig), T = rectOf(toFig);
+    if (!F.w || !T.w || !canAnim) return null;
+    var A = figLayer(fromFig), B = figLayer(toFig), W = document.createElement("div");
+    var rA = parseFloat(getComputedStyle(fromFig).borderTopLeftRadius) || 0, rB = parseFloat(getComputedStyle(toFig).borderTopLeftRadius) || 0;
+    W.setAttribute("aria-hidden", "true"); W.className = "fx-fly";
+    W.style.cssText = "position:fixed;z-index:47;pointer-events:none;margin:0;left:" + F.l + "px;top:" + F.t + "px;width:" + F.w + "px;height:" + F.h + "px;border-radius:" + rA + "px";
+    W.appendChild(A.el); W.appendChild(B.el); B.el.style.opacity = "0";
+    document.body.appendChild(W);
+    var o = { duration: dur, easing: ease, fill: "forwards" }, an = [];
+    an.push(W.animate([{ left: F.l + "px", top: F.t + "px", width: F.w + "px", height: F.h + "px", borderRadius: rA + "px" },
+      { left: T.l + "px", top: T.t + "px", width: T.w + "px", height: T.h + "px", borderRadius: rB + "px" }], o));
+    [A, B].forEach(function (ly) { if (ly.media) an.push(ly.media.animate([{ transform: placeOf(ly, F) }, { transform: placeOf(ly, T) }], o)); });
+    an.push(A.el.animate([{ opacity: 1 }, { opacity: 0 }], o), B.el.animate([{ opacity: 0 }, { opacity: 1 }], o));
+    /* each layer keeps its own side's diagram colours, which the colour engine is still blending */
+    var live = true;
+    (function vars() {
+      if (!live) return;
+      [A, B].forEach(function (ly) { var cs = getComputedStyle(ly.src); PLATE_VARS.forEach(function (k) { var v = cs.getPropertyValue(k); if (v) ly.el.style.setProperty(k, v); }); });
+      requestAnimationFrame(vars);
+    })();
+    return { anims: an, end: function () {
+      live = false;
+      var r = rectOf(W), t = rectOf(toFig), e = Math.max(Math.abs(r.l - t.l), Math.abs(r.t - t.t), Math.abs(r.w - t.w), Math.abs(r.h - t.h));
+      W.remove(); return e;
+    } };
+  }
+  function crossText(outEl, inEl, dur, ease, proxyOut) {
+    var F = rectOf(outEl), T = rectOf(inEl), co = getComputedStyle(outEl), fo = parseFloat(co.fontSize) || 16, fi = parseFloat(getComputedStyle(inEl).fontSize) || 16;
+    var mover = outEl, o = { duration: dur, easing: ease, fill: "forwards" };
+    if (proxyOut) {
+      mover = outEl.cloneNode(true); mover.removeAttribute("id"); mover.removeAttribute("tabindex"); mover.setAttribute("aria-hidden", "true"); mover.classList.add("fx-fly");
+      mover.style.cssText = "position:fixed;z-index:47;pointer-events:none;margin:0;visibility:visible;left:" + F.l + "px;top:" + F.t + "px;width:" + F.w + "px;max-width:none;color:" + co.color +
+        ";font-size:" + co.fontSize + ";line-height:" + co.lineHeight + ";font-family:" + co.fontFamily + ";font-style:" + co.fontStyle + ";font-weight:" + co.fontWeight;
+      document.body.appendChild(mover);
+    }
+    mover.style.transformOrigin = "0 0";
+    function lim(v) { return Math.max(-18, Math.min(18, v)); }
+    var an = [
+      mover.animate([{ transform: "none", opacity: 1 }, { opacity: 1, offset: .2 }, { opacity: 0, offset: .62 },
+        { transform: "translate(" + (T.l - F.l).toFixed(1) + "px," + (T.t - F.t).toFixed(1) + "px) scale(" + (fi / fo).toFixed(4) + ")", opacity: 0 }], o),
+      inEl.animate([{ transform: "translate(" + lim(F.l - T.l).toFixed(1) + "px," + lim(F.t - T.t).toFixed(1) + "px)", opacity: 0 }, { opacity: 0, offset: .3 },
+        { opacity: 1, offset: .75 }, { transform: "none", opacity: 1 }], o)
+    ];
+    return { anims: an, proxy: proxyOut ? mover : null, inEl: inEl, T: T };
+  }
+  function handover(fly, texts) {
+    var e = 0;
+    if (fly) e = Math.max(e, fly.end());
+    texts.forEach(function (t) { var r = rectOf(t.inEl); e = Math.max(e, Math.abs(r.l - t.T.l), Math.abs(r.t - t.T.t)); if (t.proxy) t.proxy.remove(); });
+    return e;
+  }
+  /* the end of a transition is guaranteed: every participant settled, or duration + 250ms passed (a background or
+     throttled page may never deliver "finished"), whichever comes first; the caller's clean-up runs once */
+  function allDone(anims, ms) {
+    var all = Promise.all(anims.map(function (a) { return a && a.finished ? a.finished.catch(function () {}) : null; }));
+    return Promise.race([all, new Promise(function (r) { setTimeout(r, (ms || EXPAND_MS) + 250); })]);
+  }
+  /* one transition at a time: a new one first finishes the current one instantly through its own clean-up */
+  function finishTx() { if (DT.tx) { var t = DT.tx; DT.tx = null; t(); } }
+  /* watchdog: nothing may be left mid-air after a transition's expected end */
+  function watchdog(ms) {
+    setTimeout(function () {
+      if (DT.tx) { mlog("expand", "watchdog cleanup (forced finish)"); finishTx(); }
+      var left = document.querySelectorAll(".fx-fly");
+      if (left.length && !DT.tx) { [].forEach.call(left, function (x) { x.remove(); }); mlog("expand", "watchdog cleanup"); }
+    }, ms + 400);
+  }
   function openDetail(id, o) {
     if (!$("d-" + id)) return;
     o = o || {};
+    finishTx();
     if (DT.closing && DT.doneFn) DT.doneFn();
     if (DT.open) { travelTo(id); return; }
     if (DT.opening) return;
@@ -4077,8 +4200,17 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     closePop();
     var animate = o.animate !== false && canAnim;
     DT.opening = true;
+    /* the expanded picture is decoded before the move starts (at most 150ms), so the hand-over is never a swap */
     function go() {
       if (DT.open) { DT.opening = false; return; }
+      var pg0 = $("d-" + id); hydrate(pg0);
+      var bi = pg0 && pg0.querySelector(".d-fig img");
+      var wait = animate && bi && bi.decode ? Promise.race([bi.decode().catch(function () {}), new Promise(function (r) { setTimeout(r, 150); })]) : null;
+      if (wait) wait.then(go2); else go2();
+    }
+    function go2() {
+      if (DT.open) { DT.opening = false; return; }
+      settleReveals(anchorOf(id));
       var e = edges(), g = animate && !still() ? geo(id) : null, pl = g ? pushPlan(g, e) : null;
       var box = g ? g.box : contentBox();
       DT.open = true; DT.after = null;
@@ -4092,37 +4224,52 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       layer.hidden = false;
       dlg.scrollTop = 0;
       storyOn(id);
+      if (o.sketch) scrollToSketch(id);   /* scroll positions are set before anything is measured */
       placeLn(lnT, e.t, box); placeLn(lnB, e.b, box); showLines(true);
       var h = $("dt-" + id);
       function settle() {
         DT.opening = false;
         main.style.visibility = "hidden";
-        if (o.sketch) scrollToSketch(id); else dlg.scrollTop = 0;
         drawForks();
       }
       if (!animate) settle();
       else if (!pl) {
         /* reduced motion (or nothing to measure): a 150ms crossfade to the same end state */
         var f = fades([layer, lnT, lnB], 0, 1, 150).concat(fades([main], 1, 0, 150), [runSun(true, 150, "linear")]);
-        f[0].onfinish = function () { settle(); f.forEach(function (x) { x.cancel(); }); };
+        var fdone = false, fend = function () { if (fdone) return; fdone = true; settle(); f.forEach(function (x) { try { x.cancel(); } catch (y) {} }); };
+        allDone(f, 150).then(fend);
       } else {
         layer.classList.add("is-anim");
         mlog("expand", "expand start");
-        var pairs = shared(id), rest = restEls(id), anims = [];
-        hideOrig(id, true);
-        pairs.forEach(function (x) { x[1].style.transformOrigin = "0 0"; anims.push(x[1].animate([{ transform: flipFrom(x[0], x[1]) }, { transform: "none" }], { duration: EXPAND_MS, easing: EOUT })); });
-        rest.forEach(function (el) { el.style.opacity = "0"; });
-        anims = anims.concat(runPush(g, pl, true, EXPAND_MS, EOUT), runLines(pl, e, true, EXPAND_MS, EOUT), [runSun(true, EXPAND_MS, EOUT)]);
-        anims[anims.length - 1].onfinish = function () {
-          mlog("expand", "expand end");
+        var pairs = o.sketch ? [] : shared(id), rest = restEls(id), anims = [], fly = null, texts = [], over = false;
+        /* the single clean-up: runs once, whatever happened (normal end, timeout, interruption or an error) */
+        var finishOpen = function () {
+          if (over) return; over = true; if (DT.tx === finishOpen) DT.tx = null;
+          var err = 0;
+          try { err = handover(fly, texts); } catch (x) { [].forEach.call(document.querySelectorAll(".fx-fly"), function (n) { n.remove(); }); }
+          mlog("expand", "expand end, max handover error " + err.toFixed(1) + "px");
+          pairs.forEach(function (x) { x[1].style.visibility = ""; });
           layer.classList.remove("is-anim");
           main.style.visibility = "hidden";
           hideOrig(id, false);
-          anims.forEach(function (x) { x.cancel(); });
-          rest.forEach(function (el) { el.style.opacity = ""; el.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: EOUT }); });
+          anims.forEach(function (x) { try { x.cancel(); } catch (y) {} });
+          rest.forEach(function (el) { el.style.opacity = ""; if (el.animate && !still()) el.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 320, easing: EOUT }); });
           settle();
           unfoldIdx(id);
         };
+        DT.tx = finishOpen;
+        try {
+        rest.forEach(function (el) { el.style.opacity = "0"; });
+        /* measured before anything moves: first rects from the stop, last rects from the laid-out expanded view */
+        pairs.forEach(function (x) {
+          if (x[1].tagName === "FIGURE") { fly = flyFig(x[0], x[1], EXPAND_MS, EOUT); if (fly) { anims = anims.concat(fly.anims); x[1].style.visibility = "hidden"; } }
+          else { var ct = crossText(x[0], x[1], EXPAND_MS, EOUT, true); texts.push(ct); anims = anims.concat(ct.anims); }
+        });
+        hideOrig(id, true);
+        anims = anims.concat(runPush(g, pl, true, EXPAND_MS, EOUT), runLines(pl, e, true, EXPAND_MS, EOUT), [runSun(true, EXPAND_MS, EOUT)]);
+        } catch (x) { finishOpen(); }
+        /* clean-up in one frame, after every participant has finished (or the hard timeout) */
+        if (!over) { allDone(anims).then(finishOpen); watchdog(EXPAND_MS); }
       }
       h.focus({ preventScroll: true });
     }
@@ -4136,6 +4283,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
      crossed, up to three). The target then eases forward to full size and its lines return to the edges. */
   function orderOf(id) { var p = byId(id); return p ? P.indexOf(p) : N; }
   function travelTo(id) {
+    finishTx();
     if (id === DT.id || !$("d-" + id) || DT.trav) return;
     var from = orderOf(DT.id), to = orderOf(id), dir = to >= from ? 1 : -1, n = Math.max(1, Math.abs(to - from));
     storyOff(); ytReset(); lbClose(true);
@@ -4187,16 +4335,21 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     /* the colour flows from the old project's set to the new one's, started with the move and outlasting it */
     CE.go({ mode: "p", id: id }, 1800);
     setTimeout(arrive, dur / 2);
-    anims[1].onfinish = function () {
+    var tover = false;
+    var finishTravel = function () {
+      if (tover) return; tover = true; if (DT.tx === finishTravel) DT.tx = null;
       mlog("travel", "travel end");
       ghost.remove(); seams.forEach(function (x) { x.remove(); });
-      anims.forEach(function (x) { x.cancel(); });
+      anims.forEach(function (x) { try { x.cancel(); } catch (y) {} });
       finish();
       unfoldIdx(id);
     };
+    DT.tx = finishTravel;
+    allDone(anims, dur).then(finishTravel);
   }
   function swapDetail(id) { travelTo(id); }
   function closeDetail() {
+    finishTx();   /* an unfinished open (or travel) jumps to its end state first */
     if (!DT.open || DT.closing) return;
     if (DT.trav) { DT.closeWait = true; return; }
     DT.closing = true;
@@ -4207,6 +4360,9 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     /* place the main page at the stop you are viewing now (it may not be the one you opened) */
     var s = anchorOf(id);
     if (s) { var r0 = s.getBoundingClientRect(); window.scrollTo(0, r0.top + window.scrollY - Math.max(barPx() + 16, (window.innerHeight - r0.height) / 2)); }
+    /* the stop's parallax and tilt are put at rest before measuring (they ease back in from zero afterwards) */
+    if (s && MO && MO.reset) MO.reset(s);
+    settleReveals(s);
     var target = returnTo(id), anims = [];
     body.classList.remove("d-open");
     chip.hidden = true;
@@ -4219,6 +4375,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       layer.hidden = true; layer.classList.remove("is-anim"); DT.open = false; DT.closing = false;
       anims.forEach(function (x) { try { x.cancel(); } catch (err) {} });
       hideOrig(id, false);
+      shared(id).forEach(function (x) { x[1].style.visibility = ""; });
       restEls(id).forEach(function (el) { el.style.opacity = ""; });
       dlg.style.opacity = "";
       showLines(false);
@@ -4232,19 +4389,32 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     var e = edges(), g = still() ? null : geo(id);
     if (!g) {
       anims = fades([layer, lnT, lnB], 1, 0, 150).concat(fades([main], 0, 1, 150), [runSun(false, 150, "linear")]);
-      anims[0].onfinish = done;
+      allDone(anims, 150).then(done);
       return;
     }
-    var pl = pushPlan(g, e), pairs = shared(id), rest = restEls(id);
+    var pl = pushPlan(g, e), pairs = shared(id), rest = restEls(id), fly = null, texts = [];
     placeLn(lnT, e.t, g.box); placeLn(lnB, e.b, g.box);
-    dlg.scrollTop = 0;
+    dlg.scrollTop = 0;   /* before measuring */
     layer.classList.add("is-anim");
-    hideOrig(id, true);
     rest.forEach(function (el) { anims.push(el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: "ease-out", fill: "forwards" })); });
-    pairs.forEach(function (x) { x[1].style.transformOrigin = "0 0"; anims.push(x[1].animate([{ transform: "none" }, { transform: flipFrom(x[0], x[1]) }], { duration: EXPAND_MS, easing: EOUT, fill: "forwards" })); });
+    /* first rects from the expanded view, last rects from the stop at its final place (measured before it moves) */
+    pairs.forEach(function (x) {
+      if (x[1].tagName === "FIGURE") { fly = flyFig(x[1], x[0], EXPAND_MS, EOUT); if (fly) { anims = anims.concat(fly.anims); x[1].style.visibility = "hidden"; x[0].style.visibility = "hidden"; } }
+      else { var ct = crossText(x[1], x[0], EXPAND_MS, EOUT, false); texts.push(ct); anims = anims.concat(ct.anims); }
+    });
     anims = anims.concat(runPush(g, pl, false, EXPAND_MS, EOUT), runLines(pl, e, false, EXPAND_MS, EOUT), [runSun(false, EXPAND_MS, EOUT)]);
     mlog("expand", "collapse start");
-    anims[anims.length - 1].onfinish = function () { mlog("expand", "collapse end"); done(); };
+    var over = false;
+    var finishClose = function () {
+      if (over) return; over = true; if (DT.tx === finishClose) DT.tx = null;
+      var err = 0;
+      try { err = handover(fly, texts); } catch (x) { [].forEach.call(document.querySelectorAll(".fx-fly"), function (n) { n.remove(); }); }
+      mlog("expand", "collapse end, max handover error " + err.toFixed(1) + "px");
+      done();
+    };
+    DT.tx = finishClose;
+    allDone(anims).then(finishClose);
+    watchdog(EXPAND_MS);
   }
   /* Back, Esc, the wordmark: let the browser history close it when we pushed an entry, so Back and the button agree */
   function requestClose(after) {
@@ -4486,7 +4656,11 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     onEnter([].slice.call(main.querySelectorAll(".s-div")), function (d) { d.classList.add("dv-arm"); }, function (d) { d.classList.remove("dv-arm"); });
     measureM();
     window.addEventListener("load", measureM);
-    return { step: step, measure: measureM };
+    function reset(sec) {
+      items.forEach(function (it) { if (it.sec === sec) it.els.forEach(function (x) { x.c = 0; x.el.style.transform = ""; }); });
+      tilts.forEach(function (t) { if (sec.contains(t.el)) { t.x = t.y = t.tx = t.ty = 0; t.el.style.transform = ""; } });
+    }
+    return { step: step, measure: measureM, reset: reset };
   })();
   kick();
 
