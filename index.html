@@ -236,7 +236,7 @@ main{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip}
 .frame.cutout{background:none;border:0;border-radius:0;overflow:visible}
 /* bare photo compositions: they fade into the page at their edges, so no plate, frame, mat or shadow; fitted whole
    (they carry labels); a soft mask on the outer 6% so no rectangle edge can show against the screen's light */
-.frame.bare{background:none;border:0;border-radius:0;overflow:visible;box-shadow:none}
+.frame.bare{background:var(--img-veil);border:0;border-radius:0;overflow:visible;box-shadow:none}
 .frame.bare img{width:100%;height:100%;object-fit:contain;filter:none;
   -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent);-webkit-mask-composite:source-in;
   mask-image:linear-gradient(90deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent);mask-composite:intersect}
@@ -467,8 +467,17 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 .mconn{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:7}
 .mconn path{fill:none;stroke:var(--link);stroke-width:1.5}
 .mconn circle{fill:var(--link)}
-.map-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:clamp(16px,2.5vw,36px);align-items:start}
-.stage{position:relative;height:clamp(480px,66vh,620px);border:1px solid var(--rule);border-radius:16px;overflow:hidden;background-image:radial-gradient(circle,var(--rule) 1px,transparent 1.3px);background-size:28px 28px}
+/* the map and its panel side by side (panel top-right, level with the map) from about 560px up; the hint, legend and
+   security note sit below both. On phones the panel comes straight under the map. */
+.map-grid{--stage-h:clamp(480px,66vh,620px);position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,370px);gap:clamp(16px,2.5vw,36px);align-items:start}
+.mp-pick,.mp-chips{display:none}
+.mp-pick{margin:0 0 .8rem}
+/* keep the panel label clear of its close button */
+.mp-in>p.lbl:not(.mp-h){padding-right:40px}
+.mp-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.mp-chips button{display:inline-flex;align-items:center;gap:.35rem;min-height:36px;padding:.3rem .7rem;border:1px solid var(--rule);border-radius:999px;background:transparent;cursor:pointer;font-weight:600;font-size:.9rem;line-height:1.2;text-align:left}
+.mp-chips button:hover{border-color:var(--link)}
+.stage{position:relative;height:var(--stage-h);border:1px solid var(--rule);border-radius:16px;overflow:hidden;background-image:radial-gradient(circle,var(--rule) 1px,transparent 1.3px);background-size:28px 28px}
 /* calm the map: a veil in the (engine-blended) screen base, clear at the box's edges and about 87% in the middle,
    so the contour lines run into the edges and fade to ~13% behind the markers; it softens the dotted grid too */
 .stage::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:color-mix(in srgb,var(--ce-1) 87%,transparent);
@@ -543,7 +552,13 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 /* the divider between projects: a content-width hairline with the number just under it.
    reason: the lines are the page's structure, and they are what stretches apart when a project expands. */
 .s-rule{position:relative;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.2rem;max-width:var(--max);margin:0 auto clamp(14px,2.5vh,28px);padding-top:16px}
-.s-div{position:absolute;left:0;right:0;top:0;height:1px;background:var(--rule);transform-origin:0 50%;transition:transform .6s var(--ease-out)}
+/* the divider: about 2px, confident ink, tapered ends; the page's contour lines fade in a soft band around it
+   (the band is a base-coloured veil under the line, so it travels with it) */
+.s-div{--ln-c:color-mix(in srgb,var(--fg) 62%,transparent);position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--ln-c) 8%,var(--ln-c) 92%,transparent);transform-origin:0 50%;transition:transform .6s var(--ease-out)}
+.s-div::before{content:"";position:absolute;left:-6%;right:-6%;top:-36px;bottom:-36px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--base-bg) 74%,transparent) 42%,color-mix(in srgb,var(--base-bg) 74%,transparent) 58%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 12%,var(--base-ink) 88%,transparent);mask-image:linear-gradient(90deg,transparent,var(--base-ink) 12%,var(--base-ink) 88%,transparent)}
+@media (max-width:767px){.s-div{height:1.5px}}
 /* divider draws itself from the left when it first enters (armed only by JS, only while off screen) */
 .s-div.dv-arm{transform:scaleX(0)}
 .s-end{position:relative;max-width:var(--max);height:1px;margin:clamp(56px,8vh,80px) auto 0}
@@ -641,7 +656,13 @@ html.pc-on.dg-ok body{--plate:color-mix(in srgb,var(--base-bg) 85%,transparent);
   --plate-ink:var(--m-plate-ink);--plate-highlight:var(--m-plate-hl);--plate-fill:var(--plate-glass,color-mix(in srgb,var(--m-plate-hl) 9%,transparent))}
 /* the spotlight: one soft light in the accent from the top-left corner and a faint fill from the bottom-right, feathered
    at the edges so no rectangle shows; drawings and diagrams sit in it with no box, border or shadow */
-html.dg-ok :is(.frame.contain,.k-diagram .c-mat,.c-svgbox,.lbox-svg){position:relative;isolation:isolate;border-color:transparent;box-shadow:none}
+html.dg-ok :is(.frame.contain,.k-diagram .c-mat,.c-svgbox,.lbox-svg){position:relative;isolation:isolate;border-color:transparent;box-shadow:none;background:var(--img-veil)}
+/* the veil: a soft base-coloured ellipse behind every bare image, so the page's contour lines fade out where a picture sits
+   and stay visible around it (order: page, lines, veil, spotlight, image). Two offset ellipses so the falloff is not a box. */
+:root{--img-veil:radial-gradient(farthest-side at 47% 52%,color-mix(in srgb,var(--base-bg) 94%,transparent) 62%,transparent 100%),
+  radial-gradient(farthest-side at 54% 47%,color-mix(in srgb,var(--base-bg) 90%,transparent) 58%,transparent 98%)}
+/* inside cards (rail, map panel, route thumbnails) the card already hides the lines: no veil there */
+html.dg-ok :is(.card-p,.mp-fig,.br-pl).frame,:is(.card-p,.mp-fig,.br-pl).frame.bare{background:none}
 html.dg-ok :is(.frame.contain,.k-diagram .c-mat,.c-svgbox,.lbox-svg)::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(90% 80% at 0% 0%,color-mix(in srgb,var(--plate-highlight) var(--spot-a),transparent),transparent 75%),
     radial-gradient(70% 65% at 100% 100%,color-mix(in srgb,var(--plate-highlight) var(--spot-f),transparent),transparent 75%);
@@ -670,11 +691,12 @@ svg.dg{display:block;width:100%;height:100%;max-width:100%}
 /* the outgoing view during project-to-project travel (a painted copy, inert) */
 .d-ghost{pointer-events:none}
 /* the two divider lines at the edges of the expanded area, and the ones streaking past during travel */
-.d-ln{position:fixed;left:0;top:0;width:100px;height:1px;z-index:46;pointer-events:none;background:var(--base-line);transition:background-color .6s ease}
+.d-ln{--ln-c:color-mix(in srgb,var(--base-ink) 62%,transparent);position:fixed;left:0;top:0;width:100px;height:2px;z-index:46;pointer-events:none;background:linear-gradient(90deg,transparent,var(--ln-c) 8%,var(--ln-c) 92%,transparent)}
+@media (max-width:767px){.d-ln{height:1.5px}}
 .d-ln[hidden]{display:none}
-body.d-open .d-ln{background:var(--ln-open)}
-html.pc-on body.d-open .d-ln{background:var(--p-line)}
-.d-seam{position:absolute;left:0;top:0;height:1px;background:var(--ln-open);pointer-events:none}
+body.d-open .d-ln{--ln-c:var(--ln-open)}
+html.pc-on body.d-open .d-ln{--ln-c:var(--p-line)}
+.d-seam{--ln-c:var(--p-line,var(--ln-open));position:absolute;left:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--ln-c) 8%,var(--ln-c) 92%,transparent);pointer-events:none}
 /* the corner widgets belong to the main page; they step aside while a project is expanded */
 body.d-open .c-bl,body.d-open .c-br{opacity:0!important;visibility:hidden!important;transition:opacity .3s,visibility 0s .3s}
 body.d-open .ctr-mini{display:none}
@@ -1110,6 +1132,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
 @media (max-width:1023px){
   .fig.cover{aspect-ratio:4/5;max-height:none}
   .map-grid{grid-template-columns:minmax(0,1fr)}
+  .mconn{display:none}
   .tp{grid-template-columns:minmax(0,1fr)}
   .tp-plate{max-width:560px}
   .b-grid,.ai-box,.d-grid{grid-template-columns:minmax(0,1fr)}
@@ -1144,7 +1167,12 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
   .map-head{margin-bottom:.9rem}
   .map-how{display:none}
   .elabel{display:none!important}
-  .stage{height:330px}
+  /* phones: the panel comes straight under the map, then the hint, legend and note */
+  .map-grid{--stage-h:330px;gap:14px}
+  .map-main{display:contents}
+  .map-grid .mpanel{order:1}.map-grid .map-foot{order:2;margin-top:-14px}
+  .mp-wide{display:none}
+  .mp-pick{display:block}.mp-chips{display:flex}
   .map-sub{font-size:1.25rem;line-height:1.3}
   .legend{margin-top:.5rem}
   /* phones: the routes are on the canvas and on each detail page, so the panel keeps to one screenful */
@@ -1564,7 +1592,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
           '<p class="map-count lbl">' + N + " projects and " + EDGES.length + " routes between them, drawn from each project's own links.</p></div>" +
           '<p class="map-how">Pick a project to see its routes, then Read more to open it. Arrow keys follow routes.</p></div>' +
         '<div class="map-grid">' +
-          "<div>" +
+          '<div class="map-main">' +
             '<div class="stage" id="stage"><svg class="edges" id="edges" aria-hidden="true" focusable="false"></svg><svg class="edges edges-on" id="edges-on" aria-hidden="true" focusable="false"></svg>' +
               P.map(function (p, i) {
                 var r = routes(p.id).length;
@@ -1572,9 +1600,11 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
                   '<span class="mk" aria-hidden="true">' + esc(p.no) + '</span><span class="nl" aria-hidden="true">' + esc(p.title) + "</span></button>";
               }).join("") +
             "</div>" +
+            '<div class="map-foot">' +
             '<p class="map-drag" id="map-drag"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11.5v-2a1.5 1.5 0 0 1 3 0V12M14 10.5a1.5 1.5 0 0 1 3 0V12M17 11.5a1.5 1.5 0 0 1 3 0V16a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-5-2.7L5 16a1.5 1.5 0 0 1 2.5-1.7L8 15"/></svg><span>Click and drag the pieces to see the text better.</span></p>' +
             '<p class="legend lbl"><span><i class="lg-hub"></i>Hub</span><span><i class="lg-v"></i>Visited</span><span><i class="lg-r"></i>Selected route</span></p>' +
             secNote() +
+            "</div>" +
           "</div>" +
           '<aside class="mpanel" aria-label="Selected project"><div class="mp-in" id="mp-in" aria-live="polite"></div></aside>' +
         "</div>" +
@@ -2043,7 +2073,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       if (c) {
         if (c.button) { o["--bar-btn"] = parse(c.button.fill); o["--bar-btn-ink"] = parse(c.button.label); o["--p-btn"] = parse(c.button.fill); o["--p-btn-ink"] = parse(c.button.label); }
         /* text on the expanded screen is the theme's ink (it sits on the plain base now); accents stay at full strength */
-        o["--p-ink"] = ink; o["--p-onbg"] = parse(c.accent); o["--p-accent"] = parse(c.accent); o["--p-line"] = al(parse(c.accent), .3); o["--p-glow"] = th === "light" && c.stops ? al(parse(c.stops[1]), num("--exp-card-glow", .18)) : parse(c.glow);
+        o["--p-ink"] = ink; o["--p-onbg"] = parse(c.accent); o["--p-accent"] = parse(c.accent); o["--p-line"] = al(parse(c.accent), .62); o["--p-glow"] = th === "light" && c.stops ? al(parse(c.stops[1]), num("--exp-card-glow", .18)) : parse(c.glow);
         o["--p-plate"] = parse(c.plate); o["--p-plate-ink"] = parse(c.plateInk); o["--p-plate-fill"] = parse(c.plateFill); o["--p-plate-hl"] = parse(c.plateHighlight);
       }
       if (m) { o["--m-plate"] = parse(m.plate); o["--m-plate-ink"] = parse(m.plateInk); o["--m-plate-fill"] = parse(m.plateFill); o["--m-plate-hl"] = parse(m.plateHighlight); }
@@ -2476,8 +2506,10 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     }
     function panelHTML(id) {
       if (!id) {
-        return '<p class="lbl">Nothing selected</p><h3 class="mp-t">Every stop on the map</h3><p class="mp-line">Pick a marker, or one of these, to see how it connects.</p>' +
-          '<ul class="mp-conns">' + P.map(function (p) { return '<li><button type="button" data-goto="' + esc(p.id) + '"><span class="lbl">' + esc(p.no) + "</span>" + esc(p.title) + "</button></li>"; }).join("") + "</ul>";
+        return '<div class="mp-wide"><p class="lbl">Nothing selected</p><h3 class="mp-t">Every stop on the map</h3><p class="mp-line">Pick a marker, or one of these, to see how it connects.</p>' +
+          '<ul class="mp-conns">' + P.map(function (p) { return '<li><button type="button" data-goto="' + esc(p.id) + '"><span class="lbl">' + esc(p.no) + "</span>" + esc(p.title) + "</button></li>"; }).join("") + "</ul></div>" +
+          '<p class="mp-line mp-pick">Pick a project to see how it connects.</p>' +
+          '<ul class="mp-chips">' + P.map(function (p) { return '<li><button type="button" data-goto="' + esc(p.id) + '"><span class="lbl">' + esc(p.no) + "</span> " + esc(p.title) + "</button></li>"; }).join("") + "</ul>";
       }
       var p = byId(id), r = routes(id);
       return '<button type="button" class="mp-x" data-mpx aria-label="Close preview">&times;</button>' +
@@ -2504,6 +2536,10 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       if (panReady && !still() && pan.animate) {
         pan.animate([{ opacity: 0, transform: "translateX(-14px) scale(.985)", transformOrigin: "0 30%" }, { opacity: 1, transform: "none", transformOrigin: "0 30%" }], { duration: 260, easing: EOUT });
         if (cPath && id) cPath.animate([{ strokeDasharray: "1 1", strokeDashoffset: 1 }, { strokeDasharray: "1 1", strokeDashoffset: 0 }], { duration: 340, easing: EOUT });
+      }
+      if (panReady && id && NARROW.matches) {
+        var prr = pan.parentNode.getBoundingClientRect();
+        if (prr.top > window.innerHeight - 140) tweenTo(window.scrollY + prr.top - window.innerHeight + 260);
       }
       panReady = true;
       drawConn();
