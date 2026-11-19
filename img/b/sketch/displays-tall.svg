@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" role="img" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>Photos until someone arrives</title>
+  <desc>A wall tablet and a TV show family photos. Someone comes to the door, a chime plays and both screens switch to a four-camera grid. The cameras stay up for 90 seconds and until the doorway is clear, then both screens go back to photos.</desc>
+  <g class="sk-step" data-step="photos">
+    <path d="M73.5 129.9Q149.9 128.4 226.3 130.4Q229.4 131.6 232.6 132.5Q233.6 135.9 234.5 139.3Q233.1 190.3 234.8 241.3Q233.9 244.4 232.7 247.4Q229.2 248.9 225.6 250.4Q150 252.5 74.3 250.5Q71 248.7 67.5 247.2Q66.5 243.8 65.2 240.5Q66.8 189.7 65.5 138.9Q66.6 135.8 67.9 132.8Q71.3 131.4 74.6 129.7Q78.3 130.2 82 130.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M75.3 139.3Q150 137.9 224.7 139.1Q225 190.1 224.7 241Q149.8 239.7 74.8 241Q75.7 189.9 75.3 138.9Q78.5 139.3 81.6 139.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M231.7 189.6C231.7 189.8 231.7 190.6 231.5 191C231.2 191.4 230.7 191.8 230.2 191.8C229.8 191.9 229.1 191.7 228.8 191.4C228.4 191.1 228.1 190.5 228.1 190C228.1 189.5 228.4 188.9 228.8 188.6C229.1 188.3 229.8 188.1 230.2 188.2C230.7 188.3 231.3 188.6 231.6 188.9C231.8 189.3 231.7 190.2 231.8 190.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M304.9 105.4Q420 108.5 535.1 105.4Q537 174.9 535.1 244.5Q420.3 245.4 305.5 245Q304.1 175 305.2 105Q308.6 105.1 312 105.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.7"/>
+    <path d="M313.9 113.8Q419.9 113.7 525.9 114.3Q526.2 175.1 526.1 235.8Q420 237 313.9 235.7Q312.3 174.5 313.9 113.4Q317.5 114.1 321 115.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M393.6 245.8Q391.5 254.6 388.4 263" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.3"/>
+    <path d="M446.3 245.6Q449.8 254.4 452.5 263.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.3"/>
+    <path d="M370.1 263.8Q420.1 266 470.1 263.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.3"/>
+    <path d="M381.9 269.8Q386.4 268 390.9 266.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M403.9 270Q408.4 268.1 412.9 266.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M425.9 270.1Q430.3 268 434.8 265.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M448.1 270Q452.7 268.1 457.2 266.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M97.5 650.4Q99.9 551.9 97 453.3Q149.6 453.4 202.2 451.2Q202 550.5 203 649.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.8"/>
+    <path d="M108.7 462.9Q150 462.7 191.2 463.3Q188.3 556.9 190.3 650.5Q149.9 651.2 109.4 650.1Q108.4 556.3 109 462.5Q111.9 463.1 114.9 463.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M179.7 555C179.8 555.4 180.2 556.7 180 557.4C179.8 558 179 558.8 178.4 559.1C177.7 559.4 176.7 559.5 176 559.2C175.4 558.9 174.6 558.2 174.3 557.5C174.1 556.8 174.2 555.7 174.6 555C175 554.4 175.8 553.9 176.6 553.7C177.3 553.5 178.4 553.6 179 554C179.6 554.4 180 555.8 180.2 556.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M78.8 650.7Q150.2 649.3 221.6 650.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path d="M217.9 522.2Q220.6 522.7 223.4 522.9Q224.5 523.2 225.7 523.6Q225.9 524.7 226.2 525.8Q226.2 533.3 226.2 540.9Q225.9 542.5 225.7 544Q224.2 544.2 222.7 544.4Q220.1 544.7 217.6 545Q216.6 544.3 215.6 543.6Q214.9 542.2 214.2 540.8Q214 533.5 214.5 526.1Q215.2 524.9 215.8 523.6Q217 522.9 218.3 522.2Q219 522.7 219.7 523.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M223.1 532.9C222.9 533.2 222.5 534.3 222 534.7C221.5 535.1 220.6 535.3 219.9 535.2C219.3 535.1 218.5 534.5 218.2 533.9C217.9 533.3 217.8 532.3 218.1 531.7C218.3 531.1 219.1 530.5 219.7 530.3C220.4 530.1 221.3 530.1 221.9 530.5C222.4 530.8 222.9 531.6 223 532.3C223.1 532.9 222.6 534 222.6 534.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.4"/>
+    <g id="dsp-photos">
+      <path d="M88.6 150.1Q150 152.1 211.4 150.5Q212.6 189 211.7 227.6Q150 229.1 88.3 227.7Q86.8 188.9 88.5 150Q92 150.6 95.5 151.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+      <path d="M96.9 218.5Q112.3 202 128 185.8Q137.8 195.6 147.6 205.2Q158.4 191.8 170 179.2Q185.7 199.5 203 218.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+      <path d="M188.5 170C187.8 170.8 185.9 173.9 184.2 174.7C182.5 175.5 179.8 175.7 178.1 175C176.4 174.3 174.6 172.4 174 170.6C173.3 168.9 173.2 166.2 174 164.5C174.8 162.8 177 161 178.9 160.5C180.7 160.1 183.3 160.7 185 161.7C186.6 162.8 188.5 165 188.7 166.8C189 168.7 186.9 171.8 186.6 172.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+      <path d="M333.2 118.9Q419.9 118.9 506.5 119.5Q507 173.7 506.5 227.9Q419.8 225.9 333.2 227.8Q331.9 173.3 333.4 118.7Q336.8 119.3 340.1 120" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+      <path d="M345.7 215Q367.7 192.5 388.8 169.1Q402.9 182.8 416.7 196.7Q431.5 177.6 447.7 159.7Q471.9 186.8 494.4 215.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+      <path d="M456.7 152.3C456.1 151.3 453.6 148.4 453.1 146.3C452.6 144.1 452.5 141.1 453.5 139.1C454.5 137.1 456.8 135.3 458.8 134.3C460.9 133.4 463.7 132.8 465.9 133.3C468.1 133.8 470.7 135.5 472 137.2C473.3 139 473.8 141.8 473.7 144.1C473.7 146.3 473.1 148.9 471.7 150.7C470.4 152.5 468.1 154.6 465.9 155.1C463.7 155.5 460.9 154.5 458.8 153.5C456.7 152.4 454.4 149.5 453.5 148.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    </g>
+    <g id="dsp-door-empty">
+      <path d="M111 658.7Q150.1 658.9 189.2 658.3Q186.4 662.6 183.8 667Q149.9 667.4 116.1 667.1Q113.6 662.7 111.1 658.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+      <path d="M124.6 665.2Q127.1 662.7 129.6 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+      <path d="M137.3 665.2Q139.8 662.7 142.4 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+      <path d="M150 665.2Q152.6 662.7 155.1 660.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+      <path d="M162.6 665.4Q165.2 662.7 167.9 660.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+      <path d="M175.5 665.2Q178 662.8 180.5 660.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    </g>
+    <text class="sk-lbl" x="150" y="284" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="22" fill="var(--sk-ink, #1f1512)" stroke="none">wall tablet</text>
+    <text class="sk-lbl" x="420" y="299" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="22" fill="var(--sk-ink, #1f1512)" stroke="none">TV</text>
+    <rect class="sk-hit" x="65" y="130" width="470" height="160" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="arrive">
+    <g class="sk-swap" data-swap="dsp-door-empty">
+      <g id="dsp-visitor">
+        <path d="M111 658.3Q149.9 659.2 188.9 658.4Q186.5 662.9 183.9 667.2Q149.9 667.3 116 666.8Q113.5 662.6 111 658.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+        <path d="M124.6 665.4Q127.1 662.8 129.7 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M137.3 665.2Q139.9 662.7 142.4 660.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M150 665.3Q152.6 662.8 155 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M162.8 665.4Q165.4 662.9 168 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M175.5 665.4Q178 662.7 180.6 660.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <text class="sk-lbl" x="150" y="430.7" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="22" fill="var(--sk-accent, #c63f24)" stroke="none">someone arrives</text>
+        <g class="sk-move" data-from="-90,0">
+          <path class="sk-acc" d="M139.2 569C138.5 567.9 135.5 564.6 135.3 562.2C135.2 559.8 136.5 556.4 138.2 554.7C139.9 553.1 143.3 551.9 145.7 552.1C148.1 552.3 151.3 553.9 152.7 555.9C154.1 557.8 154.7 561.3 154.2 563.7C153.7 566.1 151.6 569 149.5 570.2C147.4 571.3 143.8 571.5 141.5 570.6C139.3 569.7 137 565.8 136.1 564.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.4"/>
+          <path class="sk-acc" d="M145.2 571.7Q145.2 581.9 146 592.1Q146.1 601.9 146.5 611.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.7"/>
+          <path class="sk-acc" d="M144.8 578.4Q140.9 587 136.7 595.5Q135.3 603.1 133.6 610.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+          <path class="sk-acc" d="M144.7 578.6Q149.1 587 153.4 595.4Q154.9 602.3 156.7 609.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+          <path class="sk-acc" d="M146.4 611.7Q143 622.4 139.5 633.1Q138.1 643.3 136.4 653.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.5"/>
+          <path class="sk-acc" d="M146.7 611.7Q150.4 622.1 153.7 632.8Q155.4 643.2 157.6 653.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.5"/>
+        </g>
+      </g>
+    </g>
+    <rect class="sk-hit" x="73.5" y="446" width="153" height="221" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="switch">
+    <g class="sk-swap" data-swap="dsp-photos">
+      <g id="dsp-grid">
+        <path class="sk-acc" d="M78.9 143Q113.2 142.3 147.6 142.7Q147.6 165.1 147.4 187.6Q113.3 186.7 79.2 187.7Q78.7 165.2 79.3 142.7Q82.6 143.3 85.9 143.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M152.5 143.1Q186.7 144.1 220.9 143.3Q221 165.5 221.2 187.8Q186.8 186.7 152.4 187.4Q152.7 164.9 152.5 142.5Q156.1 143.1 159.8 143.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M78.9 192.2Q113.2 191.2 147.5 192.2Q147.5 214.7 147.3 237.2Q113.1 236.9 78.8 237.3Q79.4 214.6 78.8 191.9Q82.3 192.6 85.8 193.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M152.4 192.3Q186.7 193.1 221 192.3Q220.7 214.6 221 236.8Q186.8 236.2 152.7 237.1Q153.1 214.5 152.6 191.9Q156.1 192.5 159.5 193.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M103.5 159.1Q110.5 159.1 117.5 158.8Q117.5 165.2 117.6 171.6Q110.4 171.5 103.2 171.6Q103.2 165.1 103.3 158.6Q104.2 159.2 105.2 159.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M117.7 163.3Q120.9 161.6 124 159.7Q124 165.1 124.2 170.5Q121 168.7 117.7 167" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M176.9 159.1Q184 159.1 191 159.1Q191.1 165.4 191.5 171.8Q184.1 171.7 176.7 171.6Q176.8 165.1 176.9 158.7Q177.8 159.3 178.7 159.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M191.3 163.3Q194.3 161.5 197.5 159.8Q197.4 165.2 197.4 170.6Q194.3 168.8 191.3 167.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M103.6 208.3Q110.6 208.3 117.6 208.3Q117.8 214.7 118 221.1Q110.8 221 103.5 221.1Q103.5 214.5 103.4 207.9Q104.2 208.6 105 209.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M117.7 212.8Q120.8 211.1 124 209.4Q124.1 214.7 124.2 220Q121 218.2 117.7 216.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M176.7 208.6Q184 208.5 191.3 208.6Q191.3 214.7 191.2 220.9Q184 221 176.7 221.3Q176.8 214.5 177 207.7Q177.7 208.5 178.4 209.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M191.3 212.8Q194.5 211.1 197.6 209.3Q197.8 214.7 197.6 220.2Q194.5 218.3 191.4 216.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M318 117.9Q367.7 116.7 417.4 118.2Q417.7 145.4 417.3 172.6Q367.8 172.7 318.2 172.7Q317.5 145.2 318 117.6Q321.6 118 325.2 118.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M422.4 117.8Q472.3 118 522.3 118.1Q522.1 145.3 522 172.4Q472.3 172.5 422.7 172.5Q422.6 144.8 422.4 117.2Q426 117.9 429.7 118.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M318 177.6Q367.8 178.9 417.6 177.3Q417.2 204.6 417.3 231.9Q367.7 230.3 318 231.9Q319 204.5 318.1 177.1Q321.5 177.8 324.9 178.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M422.7 177.6Q472.4 176.1 522.2 177.6Q522.7 204.8 521.8 232Q472.1 233 422.3 231.8Q421.5 204.4 422.4 177Q426 177.7 429.7 178.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M355.6 137.4Q364.3 137.3 373 137.4Q373.1 145.1 373.3 152.8Q364.5 152.8 355.8 153.1Q355.9 145 355.8 136.9Q356.9 137.6 357.9 138.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M373.1 143.2Q377 141.1 380.8 138.8Q380.8 145.3 381 151.9Q377.2 149.6 373.3 147.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M460.3 137.8Q468.9 137.6 477.5 137.5Q477.7 145.2 477.5 152.9Q468.8 153.2 460.1 153.1Q460.3 145.1 460.1 137Q461.3 137.6 462.5 138.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M477.9 143Q481.7 140.8 485.4 138.5Q485.4 145.1 485.3 151.7Q481.6 149.6 477.8 147.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M355.8 196.8Q364.5 197 373.2 196.9Q373.3 204.8 373 212.6Q364.3 212.5 355.6 212.2Q355.5 204.4 355.7 196.6Q356.6 197.3 357.5 198" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M373.2 202.6Q377 200.3 380.8 198.1Q380.9 204.8 381 211.5Q377.2 209.1 373.4 206.8" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M460.1 197.3Q469 197.4 477.9 197Q477.8 204.6 477.7 212.2Q468.8 212.5 459.9 212.5Q459.9 204.6 460.1 196.6Q461.3 197.1 462.5 197.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M477.9 202.4Q481.7 200.4 485.5 198.3Q485.6 204.9 485.4 211.5Q481.6 209.3 477.9 206.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.6"/>
+      </g>
+    </g>
+    <path class="sk-acc" d="M267.8 303.4C267.3 303.7 265.8 304.7 264.6 305C263.4 305.2 261.8 305.2 260.6 304.9C259.5 304.6 258.3 303.9 257.6 303.1C256.8 302.4 256.1 301.5 255.9 300.6C255.7 299.7 256 298.6 256.5 297.8C257.1 297 258.1 296.2 259.2 295.7C260.2 295.3 261.7 295.1 262.9 295.1C264.2 295.1 265.6 295.3 266.7 295.7C267.7 296.2 268.6 297 269.2 297.8C269.7 298.6 270.2 299.6 270.1 300.5C269.9 301.4 269.3 302.3 268.5 303C267.7 303.7 265.9 304.4 265.4 304.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M269.1 298.9Q269.5 284.5 269.9 270.1Q275.5 274.1 281.1 278.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M296 287.1C296 286.7 295.9 285.2 296.3 284.3C296.8 283.5 297.6 282.6 298.6 282C299.6 281.5 301 281.1 302.2 281C303.4 280.9 304.8 281.3 305.9 281.7C307 282 308.2 282.6 308.9 283.3C309.6 284 310.1 285.1 310.1 286C310.1 286.9 309.5 287.9 308.9 288.6C308.2 289.4 307.2 290.1 306.1 290.5C305 290.9 303.5 290.9 302.3 290.8C301 290.7 299.6 290.5 298.6 290C297.6 289.5 296.6 288.6 296.2 287.7C295.8 286.9 296 285.4 296 284.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M309 285.1Q309.4 270.5 310.1 255.8Q315.6 259.9 321 263.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <text class="sk-lbl" x="285" y="334" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="22" fill="var(--sk-accent, #c63f24)" stroke="none">chime</text>
+    <rect class="sk-hit" x="65" y="130" width="470" height="140" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="hold">
+    <path d="M410.4 437C413.4 435.9 422.2 431.1 428.4 430.7C434.5 430.2 441.8 431.4 447.4 434.2C453 436.9 458 442 461.8 447.1C465.5 452.2 468.9 458.5 470 464.7C471.1 471 470.8 478.6 468.5 484.6C466.3 490.6 461.4 496.3 456.5 500.5C451.6 504.7 445.2 508.8 439 510C432.9 511.1 425.6 509.3 419.6 507.3C413.6 505.4 407.2 502.6 402.7 498.4C398.2 494.2 394.6 488 392.5 482.1C390.4 476.1 389.2 468.9 390.1 462.7C391 456.4 394.2 449.7 398.1 444.5C402 439.3 407.7 433.8 413.6 431.5C419.5 429.2 430.3 430.9 433.6 430.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.7"/>
+    <path d="M422.6 417Q430 417.2 437.4 417.4Q437.2 421.4 437 425.3Q429.9 425.4 422.9 425.4Q422.8 421 422.9 416.7Q423.7 417.2 424.5 417.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path d="M429.9 425.1Q429.9 427.6 429.9 430" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path d="M454.9 436.4Q458.5 432.8 462 429.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path d="M461.2 470Q464 469.9 466.8 469.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M430 501.2Q430 504 430 506.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M398.8 470Q396 470.1 393.3 470.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M430.1 438.7Q430.1 435.9 430 433.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path class="sk-acc" d="M430 470.1Q429.7 456.8 429.9 443.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path d="M429.3 467.8C429.6 467.8 430.7 467.7 431.2 468C431.8 468.4 432.4 469.1 432.5 469.7C432.6 470.2 432.2 471.1 431.8 471.6C431.3 472.1 430.5 472.5 429.9 472.5C429.3 472.5 428.4 472 428.1 471.5C427.7 471.1 427.5 470.1 427.6 469.5C427.7 468.9 428.3 468.2 428.8 467.9C429.4 467.6 430.5 467.7 430.9 467.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path class="sk-acc" d="M458.1 425.3C460.3 427.4 467.8 433.1 471.5 438.1C475.3 443 478.7 449.1 480.6 455C482.4 460.9 483.2 467.3 482.7 473.6C482.2 479.8 480.3 486.7 477.7 492.3C475 498 471.2 503.3 466.8 507.6C462.3 511.9 456.8 515.9 451.1 518.3C445.5 520.8 439.1 522 432.9 522.4C426.7 522.7 420.1 521.9 414.1 520.2C408.2 518.5 402.1 515.8 397.2 512C392.4 508.3 388.3 503.2 385.1 497.8C381.8 492.3 379 485.5 377.8 479.4C376.6 473.4 377.8 464.3 377.8 461.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path class="sk-acc" d="M381.2 470Q379.6 465.4 378.1 460.8Q374.9 464.5 371.6 468.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <text class="sk-lbl" x="430" y="548.4" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="22" fill="var(--sk-ink, #1f1512)" stroke="none">90 seconds</text>
+    <g class="sk-swap" data-swap="dsp-visitor">
+      <g id="dsp-door-clear">
+        <path d="M111.1 658.7Q150.2 659.3 189.3 658.7Q186.8 663 184.2 667.2Q150.1 667.4 115.9 667.1Q113.5 662.8 110.9 658.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+        <path d="M124.4 665.4Q127.1 662.8 129.7 660.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M137.3 665.3Q139.8 662.7 142.4 660.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M150 665.3Q152.6 662.8 155.1 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M162.8 665.2Q165.3 662.7 167.8 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <path d="M175.4 665.4Q178 662.8 180.6 660.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+        <text class="sk-lbl" x="150" y="430.7" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="22" fill="var(--sk-accent, #c63f24)" stroke="none">doorway clear</text>
+      </g>
+    </g>
+    <rect class="sk-hit" x="382" y="406" width="96" height="152" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="back">
+    <g class="sk-swap" data-swap="dsp-grid">
+      <g id="dsp-photos-again">
+        <path d="M88.4 150.2Q149.9 148.4 211.3 150.3Q210.1 188.7 211.6 227.1Q150 229.1 88.4 227.8Q87.3 188.7 88.6 149.6Q91.8 150.5 95.1 151.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M97.1 218.6Q112.5 202.1 128.1 185.7Q137.8 195.7 147.9 205.3Q158.5 191.8 170 179Q187.3 198 203 218.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M174.6 172C174.4 170.9 172.8 167.7 173.3 165.8C173.8 164 175.7 161.8 177.5 160.9C179.3 160.1 182.2 160.1 183.9 160.9C185.7 161.7 187.3 163.9 187.9 165.8C188.6 167.6 188.6 170.5 187.6 172.2C186.6 173.8 184 175 182.1 175.4C180.1 175.7 177.2 175.4 175.7 174.2C174.3 173 173.8 169.3 173.4 168.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.8"/>
+        <path d="M333.1 118.9Q419.8 117.5 506.5 119Q507.2 173.4 507.1 227.7Q420.1 227.9 333.2 227.6Q332 173.2 332.9 118.8Q336.5 119.7 340.1 120.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+        <path class="sk-acc" d="M345.3 215Q367.4 192.1 389 168.8Q402.8 183 417.1 196.7Q432.5 178 448 159.5Q470.3 188.1 494.2 215.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+        <path class="sk-acc" d="M455.1 136.3C456.2 135.7 459.4 133.2 461.7 132.9C464 132.6 466.8 133.5 468.9 134.6C470.9 135.8 473.1 137.8 474 139.9C474.8 142.1 474.7 145.2 473.9 147.4C473.2 149.6 471.4 152 469.5 153.2C467.5 154.3 464.7 154.6 462.4 154.4C460.1 154.2 457.4 153.4 455.8 151.9C454.1 150.4 452.9 147.6 452.7 145.3C452.5 143.1 453.5 140.6 454.6 138.6C455.8 136.6 458.8 134.2 459.6 133.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="1.8"/>
+      </g>
+    </g>
+    <rect class="sk-hit" x="65" y="130" width="470" height="140" fill="transparent" stroke="none"/>
+  </g>
+</svg>

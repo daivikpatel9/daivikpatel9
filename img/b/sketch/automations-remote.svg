@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" role="img" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>One wall remote, other brands' lights</title>
+  <desc>A button press on a wall remote reaches Home Assistant over a local wireless network, with no internet needed. Its buttons switch a room light and a smart plug and dim a light strip from another brand. A long press brings back a scene.</desc>
+  <g class="sk-step" data-step="press">
+    <path d="M113.5 195.5Q149.6 193.6 185.7 194.8Q190.9 197.2 196.1 199.4Q197.9 204.4 199.8 209.4Q197.7 290.4 199.8 371.3Q197.7 376 195.6 380.7Q190.8 382.8 186 384.9Q150.1 385.3 114.3 385Q109.1 383.2 104.1 380.9Q101.7 375.9 99.6 370.8Q101.2 289.9 99.7 209Q101.9 204.2 104 199.4Q109.1 196.9 114.3 194.6Q117.9 195.1 121.5 195.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M126.2 212.4Q150.1 211.3 174.1 212.1Q177.5 213.7 181 215Q182.5 218.6 184 222.3Q181.8 290.3 184 358.4Q182.8 361.6 181.3 364.7Q177.6 366.1 173.9 367.5Q150 368.3 126.2 368.4Q122.6 367 119 365.4Q117.6 361.8 116.3 358.1Q115.6 289.8 116.2 221.5Q117.6 218.3 119 215Q122.6 213 126.3 211.3Q130 211.8 133.7 212.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M127.9 224.1Q150 224.5 172.2 223.8Q172.4 237 172 250.2Q150 250.2 128.1 249.9Q128.4 236.7 128.2 223.5Q130.7 224.2 133.1 225" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M128.1 260.2Q150.1 259.4 172.2 259.8Q172.3 272.9 171.8 286.1Q149.8 285.7 127.8 285.9Q128.1 272.8 127.9 259.7Q130.6 260.2 133.2 260.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M128.2 296Q150.1 296.4 171.9 295.9Q171.9 308.8 171.9 321.8Q149.9 322.5 127.8 322.2Q127.4 308.9 127.8 295.7Q130.4 296.2 133.1 296.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M128.1 332.1Q150 332.6 171.8 331.9Q172 344.9 171.9 357.8Q150 358 128.2 357.9Q127.9 344.6 128 331.4Q130.7 332 133.4 332.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path class="sk-acc" d="M127.8 224Q149.8 223.6 171.8 223.9Q171.8 237 172.1 250.2Q150.1 250.6 128 250Q128 236.8 128 223.6Q130.6 224.3 133.1 225" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path class="sk-acc" d="M118 226.6Q112.3 224.8 106.7 222.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M132.9 210.5Q130 205.8 126.9 201.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M155.9 206.9Q157 201.5 158.1 196.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M176.1 217.4Q180.7 213.8 185.3 210.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <text class="sk-lbl" x="150" y="418" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">wall remote</text>
+    <rect class="sk-hit" x="95" y="190" width="110" height="200" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="hear">
+    <path d="M438.1 240.3Q470.1 241.7 502.1 239.7Q508.7 242.2 515 245.2Q517.2 251.5 519.5 257.9Q520.3 290 520.3 322.1Q517.5 328.5 514.6 334.9Q508.1 337.3 501.6 339.6Q469.8 341.2 438 340.4Q431.7 337.7 425.5 335.1Q422.5 328.9 420 322.4Q419.7 290 420.2 257.6Q422.9 251.6 425.4 245.4Q431.9 242 438.7 239.2Q442.6 239.8 446.4 240.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.8"/>
+    <path d="M443.8 311.7Q443.5 297.8 443.8 283.8Q457.2 273.2 470 261.9Q483.2 272.7 495.9 284Q495.6 297.9 495.9 311.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M464.4 290.4C464.9 289.7 466.1 287.2 467.4 286.6C468.7 285.9 470.9 286 472.3 286.5C473.7 287.1 475.2 288.6 475.7 290.1C476.2 291.5 476.1 293.7 475.3 295C474.6 296.4 472.8 297.7 471.3 298C469.8 298.3 467.7 297.7 466.5 296.8C465.2 295.9 464.1 294 464 292.5C463.8 291 465.3 288.6 465.5 287.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M469.9 298.1Q470 305 469.9 312" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M469.9 303.9Q464 299 457.9 294.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M470.1 301.9Q476.1 296 481.9 289.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M205.8 270.4L213.7 270.8M222.1 270.6L229.8 271.5M237.7 271.3L246.1 271.9M253.6 271.9L262.1 272.4M270 273.2L277.9 273.5M286.3 273.5L294 274.3M301.9 275L309.5 275.4M317.5 275.7L325.4 276.3M333.6 276.1L341.7 277M350.2 277.5L357.8 277.3M366.1 277.4L373.4 278.7M381.9 278.8L389.4 278.5M397.4 279.2L405.4 279.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path class="sk-acc" d="M225 263.4C225.1 263.9 225.5 265.5 225.7 266.8C225.9 268.1 226.2 269.6 226.2 271C226.1 272.3 225.9 273.7 225.5 274.9C225.1 276.1 223.9 277.7 223.5 278.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M236.6 257.5C237.2 258.7 239.2 262.3 239.8 264.6C240.3 266.9 240.1 268.8 239.9 271.2C239.7 273.5 239.4 276.1 238.7 278.5C238 280.9 236.2 284.2 235.7 285.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M250.3 250.9C250.7 252.6 252.4 257.5 253 261.1C253.6 264.7 254.1 269 254 272.6C253.9 276.2 253.4 279.6 252.3 282.9C251.3 286.2 248.4 291 247.6 292.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path d="M512 128C512.3 129.2 514.3 132.8 513.6 135.1C512.9 137.4 510.7 139.9 507.8 141.6C505 143.4 499.9 144 496.5 145.5C493 146.9 490.8 149.4 487 150.5C483.3 151.7 478.2 152.4 473.9 152.3C469.6 152.2 465.5 150.5 461.1 150C456.8 149.5 451.9 150.1 447.8 149.2C443.8 148.4 439.6 146.7 437 144.9C434.4 143.1 434.2 140.3 432.3 138.2C430.3 136.1 426.5 134.3 425.2 132.1C423.9 129.9 423.5 127.2 424.6 124.9C425.6 122.7 429.5 120.9 431.3 118.7C433.2 116.6 433.4 114 435.9 112C438.3 110.1 442 108.2 445.9 107.2C449.8 106.2 454.9 106.7 459.2 106.1C463.5 105.5 467.5 104 471.8 103.8C476.1 103.6 481.3 103.9 485.2 104.9C489.1 105.9 491.7 108.3 495.2 109.7C498.7 111.2 503.3 111.9 506.3 113.6C509.3 115.3 512.2 117.5 513.2 119.8C514.3 122 512.5 124.6 512.6 127C512.7 129.3 513.6 132.8 513.8 134" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path class="sk-acc" d="M439.3 107Q470 127.9 500.6 148.8" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.8"/>
+    <path class="sk-acc" d="M500.7 107.1Q469.7 128 439 149.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.8"/>
+    <text class="sk-lbl" x="470" y="374" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">Home Assistant</text>
+    <text class="sk-lbl" x="540" y="135" text-anchor="start" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-accent, #c63f24)" stroke="none">no internet needed</text>
+    <rect class="sk-hit" x="415" y="235" width="110" height="110" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="toggle">
+    <path d="M789.9 100Q790.3 115 790.1 130" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M782.2 130Q790.1 130.1 798.1 130Q798 136 798.1 142.1Q790 142.1 781.9 142.1Q781.8 135.8 782 129.6Q783 130.2 784 130.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M782.1 142.2Q776.8 149.9 771.8 157.8Q771 165.9 770 174Q773.8 181.1 777.9 188.1Q784 190.1 790 192.2Q796.1 190.2 802 188Q805.9 180.9 810 174Q809.1 166 807.9 158.1Q803.2 149.9 798 142" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M769.8 297.4Q789.8 297.1 809.9 297.5Q812.3 298.7 814.7 299.7Q815.5 302.1 816.5 304.4Q817.9 329.7 817.4 355Q816.3 357.9 815.1 360.8Q812.6 361.8 810.1 362.7Q790 363.1 769.9 362.5Q767.5 361.4 765.2 360.1Q763.9 357.7 762.7 355.1Q763.3 330 763.3 304.8Q764.1 302 765.2 299.3Q767.9 298.3 770.8 297.5Q774.1 297.6 777.4 297.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M795.3 339.1C794.1 339.4 790.4 341.4 788.1 341.2C785.7 341 783.1 339.4 781.2 337.8C779.4 336.2 777.8 334 776.9 331.8C776 329.5 775.4 326.8 775.7 324.4C775.9 322 776.8 319.1 778.3 317.3C779.8 315.5 782.5 314.5 784.8 313.5C787.2 312.6 789.9 311.3 792.2 311.7C794.4 312 796.6 314.1 798.5 315.7C800.5 317.2 802.8 318.8 803.8 321C804.9 323.2 805.1 326.2 804.7 328.7C804.3 331.2 803.2 333.9 801.7 335.8C800.1 337.8 797.6 339.5 795.3 340.2C792.9 340.9 789 340.3 787.7 340.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M784.6 321Q784.6 326.4 784.6 331.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path d="M795.4 321.1Q795.3 326.4 795.4 331.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.8"/>
+    <path class="sk-acc" d="M800.2 198.1Q802.3 203.7 804.2 209.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M781.4 198.6Q779.8 204.5 778.2 210.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M766.2 187.9Q761.3 191.4 756.5 195.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M760 170.2Q753.9 170.4 747.8 170.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M765.9 152Q761.1 148.6 756.3 145.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M781.4 141.4Q779.7 135.5 777.9 129.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M800 141.6Q802 136 804.3 130.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path d="M521.8 269.5C534.8 257.8 562.8 216 599.8 199.5C636.8 183 719.7 175.1 743.7 170.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M522.2 299.8C538.4 303.3 580.9 315.6 619.5 320.6C658.1 325.5 731.3 328 753.7 329.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <text class="sk-lbl" x="852" y="178" text-anchor="start" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">room light</text>
+    <text class="sk-lbl" x="831.4" y="337.2" text-anchor="start" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">smart plug</text>
+    <rect class="sk-hit" x="730" y="90" width="140" height="285" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="dim">
+    <path d="M696.7 439.8Q789.9 440 883.2 440.5Q885.4 441.2 887.6 441.8Q888.3 443.6 888.8 445.5Q888.9 449.8 888.7 454.2Q888.1 456.2 887.3 458.2Q885.2 458.8 883.3 459.7Q789.9 460.2 696.6 460Q694.4 458.9 692.2 458Q691.5 456.2 690.5 454.4Q691.2 450 691.5 445.6Q692.2 443.6 692.7 441.5Q694.8 440.7 696.8 440Q700.2 440.3 703.5 440.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M707.9 447.2C708.1 447.6 708.8 449 708.8 450C708.8 450.9 708.6 452.1 707.9 452.8C707.3 453.4 705.9 453.8 705 453.7C704.1 453.6 703 452.9 702.5 452.1C701.9 451.4 701.7 450.1 701.9 449.2C702.1 448.4 702.9 447.4 703.7 447C704.5 446.6 705.7 446.4 706.5 446.6C707.4 446.9 708.4 448.2 708.8 448.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M726.1 453.6C725.7 453.3 724.1 452.7 723.6 452C723.1 451.3 722.9 450 723.1 449.2C723.3 448.3 724.1 447.3 724.8 446.9C725.6 446.5 726.8 446.4 727.7 446.7C728.5 447 729.6 447.7 730 448.5C730.4 449.3 730.3 450.7 729.9 451.5C729.5 452.3 728.4 453 727.6 453.3C726.8 453.5 725.3 453.1 724.8 453" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M748.1 446.3C748.5 446.6 750 447.3 750.5 448C751 448.8 751.4 450 751.2 450.9C751 451.7 750.1 452.7 749.3 453.1C748.4 453.5 747.1 453.7 746.3 453.4C745.5 453.1 744.5 452 744.2 451.2C743.9 450.3 744.2 449 744.7 448.2C745.1 447.4 746.2 446.5 747.1 446.3C748 446.1 749.6 447 750.1 447.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M766 448.1C766.4 447.8 767.6 446.5 768.5 446.4C769.3 446.3 770.6 446.9 771.2 447.5C771.9 448.2 772.4 449.3 772.4 450.2C772.3 451.1 771.7 452.3 771 452.9C770.3 453.4 768.9 453.6 768.1 453.4C767.2 453.2 766 452.5 765.6 451.7C765.2 450.9 765.3 449.5 765.6 448.7C766 447.8 767.4 446.8 767.7 446.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M793.1 447.9C793.2 448.4 793.8 450 793.5 450.9C793.3 451.8 792.4 452.8 791.6 453.2C790.8 453.6 789.4 453.7 788.6 453.4C787.8 453 787 451.9 786.7 451.1C786.5 450.2 786.6 449 787 448.2C787.5 447.4 788.5 446.6 789.4 446.5C790.3 446.3 791.7 446.5 792.4 447.1C793.1 447.7 793.4 449.4 793.6 449.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M809.6 453.4C809.2 453 807.7 451.9 807.5 451C807.3 450.1 807.7 448.7 808.3 448C808.8 447.2 809.9 446.6 810.8 446.5C811.7 446.4 813 446.9 813.6 447.5C814.3 448.1 814.8 449.4 814.7 450.3C814.6 451.2 814 452.4 813.3 452.9C812.5 453.4 811.2 453.6 810.3 453.4C809.4 453.2 808.2 451.9 807.8 451.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M835.8 450.3C835.6 450.7 835.2 452.3 834.5 452.8C833.8 453.4 832.5 453.7 831.7 453.5C830.8 453.3 829.9 452.6 829.4 451.8C828.9 451.1 828.6 449.8 828.8 449C829 448.2 829.9 447.2 830.7 446.8C831.5 446.4 832.8 446.4 833.6 446.7C834.4 447 835.3 447.9 835.6 448.8C835.9 449.6 835.6 451.2 835.6 451.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M852.2 453.6C851.9 453.2 850.4 452.3 850 451.5C849.7 450.6 849.8 449.3 850.2 448.5C850.6 447.7 851.5 446.8 852.4 446.6C853.2 446.3 854.6 446.3 855.4 446.8C856.2 447.2 857 448.4 857.2 449.3C857.3 450.2 856.9 451.5 856.3 452.2C855.8 452.9 854.7 453.4 853.8 453.5C852.9 453.6 851.4 452.8 851 452.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M877.3 447.4C877.5 447.9 878.4 449.3 878.3 450.2C878.2 451.1 877.5 452.2 876.8 452.7C876.1 453.3 874.9 453.8 874 453.6C873.1 453.5 872 452.8 871.5 452C871 451.3 870.7 449.9 871 449C871.2 448.1 872.1 447.1 872.9 446.7C873.7 446.3 875 446.3 875.9 446.6C876.7 447 877.7 448.3 878.1 448.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path class="sk-acc" d="M701.7 433.9Q705.3 430.3 708.9 426.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M722.5 433.9Q726.1 430.2 729.7 426.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M743.3 433.8Q746.8 430.2 750.3 426.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M764 433.8Q767.6 430.3 771.1 426.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path d="M521.8 325.8C534.8 338.2 572.6 379.6 600.3 400.2C628 420.9 673.3 441.6 687.9 449.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <text class="sk-lbl" x="790" y="491.4" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">light strip, another brand</text>
+    <path class="sk-acc" d="M128.1 259.8Q149.9 260.2 171.8 259.8Q172 272.8 171.8 285.8Q149.8 286.5 127.9 286.1Q127.7 272.8 128.2 259.5Q130.8 260.3 133.5 261" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path class="sk-acc" d="M141.9 273.1Q149.9 273 157.9 272.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.4"/>
+    <rect class="sk-hit" x="682" y="423" width="216" height="60" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="scene">
+    <path class="sk-acc" d="M130 287.6Q150.1 287.6 170.2 288.3Q173.6 289.7 176.9 291.2Q178.6 294.4 180.2 297.7Q179.6 323.6 179.7 349.6Q178.1 353.4 176.8 357.4Q173.6 358.5 170.3 359.6Q150.2 359.1 130.1 360.3Q126.4 358.4 122.5 356.8Q121.2 353.3 119.7 349.8Q121.3 324 120.2 298.1Q121.5 294.3 122.5 290.5Q126.4 288.9 130.3 287.2Q134.1 287.8 137.9 288.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.4"/>
+    <path class="sk-acc" d="M132 380Q132 384 131.9 387.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M150 386.1Q150 390.1 150 394" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M167.9 380Q168 384.1 168 388.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <text class="sk-lbl" x="150" y="450" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-accent, #c63f24)" stroke="none">long press: a scene</text>
+    <rect class="sk-hit" x="95" y="280" width="110" height="100" fill="transparent" stroke="none"/>
+  </g>
+</svg>

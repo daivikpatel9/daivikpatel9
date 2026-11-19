@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" role="img" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>How I reach home with no open ports</title>
+  <desc>A house with every door closed. The home server opens a tunnel outward to a relay on a cloud server. A visitor elsewhere opens an address, the relay's proxy passes the request down the tunnel, and the service at home answers back the same way. A separate private path, Tailscale, serves my own devices.</desc>
+  <g class="sk-step" data-step="home">
+    <path d="M84.4 462.4Q86.8 375 84.5 287.6Q215.2 284.2 345.9 284.8Q347.4 373.5 344.7 462.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.8"/>
+    <path d="M62.9 296.3Q138.3 247 215 199.6Q292.2 244.8 367 293.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.8"/>
+    <path d="M54.9 463Q214.8 464 374.8 462" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M256.3 356.2Q287.2 356.7 318 355.6Q319.1 391.8 317.1 428Q286.9 429.2 256.8 428.5Q257.6 392 256.4 355.4Q259.3 356.2 262.1 356.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M256.7 356.6Q260.7 351.6 265.1 346.9Q295.6 345.8 326 346.9Q321.4 351.4 317.1 356.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M326.1 346.8Q327 382.8 327.9 418.9Q322.8 423.9 317.5 428.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path d="M265.2 368.8Q282.4 369.3 299.6 368.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M265.5 379.5Q282.5 379.2 299.6 379.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M265.5 390.1Q282.7 390.3 299.9 390.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M308.4 366.9C308.6 366.9 309.4 366.9 309.8 367.2C310.1 367.5 310.4 368.1 310.4 368.5C310.4 369 310.2 369.6 309.9 369.9C309.6 370.3 308.9 370.5 308.5 370.5C308 370.5 307.4 370.1 307.1 369.8C306.9 369.4 306.7 368.7 306.8 368.3C306.9 367.9 307.3 367.4 307.7 367.1C308.1 366.9 308.9 366.9 309.1 366.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M310.3 380.3C310 380.4 309.5 381 309 381.1C308.5 381.2 307.9 381.1 307.5 380.9C307.1 380.6 306.8 380 306.7 379.5C306.7 379.1 307 378.5 307.4 378.1C307.7 377.8 308.3 377.6 308.8 377.6C309.2 377.6 309.7 378 310 378.4C310.3 378.8 310.4 379.4 310.3 379.8C310.2 380.3 309.6 380.9 309.4 381.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M274.7 402.9Q285.5 402.5 296.3 403Q296.2 410.8 296.2 418.7Q285.1 418.6 274.1 419.1Q273.8 410.6 274.2 402.1Q275.4 403 276.6 403.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M114.8 373.6Q140.9 372.6 166.9 374Q165.8 418 167.1 462Q141.1 460.7 115.1 461.6Q113.5 417.6 115.5 373.5Q118.1 374 120.8 374.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M154.8 416.9C155 416.7 155.7 415.6 156.3 415.5C157 415.3 157.9 415.6 158.4 415.9C158.9 416.3 159.4 417.1 159.5 417.7C159.5 418.3 159.3 419.2 158.9 419.7C158.5 420.2 157.6 420.6 156.9 420.6C156.3 420.6 155.5 420.1 155.1 419.6C154.7 419.1 154.4 418.2 154.5 417.6C154.5 417 155.5 416.2 155.7 415.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path class="sk-acc" d="M131 402.4Q140.2 402.6 149.4 402.3Q150.9 402.6 152.3 402.8Q152.5 404.2 152.9 405.5Q153.3 412.6 153.1 419.7Q152.3 421.3 151.5 422.9Q150.4 423.5 149.2 424.2Q140.1 423.8 130.9 423.8Q129.5 423.2 128 422.7Q127.3 421.3 126.6 419.9Q127.4 413 127.4 406.1Q127.9 404.5 128.3 402.9Q129.7 401.9 131.2 401.2Q132.9 401.7 134.5 402.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path class="sk-acc" d="M131.8 401.9C132 401.2 132.3 398.9 133.2 397.7C134.2 396.5 135.8 395.2 137.4 394.7C139 394.2 141.3 394.2 142.8 394.7C144.3 395.2 145.4 396.6 146.3 397.7C147.2 398.9 147.9 400.9 148.2 401.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path d="M104.5 311.7Q127.9 312.9 151.3 311.5Q151.8 330.9 151.5 350.3Q128.4 350.1 105.3 349.5Q105.6 330.8 104.6 312Q107.7 312.7 110.7 313.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path d="M127.9 311.9Q127.9 331 128 350.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M104.8 331.1Q128 330.6 151.1 331" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <text class="sk-lbl" x="215" y="180" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-accent, #c63f24)" stroke="none">home: no open ports</text>
+    <text class="sk-lbl" x="287" y="494" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">home server</text>
+    <rect class="sk-hit" x="65" y="202" width="300" height="260" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="tunnel">
+    <path d="M785 130C785.9 134 793 146.2 790.6 153.8C788.2 161.5 780.5 169.9 770.7 175.6C760.8 181.4 743.3 183.5 731.4 188.5C719.4 193.4 711.7 201.7 698.8 205.5C685.8 209.3 668.4 211.6 653.5 211.3C638.6 211 624.4 205.4 609.4 203.7C594.4 201.9 577.4 203.8 563.5 201C549.6 198.2 535 192.8 526.1 186.6C517.1 180.5 516.5 171.2 509.7 164.1C502.9 157 489.8 151.2 485.3 143.8C480.9 136.5 479.6 127.2 483.1 119.7C486.7 112.3 500.1 106.2 506.6 99C513.1 91.8 513.7 83 522.1 76.5C530.5 70.1 543.3 63.7 556.7 60.4C570.2 57.1 587.8 58.5 602.7 56.6C617.6 54.8 631.3 49.7 646.3 49.1C661.2 48.4 678.9 49.4 692.4 52.7C705.8 56 714.9 63.9 727.1 68.8C739.3 73.6 755.1 76.1 765.5 81.7C775.8 87.3 785.7 95 789.3 102.4C792.9 109.9 786.8 118.6 787.2 126.5C787.5 134.5 790.6 146.2 791.3 150.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M654.9 102.3Q699.7 101.7 744.6 101.6Q743.7 126.9 744.8 152.2Q699.9 153.5 655 152.3Q653.6 127 654.8 101.7Q658.6 102.1 662.4 102.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <text class="sk-lbl" x="700" y="136" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">tunnel</text>
+    <path d="M344.4 344.6C364.1 341.4 416.6 338.8 462.7 325.5C508.8 312.1 583.2 291 620.9 264.4C658.5 237.9 677.5 182.6 688.8 166.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path d="M346.2 358.4C366.4 355 420.2 352.1 467.3 338.3C514.4 324.5 589.9 302.9 628.8 275.5C667.6 248.2 688.6 191.1 700.6 174.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M693.6 186.1Q694.1 178 694.9 169.9Q687.6 173.3 680.5 176.9" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="3"/>
+    <text class="sk-lbl" x="640" y="34" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">cloud relay</text>
+    <text class="sk-lbl" x="500" y="350" text-anchor="start" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-accent, #c63f24)" stroke="none">opened from inside</text>
+    <rect class="sk-hit" x="490" y="50" width="300" height="165" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="visit">
+    <path d="M760.2 462Q802.2 462.3 844.2 462.2Q840.2 458 836.1 454Q802.2 455.1 768.2 454Q764 457.9 759.8 461.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M770 403.4Q800 404.3 830 404.3Q828.3 427.9 829.9 451.5Q800.2 450.8 770.5 452.5Q769.6 427.9 769.9 403.3Q773.5 404 777.2 404.3" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M780.1 418.1Q800 418.3 820 417.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <path d="M780.1 428.2Q796 428.4 811.9 428.1" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.5"/>
+    <g class="sk-move" data-from="110,0">
+      <path d="M913.6 365.8C912.5 366.5 909.3 369.4 906.9 369.8C904.6 370.1 901.7 369.1 899.7 367.8C897.6 366.5 895.4 364.3 894.8 362.1C894.2 359.9 895.1 356.8 896.2 354.7C897.3 352.6 899.5 350.5 901.7 349.6C903.9 348.7 907.3 348.6 909.4 349.5C911.5 350.5 913.3 353.2 914.3 355.5C915.3 357.7 916 361 915.2 363.1C914.4 365.2 910.5 367.4 909.5 368.2" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+      <path d="M904.9 371.2Q904.9 382.4 905.6 393.7Q906 404.7 906.8 415.6" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.7"/>
+      <path d="M904.7 378.2Q900 387.7 895.3 397.2Q894.3 405.9 892.9 414.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+      <path d="M904.8 378.3Q909.8 387.7 914.3 397.4Q916.1 405.1 918.4 412.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+      <path d="M906.9 415.7Q903.1 427.5 899.4 439.4Q897.1 450.6 895.4 461.9" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.5"/>
+      <path d="M906.9 415.5Q910.4 427.4 914.6 439.1Q917 450.6 919.4 462" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.5"/>
+    </g>
+    <path d="M799.5 395.7L799.5 394.9M796.2 378.4L795.7 376.9M792.7 360.4L792.7 359.9M789.4 343.3L788.3 339.6M785.9 325.6L785.8 323.7M783 307.4L782.7 305.5M780.9 290L780.9 286.9M780.2 271.6L779.5 269.1M779.9 254L779.8 252.4M780.6 236.2L780.6 234.3M781.9 218.2L781.9 216.1M784.2 200.4L784.2 198.3M785.3 182.5L785.5 180.7M788 164.6L788.1 162.7M789.8 145.8L789.9 145.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2"/>
+    <path class="sk-acc" d="M796 152.6Q793 146.4 789.9 140.2Q786 146 782 151.7" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.8"/>
+    <text class="sk-lbl" x="830" y="496" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">a visitor elsewhere</text>
+    <rect class="sk-hit" x="750" y="312" width="180" height="190" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="pass">
+    <path d="M534.7 102.1Q580 101.6 625.2 102.1Q623.9 126.8 625.3 151.5Q580.1 152.3 534.9 151.8Q534.4 126.4 534.9 100.9Q538.3 101.9 541.8 102.8" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <text class="sk-lbl" x="580" y="136" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">proxy</text>
+    <path class="sk-acc" d="M628.1 127.1Q639.1 126.9 650 127.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <path class="sk-acc" d="M644.4 131.3Q648.2 129 652 126.8Q647.9 124.7 644 122.3" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <g class="sk-move" data-from="354,-182">
+      <path class="sk-acc" d="M346.2 359C345 359.3 341.1 361.3 338.9 360.7C336.8 360.2 334.3 358 333.2 356C332.2 353.9 331.8 350.6 332.6 348.5C333.5 346.4 336.2 344.2 338.4 343.5C340.5 342.9 343.8 343.5 345.6 344.7C347.5 346 349.2 348.6 349.6 350.8C349.9 353.1 349.1 356.3 347.6 358C346.2 359.7 341.8 360.5 340.7 361" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="3"/>
+    </g>
+    <text class="sk-lbl" x="601" y="236" text-anchor="end" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">passed down</text>
+    <rect class="sk-hit" x="520" y="90" width="140" height="80" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="answer">
+    <path d="M184.4 308.4Q205.3 308.2 226.1 307.8Q227.9 308.6 229.5 309.4Q230.5 311.3 231.2 313.3Q230.4 328.2 230.8 343.1Q230.4 345.1 229.9 347Q227.9 347.6 225.8 348.2Q204.8 347.5 183.9 348Q182.4 347.4 180.9 347Q179.9 345.1 178.9 343.2Q178.1 327.9 178.7 312.5Q179.7 311.3 180.7 309.9Q182.4 308.8 184.1 307.6Q187.7 308 191.3 308.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.4"/>
+    <path d="M179 318Q205 318.4 231 318" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path class="sk-acc" d="M191 336.1Q195.4 339.7 199.9 343.2Q209.4 334.6 219 326.1" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <g class="sk-move" data-from="-354,172">
+      <path class="sk-acc" d="M693.9 188.8C692.8 188.2 688.5 187.1 687.2 185.2C685.9 183.3 685.4 179.6 686.1 177.4C686.8 175.3 689.3 173 691.4 172.1C693.5 171.2 696.6 171.3 698.7 172.2C700.7 173.1 703.2 175.4 703.9 177.6C704.5 179.7 703.9 183.3 702.6 185.2C701.3 187 698.2 188.4 695.9 188.6C693.7 188.8 690.2 186.7 689 186.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="3"/>
+    </g>
+    <path class="sk-acc" d="M789.7 166.4L790.5 167.3M792.5 181.5L792.8 183.6M795.4 197.5L796.1 200M798.6 213.5L798.5 215.2M800.5 229.3L801.1 232.8M803.4 244.4L804.2 247.1M805.8 260.9L806 262.1M808.3 276.9L807.9 278M809.7 292.7L810.5 294M810.9 308.7L811.7 309.5M812.7 324.4L812.9 327.6M813 340.1L813.1 343M813.8 356.8L813.6 358.6M814 372.4L814.1 374.8M813.5 388.4L814.3 390.4" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M807 380.9Q810.6 386.4 814.1 392Q817.1 386.4 819.9 380.6" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <text class="sk-lbl" x="215" y="268" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-accent, #c63f24)" stroke="none">it answers</text>
+    <rect class="sk-hit" x="155" y="292" width="120" height="80" fill="transparent" stroke="none"/>
+  </g>
+  <g class="sk-step" data-step="tailscale">
+    <path d="M641.6 396.3Q659.9 395.8 678.2 396.4Q681.3 397.6 684.3 398.9Q685.8 402.1 687.2 405.3Q685.5 445.1 687 484.9Q686 488.2 684.9 491.4Q681.2 492.3 677.5 493.2Q659.9 493.3 642.4 493.4Q639 492.4 635.7 491.1Q634.4 487.9 633.3 484.6Q635.1 444.9 632.7 405.2Q634.4 401.9 636 398.6Q639.4 397.4 642.6 395.9Q646 396.4 649.4 397" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.6"/>
+    <path d="M653 404.4Q660.2 404.5 667.3 404.7" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path d="M651.8 485.3Q659.9 485.3 667.9 485.5" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="1.6"/>
+    <path class="sk-acc" d="M647.3 418.3Q659.8 418.8 672.2 417.9Q673.5 418.4 674.8 418.9Q675.4 420.1 676 421.3Q676 429.4 676.5 437.4Q675.9 439 675.3 440.5Q673.9 440.8 672.5 441.3Q660 441.6 647.5 441.8Q646 441 644.5 440.2Q644.4 438.8 644.1 437.4Q644 429.3 643.9 421.2Q644.2 420 644.5 418.7Q646.2 418.2 647.9 417.8Q650.3 418.1 652.7 418.5" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path class="sk-acc" d="M654.8 418.4C655.1 417.6 655.5 414.8 656.4 413.7C657.4 412.7 659 412.1 660.3 412.1C661.6 412.1 663.1 412.9 664 413.8C664.8 414.7 665.2 417.1 665.4 417.8" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2"/>
+    <path d="M628.9 444.9L627 445.2M616.9 449.1L615.6 449.3M604.9 453.5L602.9 453.9M592.2 457.9L589.9 458.6M579.7 461.5L578.9 462M567.6 465.7L566 465.6M555.5 467.7L553.1 468.3M542 469.5L540.3 470.3M529.1 470.8L526.2 470.6M515.9 469.4L512.9 468.7M503.1 467.8L500.4 467.2M491 464.9L489.5 464.4M477.8 461.1L474.9 460.4M465.6 457.2L463 456.8M453.3 453.3L450.5 453.1M440.7 449.5L438.3 448.4M428.9 445L426.3 444.5M416.5 440.4L415.5 440.4M403.8 436L401.7 434.9M392.5 431.2L388.9 430.9M379.5 427L378.2 426.3M367.9 422.7L366.6 422.4" fill="none" stroke="var(--sk-ink, #1f1512)" stroke-width="2.2"/>
+    <path class="sk-acc" d="M375.6 415.9Q370.3 418.9 365 421.9Q370.3 424.9 375.5 428.2" fill="none" stroke="var(--sk-accent, #c63f24)" stroke-width="2.6"/>
+    <text class="sk-lbl" x="470" y="432" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">Tailscale, my own devices</text>
+    <text class="sk-lbl" x="660" y="518.8" text-anchor="middle" font-family="Instrument Serif, Georgia, serif" font-style="italic" font-size="21" fill="var(--sk-ink, #1f1512)" stroke="none">my phone</text>
+    <rect class="sk-hit" x="606" y="382" width="108" height="135" fill="transparent" stroke="none"/>
+  </g>
+</svg>
