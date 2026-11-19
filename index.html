@@ -119,6 +119,8 @@
   --main-glow-2:.15;
   --main-fill:.07;
   --hv-sheen:rgba(255,255,255,.24);
+  /* the plate spotlight: peak and fill strength of the accent light behind drawings */
+  --spot-a:24%; --spot-f:8%;
   --exp-intensity:1; --exp-card-glow:.18;
 }
 :root[data-theme="dark"]{
@@ -161,6 +163,7 @@
   --main-glow-2:.1;
   --main-fill:.04;
   --hv-sheen:rgba(255,255,255,.14);
+  --spot-a:28%; --spot-f:9%; --plate-glass:rgba(255,255,255,.07);
   --exp-intensity:1;
 }
 /* ===================== end of colour tokens ===================== */
@@ -626,11 +629,24 @@ a:hover>.go-ico,a:focus-visible>.go-ico,button:hover>.go-ico,a:hover .card-ar,a:
 html.pc-on .dlayer{--detail-ink:var(--p-ink);--detail-line:var(--p-line);--detail-onbg:var(--p-onbg);--detail-link:var(--p-accent);--detail-route-1:var(--p-accent);--detail-route-2:var(--p-accent);
   --detail-sheet-btn:var(--p-btn);--detail-sheet-btn-ink:var(--p-btn-ink);--detail-btn-bg:var(--p-btn);--detail-btn-ink:var(--p-btn-ink);
   --card-glow:var(--p-glow);--card-glow-2:transparent;--card-line-warm:var(--p-glow);--card-shadow:0 18px 44px -26px var(--p-glow);
-  --c-mat:var(--p-plate);--lbox-bg:var(--p-plate);--svg-bg:var(--p-plate);--svg-ink:var(--p-plate-ink);--svg-ink-soft:var(--p-plate-ink);
+  --c-mat:transparent;--lbox-bg:color-mix(in srgb,var(--base-bg) 94%,transparent);--svg-bg:color-mix(in srgb,var(--base-bg) 85%,transparent);--svg-ink:var(--p-plate-ink);--svg-ink-soft:var(--p-plate-ink);
   --svg-surface:var(--p-plate-fill);--svg-line:var(--p-plate-fill);--svg-accent:var(--p-plate-hl);--svg-accent-soft:var(--p-plate-fill)}
 /* diagram plates follow too, once diagrams are drawn inline (a baked cream image needs its dark plate) */
-html.pc-on.dg-ok .dlayer,html.pc-on[data-theme="dark"] .dlayer{--plate:var(--p-plate);--plate-bg:var(--p-plate);--detail-plate-bg:var(--p-plate);--plate-ink:var(--p-plate-ink);--plate-fill:var(--p-plate-fill);--plate-highlight:var(--p-plate-hl)}
-html.pc-on.dg-ok body{--plate:var(--m-plate);--plate-bg:var(--m-plate);--plate-ink:var(--m-plate-ink);--plate-fill:var(--m-plate-fill);--plate-highlight:var(--m-plate-hl)}
+/* plates are bare now: the drawing sits on the page base in a spotlight of the accent (see .frame.contain::before).
+   --plate (faces that hide lines behind them) is the base, nearly opaque; fills are a faint glass on black or a faint
+   accent tint on white; --plate-on is text on the one solid ink box in the old diagrams */
+html.pc-on.dg-ok .dlayer{--plate:color-mix(in srgb,var(--base-bg) 85%,transparent);--plate-bg:transparent;--detail-plate-bg:transparent;--plate-on:var(--base-bg);
+  --plate-ink:var(--p-plate-ink);--plate-highlight:var(--p-plate-hl);--plate-fill:var(--plate-glass,color-mix(in srgb,var(--p-plate-hl) 9%,transparent));--svg-surface:var(--plate-fill);--svg-line:var(--plate-fill);--svg-accent-soft:var(--plate-fill)}
+html.pc-on.dg-ok body{--plate:color-mix(in srgb,var(--base-bg) 85%,transparent);--plate-bg:transparent;--plate-on:var(--base-bg);
+  --plate-ink:var(--m-plate-ink);--plate-highlight:var(--m-plate-hl);--plate-fill:var(--plate-glass,color-mix(in srgb,var(--m-plate-hl) 9%,transparent))}
+/* the spotlight: one soft light in the accent from the top-left corner and a faint fill from the bottom-right, feathered
+   at the edges so no rectangle shows; drawings and diagrams sit in it with no box, border or shadow */
+html.dg-ok :is(.frame.contain,.k-diagram .c-mat,.c-svgbox,.lbox-svg){position:relative;isolation:isolate;border-color:transparent;box-shadow:none}
+html.dg-ok :is(.frame.contain,.k-diagram .c-mat,.c-svgbox,.lbox-svg)::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(90% 80% at 0% 0%,color-mix(in srgb,var(--plate-highlight) var(--spot-a),transparent),transparent 75%),
+    radial-gradient(70% 65% at 100% 100%,color-mix(in srgb,var(--plate-highlight) var(--spot-f),transparent),transparent 75%);
+  -webkit-mask-image:linear-gradient(90deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent),linear-gradient(180deg,transparent,var(--base-ink) 8%,var(--base-ink) 92%,transparent);mask-composite:intersect}
 /* small solid fills on the main page (map markers, rail edge fades) follow the screen tone */
 body{--solid:var(--ce-1)}
 .dlayer ::selection{background:var(--detail-sheet-btn);color:var(--detail-sheet-btn-ink)}
@@ -4019,7 +4035,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     }
     return t;
   }
-  var DG_MAP = { "#f6efe4": "--plate-ink", "#ffd9a0": "--plate-highlight", "#140c0a": "--plate-fill", "#1f1512": "--plate" };
+  var DG_MAP = { "#f6efe4": "--plate-ink", "#ffd9a0": "--plate-highlight", "#140c0a": "--plate-fill", "#1f1512": "--plate-on,var(--plate)" };
   function dgKey(src) { var k = String(src || "").split("?")[0]; return DG[k] ? k : null; }
   function diagramEl(src, alt) {
     var key = dgKey(src); if (!key || !window.DOMParser) return null;
@@ -4153,12 +4169,19 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     if (m.tagName === "IMG") return [m.naturalWidth || 400, m.naturalHeight || 300];
     var vb = m.viewBox && m.viewBox.baseVal; return vb && vb.width ? [vb.width, vb.height] : [400, 300];
   }
-  var PLATE_VARS = ["--plate", "--plate-bg", "--plate-ink", "--plate-fill", "--plate-highlight"];
+  var PLATE_VARS = ["--plate", "--plate-bg", "--plate-ink", "--plate-fill", "--plate-highlight", "--plate-on"];
   function figLayer(fig) {
     var cs = getComputedStyle(fig), m = fig.querySelector("svg.dg, img"), L = document.createElement("div"), bw = parseFloat(cs.borderTopWidth) || 0;
     var cut = fig.classList.contains("cutout");
     L.style.cssText = "position:absolute;inset:0;box-sizing:border-box;border-radius:inherit;overflow:" + (cut ? "visible" : "hidden") +
       ";background-color:" + cs.backgroundColor + ";background-image:" + cs.backgroundImage + ";border:" + bw + "px solid " + cs.borderTopColor + ";box-shadow:" + cs.boxShadow;
+    var pb = getComputedStyle(fig, "::before"), spot = null;
+    if (pb.content && pb.content !== "none" && pb.backgroundImage !== "none") {
+      spot = document.createElement("div");
+      spot.style.cssText = "position:absolute;inset:0;pointer-events:none;background-image:" + pb.backgroundImage + ";-webkit-mask-image:" + pb.webkitMaskImage + ";mask-image:" + pb.maskImage +
+        ";-webkit-mask-composite:" + (pb.webkitMaskComposite || "source-in") + ";mask-composite:" + pb.maskComposite;
+      L.appendChild(spot);
+    }
     var nat = natOf(m), c = m ? m.cloneNode(true) : null;
     if (c) {
       var ms = getComputedStyle(m);
@@ -4168,7 +4191,7 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
       if (ms.maskImage && ms.maskImage !== "none") { c.style.maskImage = ms.maskImage; c.style.webkitMaskImage = ms.maskImage; c.style.maskComposite = ms.maskComposite; c.style.webkitMaskComposite = ms.webkitMaskComposite || ""; }
       L.appendChild(c);
     }
-    return { el: L, media: c, nat: nat, fit: fig.classList.contains("cover") ? "cover" : "contain", bw: bw, src: fig };
+    return { el: L, media: c, spot: spot, nat: nat, fit: fig.classList.contains("cover") ? "cover" : "contain", bw: bw, src: fig };
   }
   function placeOf(ly, box) {
     var iw = box.w - 2 * ly.bw, ih = box.h - 2 * ly.bw, n = ly.nat;
@@ -4193,7 +4216,10 @@ html:not(.mo-on) .hv-fig.hv,html:not(.mo-on) .hv-mark.hv .mk-1,html:not(.mo-on) 
     var live = true;
     (function vars() {
       if (!live) return;
-      [A, B].forEach(function (ly) { var cs = getComputedStyle(ly.src); PLATE_VARS.forEach(function (k) { var v = cs.getPropertyValue(k); if (v) ly.el.style.setProperty(k, v); }); });
+      [A, B].forEach(function (ly) {
+        var cs = getComputedStyle(ly.src); PLATE_VARS.forEach(function (k) { var v = cs.getPropertyValue(k); if (v) ly.el.style.setProperty(k, v); });
+        if (ly.spot) ly.spot.style.backgroundImage = getComputedStyle(ly.src, "::before").backgroundImage;
+      });
       requestAnimationFrame(vars);
     })();
     return { anims: an, end: function () {
